@@ -40,8 +40,8 @@ const Portfolios = ({ portfolios }) => {
 					<tr>
 						<th>Name</th>
 						<th>Allocations</th>
-						<th></th>
-						<th></th>
+						<th>Edit</th>
+						<th>Assign</th>
 					</tr>
 				</thead>
 				<tbody>{portfolios.map(portfolio => renderPortfolios(portfolio))}</tbody>

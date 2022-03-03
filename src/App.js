@@ -4,6 +4,8 @@ import { Account } from './Account'
 
 import Advisor from './Pages/Advisor/Advisor'
 import Home from './Pages/Home/Home'
+import SignIn from './Pages/SignIn/SignIn'
+import SignUp from './Pages/SignUp/SignUp'
 
 import './App.css'
 
@@ -61,11 +63,11 @@ function App() {
 					path='/advisor/*'
 					element={<Advisor clients={clients} email={email} portfolios={portfolios} setPortfolios={setPortfolios} />}
 				/>
-				{/* <Route path='/signup' element={<SignUp />} /> */}
-				{/* <Route
+				<Route
 					path='/signin'
 					element={<SignIn email={email} setClients={setClients} setEmail={setEmail} setPortfolios={setPortfolios} />}
-				/> */}
+				/>
+				<Route path='/signup' element={<SignUp />} />
 				<Route path='/' element={<Home />} />
 			</Routes>
 		</Account>

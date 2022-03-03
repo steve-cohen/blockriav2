@@ -15,6 +15,7 @@
 	color: rgb(248, 249, 251);
 	display: flex;
 	height: 60px;
+	text-transform: capitalize;
 	width: 100vw;
 }
 

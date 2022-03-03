@@ -36,8 +36,16 @@
 	fill: rgb(230, 39, 28);
 }
 
-.Clients .Option1,
-.Clients .Option2 {
+.Clients .Options {
+	align-items: center;
+	display: flex;
+	margin: 36px 0;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.Clients .Options .Option1,
+.Clients .Options .Option2 {
 	border: 1px solid rgb(43, 44, 46);
 	border-radius: 1px;
 	cursor: pointer;
@@ -47,29 +55,21 @@
 	transition: background-color 0.15s;
 }
 
-.Clients .Option2:hover {
-	background: rgb(43, 44, 46);
-	color: rgb(250, 250, 250);
-	text-decoration: underline;
-}
-
-.Clients .Option1 {
+.Clients .Options .Option1 {
 	background: rgb(43, 44, 46);
 	color: rgb(250, 250, 250);
 }
 
-.Clients .Option1:hover {
+.Clients .Options .Option1:hover {
 	background: rgb(255, 255, 255);
 	color: inherit;
 	text-decoration: underline;
 }
 
-.Clients .Options {
-	align-items: center;
-	display: flex;
-	margin: 48px 0;
-	justify-content: space-between;
-	width: 100%;
+.Clients .Options .Option2:hover {
+	background: rgb(43, 44, 46);
+	color: rgb(250, 250, 250);
+	text-decoration: underline;
 }
 
 .Clients .Option0 {
