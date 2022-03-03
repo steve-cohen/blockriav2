@@ -1,0 +1,75 @@
+.Clients table {
+	border-collapse: collapse;
+	text-align: left;
+	width: 100%;
+}
+
+.Clients table tbody tr td,
+.Clients table thead tr th {
+	border-bottom: 1px solid rgb(223, 224, 226);
+	font-weight: 400;
+	padding: 16px 8px;
+}
+
+.Clients table tbody tr td svg {
+	cursor: pointer;
+	fill: rgb(74, 75, 77);
+	height: 14px;
+	margin-right: 10px;
+	width: 14px;
+}
+
+.Clients table thead tr th {
+	border-top: 1px solid rgb(223, 224, 226);
+	width: 25%;
+}
+
+.Clients .InviteClientBottom {
+	display: block;
+	padding: 16px 8px;
+	width: fit-content;
+}
+
+.Clients table tbody tr td .Assign {
+	color: rgb(230, 39, 28);
+	fill: rgb(230, 39, 28);
+}
+
+.Clients .ButtonExport,
+.Clients .ButtonInvite {
+	border: 1px solid rgb(43, 44, 46);
+	border-radius: 1px;
+	cursor: pointer;
+	display: inline-block;
+	margin: 0 4px;
+	padding: 12px 16px;
+	transition: background-color 0.15s;
+}
+
+.Clients .ButtonExport:hover {
+	background: rgb(43, 44, 46);
+	color: rgb(250, 250, 250);
+	text-decoration: underline;
+}
+
+.Clients .ButtonInvite {
+	background: rgb(43, 44, 46);
+	color: rgb(250, 250, 250);
+}
+
+.Clients .ButtonInvite:hover {
+	background: rgb(255, 255, 255);
+	color: inherit;
+	text-decoration: underline;
+}
+
+.Clients .Options {
+	display: flex;
+	margin: 48px 0;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.Clients .Title {
+	font-size: 24px;
+}

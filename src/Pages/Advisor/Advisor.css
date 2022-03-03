@@ -1,0 +1,10 @@
+.Advisor .Body {
+	bottom: 0;
+	height: calc(100% - 60px - 96px);
+	max-height: calc(100% - 60px);
+	overflow-y: auto;
+	padding: 48px;
+	position: absolute;
+	right: 0;
+	width: calc(100% - 300px - 96px);
+}
