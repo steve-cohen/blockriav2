@@ -1,4 +1,4 @@
-.Navigation .Left {
+.Navigation {
 	background: rgb(243, 244, 246);
 	border-right: 1px solid rgb(223, 224, 226);
 	display: flex;
@@ -8,10 +8,9 @@
 	padding-top: 1px;
 	max-height: calc(100vh - 60px);
 	overflow: hidden auto;
-	width: 300px;
 }
 
-.Navigation .Left a {
+.Navigation a {
 	color: rgb(74, 75, 77);
 	display: block;
 	fill: rgb(74, 75, 77);
@@ -22,12 +21,12 @@
 	transition: color 0.4s, fill 0.4s;
 }
 
-.Navigation .Left a:hover {
+.Navigation a:hover {
 	color: rgb(0, 0, 0);
 	fill: rgb(0, 0, 0);
 }
 
-.Navigation .Left svg {
+.Navigation svg {
 	display: inline-block;
 	fill: inherit;
 	height: inherit;
@@ -36,68 +35,34 @@
 	vertical-align: top;
 }
 
-.Navigation .Left .Search {
+.Navigation .Search {
 	background: rgb(255, 255, 255);
 	border: 1px solid rgb(223, 224, 226);
 	border-radius: 2px;
-	margin: 36px 24px;
-	width: calc(100% - 48px - 3px);
+	margin: 36px 20px;
+	width: calc(100% - 40px - 3px);
 }
 
-.Navigation .Left .Search input {
+.Navigation .Search input {
 	all: initial;
 	color: rgb(74, 75, 77);
 	display: inline-block;
 	font-family: inherit;
 	font-size: 15px;
 	font-weight: 500;
-	height: 16px;
+	height: 14px;
 	padding: 11px 0;
 	vertical-align: top;
 	width: calc(100% - 42px - 2px);
 }
 
-.Navigation .Left .Search input::placeholder {
+.Navigation .Search input::placeholder {
 	color: rgb(74, 75, 77);
 }
 
-.Navigation .Left .Search .SearchIcon {
+.Navigation .Search .SearchIcon {
 	cursor: pointer;
 	fill: rgb(74, 75, 77);
-	height: 16px;
+	height: 14px;
 	padding: 11px 0 11px 10px;
-}
-
-.Navigation .Top {
-	align-items: center;
-	background: rgb(18, 25, 44);
-	color: rgb(248, 249, 251);
-	display: flex;
-	height: 60px;
-	width: 100vw;
-}
-
-.Navigation .Top .Advisor {
-	font-family: 'Playfair Display', serif;
-	font-size: 18px;
-}
-
-.Navigation .Top .Firm {
-	border-right: 1px solid rgb(248, 249, 251);
-	font-family: 'Playfair Display', serif;
-	font-size: 21px;
-	font-weight: 200;
-	margin-right: 22px;
-	padding-right: 22px;
-}
-
-.Navigation .Top .Logo {
-	border: 2px solid rgb(248, 249, 251);
-	border-radius: 6px;
-	color: rgb(248, 249, 251);
-	line-height: 28px;
-	margin: 0 19px 0 14px;
-	text-align: center;
-	text-decoration: none;
-	width: 28px;
 }

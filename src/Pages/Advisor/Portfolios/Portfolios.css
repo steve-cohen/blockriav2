@@ -1,6 +1,7 @@
 .Portfolios table {
 	border-collapse: collapse;
 	line-height: 1.5;
+	overflow-x: auto;
 	text-align: left;
 	white-space: pre;
 	width: 100%;
