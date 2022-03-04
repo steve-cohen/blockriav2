@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link, Route, Routes } from 'react-router-dom'
 
+import Assign from './Portfolios/Assign/Assign'
 import Clients from './Clients/Clients'
 import Edit from './Portfolios/Edit/Edit'
 import Navigation from './Navigation/Navigation'
@@ -9,21 +10,18 @@ import Portfolios from './Portfolios/Portfolios'
 import './Advisor.css'
 
 const Advisor = ({ clients, email, portfolios, setPortfolios }) => {
-	const [client, setClient] = useState({})
-	const [proposedPortfolio, setProposedPortfolio] = useState({
-		allocation: { S: '{}' },
-		portfolioId: { S: '' },
-		portfolioName: { S: 'Select Portfolio' }
-	})
-
 	return (
 		<div className='Advisor'>
 			<div className='Metadata'>
-				<Link className='Logo' to='/'>
+				<Link className='Logo' to='/advisor'>
 					B
 				</Link>
-				<div className='Firm'>Hardy Capital</div>
-				<div className='Advisor'>Arynton Hardy</div>
+				<Link className='Firm' to='/advisor'>
+					Hardy Capital
+				</Link>
+				<Link className='Advisor' to='/advisor'>
+					Arynton Hardy
+				</Link>
 			</div>
 			<div className='Content'>
 				<Navigation />
@@ -31,7 +29,8 @@ const Advisor = ({ clients, email, portfolios, setPortfolios }) => {
 					<Routes>
 						<Route path='clients' element={<Clients clients={clients} portfolios={portfolios} />} />
 						<Route path='portfolios' element={<Portfolios portfolios={portfolios} />} />
-						<Route path='portfolios/edit' element={<Edit portfolios={portfolios} />} />
+						<Route path='portfolios/assign' element={<Assign portfolios={portfolios} />} />
+						<Route path='portfolios/edit' element={<Edit portfolios={portfolios} setPortfolios={setPortfolios} />} />
 					</Routes>
 				</div>
 			</div>

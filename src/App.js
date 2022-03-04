@@ -39,8 +39,8 @@ function App() {
 			portfolioName: {
 				S: 'Classic'
 			},
-			allocation: {
-				S: '{"BTC":60,"ETH":40}'
+			allocations: {
+				S: '[{"currency":"BTC","percent":60},{"currency":"ETH","percent":40}]'
 			}
 		},
 		{
@@ -50,8 +50,8 @@ function App() {
 			portfolioName: {
 				S: 'Equal'
 			},
-			allocation: {
-				S: '{"BTC":50,"ETH":50}'
+			allocations: {
+				S: '[{"currency":"BTC","percent":50},{"currency":"ETH","percent":50}]'
 			}
 		}
 	])

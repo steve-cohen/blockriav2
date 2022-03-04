@@ -12,11 +12,15 @@
 .Advisor .Metadata {
 	align-items: center;
 	background: rgb(18, 25, 44);
-	color: rgb(248, 249, 251);
 	display: flex;
 	height: 60px;
 	text-transform: capitalize;
 	width: 100vw;
+}
+
+.Advisor .Metadata a {
+	color: rgb(248, 249, 251);
+	text-decoration: none;
 }
 
 .Advisor .Metadata .Advisor {
@@ -36,7 +40,6 @@
 .Advisor .Metadata .Logo {
 	border: 2px solid rgb(248, 249, 251);
 	border-radius: 6px;
-	color: rgb(248, 249, 251);
 	line-height: 28px;
 	margin: 0 19px 0 14px;
 	text-align: center;

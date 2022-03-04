@@ -31,7 +31,7 @@
 	text-transform: uppercase;
 }
 
-.Clients table tbody tr td .Assign {
+.Clients table tbody tr td .AssignPortfolio {
 	color: rgb(230, 39, 28);
 	fill: rgb(230, 39, 28);
 }
@@ -74,6 +74,7 @@
 
 .Clients .Option0 {
 	display: block;
+	margin: 16px 0;
 	padding: 16px 8px;
 	width: fit-content;
 }

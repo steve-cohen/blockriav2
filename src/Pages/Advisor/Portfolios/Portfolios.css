@@ -55,6 +55,7 @@
 
 .Portfolios .Option0 {
 	display: block;
+	margin: 16px 0;
 	padding: 16px 8px;
 	width: fit-content;
 }

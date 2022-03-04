@@ -2,14 +2,14 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import './Portfolios.css'
 
-function renderPortfolios({ allocation, portfolioId, portfolioName }) {
+function renderPortfolios({ allocations, portfolioId, portfolioName }) {
 	return (
 		<tr key={`Portfolio ${portfolioId.S}`}>
 			<td>{portfolioName.S}</td>
 			<td>
-				{Object.entries(JSON.parse(allocation.S))
-					.sort((a, b) => b[1] - a[1])
-					.map(([id, percent]) => `${id} ${percent}%`)
+				{JSON.parse(allocations.S)
+					.sort((a, b) => b.percent - a.percent)
+					.map(({ currency, percent }) => `${currency} ${percent}%`)
 					.join('\n')}
 			</td>
 			<td>
@@ -30,7 +30,7 @@ const Portfolios = ({ portfolios }) => {
 			<div className='Options'>
 				<div></div>
 				<div>
-					<Link className='Option1' to='/advisor/createportfolio'>
+					<Link className='Option1' to='/advisor/portfolios/edit'>
 						Create Portfolio
 					</Link>
 				</div>
@@ -44,9 +44,9 @@ const Portfolios = ({ portfolios }) => {
 						<th>Assign</th>
 					</tr>
 				</thead>
-				<tbody>{portfolios.map(portfolio => renderPortfolios(portfolio))}</tbody>
+				<tbody>{portfolios.map(renderPortfolios)}</tbody>
 			</table>
-			<Link className='Option0' to='/advisor/createportfolio'>
+			<Link className='Option0' to='/advisor/portfolios/edit'>
 				+ Create Portfolio
 			</Link>
 		</div>
