@@ -1,0 +1,92 @@
+.Confirm {
+	background: rgb(248, 249, 251);
+	display: flex;
+	flex-wrap: wrap;
+	height: calc(80vh - 60px);
+	justify-content: center;
+	left: 0;
+	padding-top: 20vh;
+	position: absolute;
+	top: 60px;
+	width: 100vw;
+}
+
+.Confirm .Portfolio {
+	margin: 0 36px;
+	width: 300px;
+
+	font-size: 14px;
+	font-weight: 500;
+	letter-spacing: 0.5px;
+	line-height: 36px;
+}
+
+.Confirm .Portfolio .Allocation {
+	opacity: 0.8;
+}
+
+.Confirm .Portfolio .Allocation .Flex {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.Confirm .Portfolio .Allocation .Flex div {
+	border-bottom: 1px solid rgb(173, 174, 176);
+	padding: 16px 8px 0 8px;
+}
+
+.Confirm .Portfolio .Allocation .Flex .Currency {
+	width: 180px;
+}
+
+.Confirm .Portfolio .Allocation .Flex .Percent {
+	text-align: right;
+	width: 60px;
+}
+
+.Confirm .Portfolio .Cancel {
+	cursor: pointer;
+	display: inline-block;
+	opacity: 0.8;
+	padding: 8px 16px;
+}
+
+.Confirm .Portfolio .Cancel:hover {
+	text-decoration: underline;
+}
+
+.Confirm .Portfolio .Name {
+	border-bottom: 1px solid rgb(173, 174, 176);
+	opacity: 0.8;
+	padding: 16px 8px 0 8px;
+	transition: 0.4s;
+	width: calc(300px - 18px);
+}
+
+.Confirm .Portfolio .Submit {
+	all: initial;
+	background: rgb(18, 25, 44);
+	border: 1px solid rgb(18, 25, 44);
+	color: rgb(248, 249, 251);
+	display: inline-block;
+	font-family: inherit;
+	font-size: 14px;
+	letter-spacing: 0.5px;
+	margin-top: 28px;
+	padding: 8px 12px;
+	transition: 0.4s;
+}
+
+.Confirm .Portfolio .Submit:hover {
+	background: rgb(248, 249, 251);
+	color: rgb(48, 48, 52);
+	cursor: pointer;
+}
+
+.Confirm .Title {
+	font-family: 'Playfair Display', serif;
+	font-size: 42px;
+	margin: 0 36px;
+	width: 300px;
+}

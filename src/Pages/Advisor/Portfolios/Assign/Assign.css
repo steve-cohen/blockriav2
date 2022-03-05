@@ -11,77 +11,50 @@
 	width: 100vw;
 }
 
-.Assign form {
-	margin: 0 36px;
+.Assign table {
+	border-collapse: collapse;
+	line-height: 1.5;
+	text-align: left;
+	text-overflow: ellipsis;
+	white-space: pre;
 	width: 300px;
 }
 
-.Assign form a {
-	display: block;
-	font-size: 14px;
-	margin-top: 24px;
-}
-
-.Assign form button {
-	all: initial;
-	background: rgb(18, 25, 44);
-	border: 1px solid rgb(18, 25, 44);
-	color: rgb(248, 249, 251);
-	font-family: inherit;
-	font-size: 14px;
-	letter-spacing: 0.5px;
-	margin-top: 28px;
-	padding: 8px 12px;
-	transition: background-color 0.4s, color 0.4s;
-}
-
-.Assign form button:hover {
-	background: rgb(248, 249, 251);
-	color: rgb(48, 48, 52);
-	cursor: pointer;
-}
-
-.Assign form input {
-	all: initial;
-	border-bottom: 1px solid rgb(173, 174, 176);
-	color: inherit;
-	font-family: inherit;
+.Assign table tbody tr td {
 	font-size: 14px;
 	font-weight: 500;
 	letter-spacing: 0.5px;
-	line-height: 36px;
-	padding: 16px 8px 0 8px;
+	max-width: 150px;
 	opacity: 0.8;
+	overflow: hidden;
+	padding: 16px 8px;
+	text-overflow: ellipsis;
+	vertical-align: top;
+	width: 50%;
+}
+
+.Assign table tbody tr {
+	border-bottom: 1px solid rgb(223, 224, 226);
+	cursor: pointer;
 	transition: 0.4s;
-	width: 100%;
 }
 
-.Assign form input:active,
-.Assign form input:hover {
-	border-bottom: 1px solid black;
+.Assign table tbody tr:hover {
+	background: rgb(238, 239, 241);
+	border-bottom: 1px solid rgb(29, 29, 32);
 	color: rgb(0, 0, 0);
-	opacity: 1;
 }
 
-.Assign form input::placeholder {
-	color: inherit;
+.Assign .Option0 {
+	display: block;
+	font-size: 14px;
+	margin: 24px 8px;
+	width: fit-content;
 }
 
-.Assign form select {
-	all: initial;
-}
-
-.Assign form select option {
-	all: initial;
-}
-
-.Assign .Description {
-	margin: 0 36px;
-	width: 300px;
-}
-
-.Assign .Description .Title {
+.Assign .Title {
 	font-family: 'Playfair Display', serif;
 	font-size: 42px;
-	margin-bottom: 24px;
+	margin: 0 36px;
+	width: 300px;
 }

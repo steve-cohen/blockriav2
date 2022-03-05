@@ -1,49 +1,44 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import React from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import './Assign.css'
 
 const Assign = ({ portfolios }) => {
+	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
 
-	const [allocations, setAllocations] = useState([])
-	const [portfolioName, setPortfolioName] = useState('')
-	const [portfolioId, setPortfolioId] = useState('')
-	const [showOptions, setShowOptions] = useState(false)
+	function renderPortfolios({ allocations, portfolioId, portfolioName }) {
+		let url = '/advisor/portfolios/confirm?'
+		url += `clientName=${searchParams.get('clientName')}`
+		url += `&clientId=${searchParams.get('clientId')}`
+		// url += `&portfolioId=${searchParams.get('portfolioId')}`
+		url += `&newPortfolioId=${portfolioId.S}`
 
-	useEffect(() => {
-		if (searchParams.get('portfolioId')) {
-			const portfolio = portfolios.filter(({ portfolioId }) => portfolioId.S === searchParams.get('portfolioId'))
-			if (portfolio.length) selectPortfolio(portfolio[0])
-		}
-	}, [])
-
-	function handleSubmit() {
-		console.log('Submit')
-	}
-
-	function renderAllocation({ currency, percent }, index) {
 		return (
-			<div className='Allocation' key={`Allocation ${index}`}>
-				<div className='Flex'>
-					<input className='Currency' disabled readOnly value={currency} />
-					<input className='Percent' disabled readOnly value={`${percent.toFixed(2)}%`} />
-				</div>
-			</div>
+			<tr key={`Portfolio ${portfolioId.S}`} onClick={() => navigate(url)}>
+				<td>{portfolioName.S}</td>
+				<td>
+					{JSON.parse(allocations.S)
+						.sort((a, b) => b.percent - a.percent)
+						.map(({ currency, percent }) => `${currency} ${percent}%`)
+						.join(', ')}
+				</td>
+			</tr>
 		)
 	}
 
-	function renderPortfolio(portfolio) {
-		return (
-			<div onClick={() => selectPortfolio(portfolio)} key={`Portfolio ${portfolio.portfolioId.S}`}>
-				{portfolio.portfolioName.S}
-			</div>
-		)
-	}
+	function renderNoPortfolio() {
+		let url = '/advisor/portfolios/confirm?'
+		url += `clientName=${searchParams.get('clientName')}`
+		url += `&clientId=${searchParams.get('clientId')}`
+		// url += `&portfolioId=${searchParams.get('portfolioId')}`
+		url += `&newPortfolioId=`
 
-	function selectPortfolio({ allocations, portfolioId, portfolioName }) {
-		setAllocations(JSON.parse(allocations.S))
-		setPortfolioName(portfolioName.S)
-		setPortfolioId(portfolioId.S)
+		return (
+			<tr key={`Portfolio -1`} onClick={() => navigate(url)}>
+				<td>No Portfolio</td>
+				<td />
+			</tr>
+		)
 	}
 
 	return (
@@ -51,24 +46,18 @@ const Assign = ({ portfolios }) => {
 			<div className='Description'>
 				<div className='Title'>Assign a Portfolio to {searchParams.get('clientName')}.</div>
 			</div>
-			<form onSubmit={handleSubmit}>
-				<div className='Select' onClick={() => setShowOptions(!showOptions)}>
-					{portfolioId ? portfolioName : 'Select a Portfolio'}
-					{showOptions && (
-						<div className='Options'>
-							<div onClick={() => setPortfolioId('')}>Select a Portfolio</div>
-							{portfolios.map(renderPortfolio)}
-						</div>
-					)}
-				</div>
-				{portfolioId && (
-					<>
-						<input className='PortfolioName' disabled value={portfolioName} />
-						{allocations.map(renderAllocation)}
-						<Link to='/signup'>Assign Portfolio</Link>
-					</>
-				)}
-			</form>
+			<div>
+				<table>
+					<tbody>
+						{portfolios.map(renderPortfolios)}
+						{renderNoPortfolio()}
+						<tr key={`Portfolio Create`} onClick={() => navigate('/advisor/portfolios/edit')}>
+							<td>Create a Portfolio</td>
+							<td />
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	)
 }

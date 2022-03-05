@@ -103,7 +103,7 @@ const Edit = ({ portfolios, setPortfolios }) => {
 						className='Currency'
 						minLength={1}
 						onChange={e => handleCurrency(e, index)}
-						placeholder='Currency'
+						placeholder='Holding'
 						required
 						value={currency}
 					/>
@@ -127,9 +127,10 @@ const Edit = ({ portfolios, setPortfolios }) => {
 
 	return (
 		<div className='Edit'>
-			<div className='Title'>Edit Portfolio</div>
+			<div className='Title'>{searchParams.get('portfolioId') ? 'Edit Portfolio' : 'Create a Portfolio'}</div>
 			<form onSubmit={handleSubmit}>
 				<input
+					autoFocus
 					className='PortfolioName'
 					onChange={e => setPortfolioName(e.target.value)}
 					placeholder='Portfolio Name'
@@ -138,7 +139,7 @@ const Edit = ({ portfolios, setPortfolios }) => {
 				/>
 				{allocations.map(renderAllocation)}
 				<div className='AddCurrency' onClick={addCurrency}>
-					+ Add Currency
+					+ Add Holding
 				</div>
 				{/* <button disabled={isLoading} type='submit'>
 					{isLoading ? 'Loading…' : 'Save'}

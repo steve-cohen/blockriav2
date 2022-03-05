@@ -53,6 +53,17 @@ function App() {
 			allocations: {
 				S: '[{"currency":"BTC","percent":50},{"currency":"ETH","percent":50}]'
 			}
+		},
+		{
+			portfolioId: {
+				S: '2645518264828'
+			},
+			portfolioName: {
+				S: 'Bitcoin'
+			},
+			allocations: {
+				S: '[{"currency":"BTC","percent":100}]'
+			}
 		}
 	])
 
