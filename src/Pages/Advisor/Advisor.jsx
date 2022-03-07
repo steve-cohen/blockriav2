@@ -2,8 +2,11 @@ import React from 'react'
 import { Link, Route, Routes } from 'react-router-dom'
 
 import Assign from './Portfolios/Assign/Assign'
+import Client from './Clients/Client/Client'
 import Clients from './Clients/Clients'
 import Confirm from './Portfolios/Confirm/Confirm'
+import DepositAmount from './Clients/Client/DepositMethod/DepsoitAmount/DepositAmount'
+import DepositMethod from './Clients/Client/DepositMethod/DepositMethod'
 import Edit from './Portfolios/Edit/Edit'
 import Invites from './Invites/Invites'
 import Navigation from './Navigation/Navigation'
@@ -31,6 +34,9 @@ const Advisor = ({ clients, email, portfolios, setPortfolios }) => {
 					<Routes>
 						<Route path='' element={<Clients clients={clients} portfolios={portfolios} />} />
 						<Route path='clients' element={<Clients clients={clients} portfolios={portfolios} />} />
+						<Route path='clients/client' element={<Client clients={clients} portfolios={portfolios} />} />
+						<Route path='clients/client/depositmethod' element={<DepositMethod clients={clients} />} />
+						<Route path='clients/client/depositmethod/depositamount' element={<DepositAmount />} />
 						<Route path='invites' element={<Invites />} />
 						<Route path='portfolios' element={<Portfolios portfolios={portfolios} />} />
 						<Route path='portfolios/assign' element={<Assign portfolios={portfolios} />} />

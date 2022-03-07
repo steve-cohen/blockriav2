@@ -10,7 +10,8 @@ function renderPortfolio(clientId, clientName, currentPortfolioId, portfolios) {
 			<svg viewBox='0 0 576 512'>
 				<path d='M304 16.58C304 7.555 310.1 0 320 0C443.7 0 544 100.3 544 224C544 233 536.4 240 527.4 240H304V16.58zM32 272C32 150.7 122.1 50.34 238.1 34.25C248.2 32.99 256 40.36 256 49.61V288L412.5 444.5C419.2 451.2 418.7 462.2 411 467.7C371.8 495.6 323.8 512 272 512C139.5 512 32 404.6 32 272zM558.4 288C567.6 288 575 295.8 573.8 305C566.1 360.9 539.1 410.6 499.9 447.3C493.9 452.1 484.5 452.5 478.7 446.7L320 288H558.4z' />
 			</svg>
-			<Link to={`/advisor/portfolios?portfolioId=${currentPortfolioId}`}>{portfolioName}</Link> (
+			{/* <Link to={`/advisor/portfolios?portfolioId=${currentPortfolioId}`}>{portfolioName}</Link> ( */}
+			{portfolioName} (
 			<Link
 				to={`/advisor/portfolios/assign?clientName=${clientName}&clientId=${clientId}&portfolioId=${currentPortfolioId}`}
 			>
@@ -54,7 +55,7 @@ const Clients = ({ clients, portfolios }) => {
 		return (
 			<tr key={clientId.S}>
 				<td>
-					<Link to={`/advisor/client`}>{clientName.S}</Link>
+					<Link to={`/advisor/clients/client?clientId=${clientId.S}`}>{clientName.S}</Link>
 				</td>
 				<td>{balance.toLocaleString('en-US', { style: 'currency', currency: native_currency })}</td>
 				<td>
@@ -100,7 +101,7 @@ const Clients = ({ clients, portfolios }) => {
 				<div></div>
 				<div>
 					{/* <div className='Option2'>Export CSV</div> */}
-					<Link className='Option1' to='/invites'>
+					<Link className='Option1' to='/advisor/invites'>
 						Invite Client
 					</Link>
 				</div>
@@ -116,7 +117,7 @@ const Clients = ({ clients, portfolios }) => {
 				</thead>
 				<tbody>{clients.map(renderClient)}</tbody>
 			</table>
-			<Link className='Option0' to='/invites'>
+			<Link className='Option0' to='/advisor/invites'>
 				+ Invite Client
 			</Link>
 		</div>

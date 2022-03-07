@@ -1,0 +1,24 @@
+.DepositMethod {
+	background: rgb(248, 249, 251);
+	display: flex;
+	flex-wrap: wrap;
+	height: calc(80vh - 60px);
+	justify-content: center;
+	left: 0;
+	padding-top: 20vh;
+	position: absolute;
+	top: 60px;
+	width: 100vw;
+}
+
+.DepositMethod .Options {
+	white-space: pre;
+	width: 360px;
+}
+
+.DepositMethod .Title {
+	font-family: 'Playfair Display', serif;
+	font-size: 42px;
+	margin: 0 36px;
+	width: 300px;
+}

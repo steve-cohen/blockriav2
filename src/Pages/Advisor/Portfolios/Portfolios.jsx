@@ -15,9 +15,9 @@ function renderPortfolios({ allocations, portfolioId, portfolioName }) {
 			<td>
 				<Link to={`/advisor/portfolios/edit?portfolioId=${portfolioId.S}`}>Edit Portfolio</Link>
 			</td>
-			<td>
+			{/* <td>
 				<Link to={`/advisor/portfolios/assign?portfolioId=${portfolioId.S}`}>Assign Portfolio to Client(s)</Link>
-			</td>
+			</td> */}
 			<td></td>
 		</tr>
 	)
@@ -41,7 +41,8 @@ const Portfolios = ({ portfolios }) => {
 						<th>Name</th>
 						<th>Allocations</th>
 						<th>Edit</th>
-						<th>Assign</th>
+						{/* <th>Assign</th> */}
+						<th />
 					</tr>
 				</thead>
 				<tbody>{portfolios.map(renderPortfolios)}</tbody>
