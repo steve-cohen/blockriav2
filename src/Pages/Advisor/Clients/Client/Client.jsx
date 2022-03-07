@@ -45,10 +45,10 @@ const Client = ({ clients, portfolios }) => {
 			<div className='Options'>
 				<div></div>
 				<div>
-					<Link className='Option2' to={`depositmethod?clientId=${searchParams.get('clientId')}`}>
+					<Link className='Option2' to={`deposit?clientName=${clientName}&clientId=${searchParams.get('clientId')}`}>
 						Initiate Deposit(s)
 					</Link>
-					<Link className='Option1' to={`withdraw?clientId=${searchParams.get('clientId')}`}>
+					<Link className='Option1' to={`withdraw?clientName=${clientName}&clientId=${searchParams.get('clientId')}`}>
 						Initiate Withdrawal(s)
 					</Link>
 				</div>
