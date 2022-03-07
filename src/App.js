@@ -10,6 +10,7 @@ import SignUp from './Pages/SignUp/SignUp'
 import './App.css'
 
 function App() {
+	const [advisor, setAdvisor] = useState({})
 	const [clients, setClients] = useState([
 		{
 			clientId: { S: 'io8jhwaoidsfd32r' },
@@ -38,7 +39,6 @@ function App() {
 			portfolioId: { S: '1645518264828' }
 		}
 	])
-	const [email, setEmail] = useState('')
 	const [portfolios, setPortfolios] = useState([
 		{
 			portfolioId: {
@@ -80,11 +80,13 @@ function App() {
 			<Routes>
 				<Route
 					path='/advisor/*'
-					element={<Advisor clients={clients} email={email} portfolios={portfolios} setPortfolios={setPortfolios} />}
+					element={
+						<Advisor advisor={advisor} clients={clients} portfolios={portfolios} setPortfolios={setPortfolios} />
+					}
 				/>
 				<Route
 					path='/signin'
-					element={<SignIn email={email} setClients={setClients} setEmail={setEmail} setPortfolios={setPortfolios} />}
+					element={<SignIn setAdvisor={setAdvisor} setClients={setClients} setPortfolios={setPortfolios} />}
 				/>
 				<Route path='/signup' element={<SignUp />} />
 				<Route path='/' element={<Home />} />

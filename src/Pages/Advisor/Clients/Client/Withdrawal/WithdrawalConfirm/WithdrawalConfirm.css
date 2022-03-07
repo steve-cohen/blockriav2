@@ -1,4 +1,4 @@
-.DepositConfirm {
+.WithdrawalConfirm {
 	background: rgb(248, 249, 251);
 	display: flex;
 	flex-wrap: wrap;
@@ -11,7 +11,7 @@
 	width: 100vw;
 }
 
-.DepositConfirm form {
+.WithdrawalConfirm form {
 	color: rgb(88, 88, 92);
 	font-size: 14px;
 	font-weight: 500;
@@ -21,7 +21,7 @@
 	width: 300px;
 }
 
-.DepositConfirm form input {
+.WithdrawalConfirm form input {
 	all: initial;
 	border-bottom: 1px solid rgb(173, 174, 176);
 	color: inherit;
@@ -34,14 +34,14 @@
 	width: 300px;
 }
 
-.DepositConfirm form div {
+.WithdrawalConfirm form div {
 	border-bottom: 1px solid rgb(173, 174, 176);
 	padding: 16px 8px 12px 8px;
 	white-space: pre;
 	width: 300px;
 }
 
-.DepositConfirm form button {
+.WithdrawalConfirm form button {
 	all: initial;
 	background: rgb(18, 25, 44);
 	border: 1px solid rgb(18, 25, 44);
@@ -56,28 +56,29 @@
 	width: fit-content;
 }
 
-.DepositConfirm form button:hover {
+.WithdrawalConfirm form button:hover {
 	background: rgb(248, 249, 251);
 	color: rgb(48, 48, 52);
 	cursor: pointer;
 }
 
-.DepositConfirm .Cancel {
+.WithdrawalConfirm .Cancel {
 	border: none;
 	cursor: pointer;
 	display: inline-block;
 	margin-left: 2px;
+	opacity: 0.8;
 	padding: 8px 16px;
 	width: fit-content;
 }
 
-.DepositConfirm .Cancel:hover {
+.WithdrawalConfirm .Cancel:hover {
 	text-decoration: underline;
 }
 
-.DepositConfirm .Title {
+.WithdrawalConfirm .Title {
 	font-family: 'Playfair Display', serif;
 	font-size: 42px;
 	margin: 0 36px;
-	width: 300px;
+	width: 360px;
 }

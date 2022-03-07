@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { AccountContext } from '../../Account'
 import './SignIn.css'
 
-const SignIn = ({ setClients, setPortfolios }) => {
+const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
 	const { authenticate } = useContext(AccountContext)
 	const navigate = useNavigate()
 
@@ -40,6 +40,17 @@ const SignIn = ({ setClients, setPortfolios }) => {
 			setIsLoading(false)
 			return
 		}
+
+		authenticate(email, password)
+			.then(async data => {
+				setIsLoading(false)
+				await setAdvisor(data)
+				navigate('/advisor')
+			})
+			.catch(({ message }) => {
+				setIsLoading(false)
+				alert(message)
+			})
 
 		// authenticate(email, password)
 		// 	.then(async data => {

@@ -1,4 +1,4 @@
-.Deposit {
+.Withdrawal {
 	background: rgb(248, 249, 251);
 	display: flex;
 	flex-wrap: wrap;
@@ -11,7 +11,7 @@
 	width: 100vw;
 }
 
-.Deposit .Options {
+.Withdrawal .Options {
 	color: rgb(88, 88, 92);
 	font-size: 14px;
 	font-weight: 500;
@@ -23,7 +23,7 @@
 	width: 300px;
 }
 
-.Deposit .Options .Amount {
+.Withdrawal .Options .Amount {
 	all: initial;
 	border-bottom: 1px solid rgb(173, 174, 176);
 	color: inherit;
@@ -38,34 +38,41 @@
 	width: 300px;
 }
 
-.Deposit .Options .Amount:hover {
+.Withdrawal .Options .Amount:hover {
 	border-bottom: 1px solid rgb(29, 29, 32);
 	color: rgb(0, 0, 0);
 }
 
-.Deposit .Options .Amount::placeholder {
+.Withdrawal .Options .Amount::placeholder {
 	color: inherit;
 }
 
-.Deposit .Options .Cancel {
+.Withdrawal .Options .Cancel {
 	border: none;
 	cursor: pointer;
 	display: inline-block;
 	margin-left: 2px;
+	opacity: 0.8;
 	padding: 8px 16px;
+	transition: 0.4s;
 }
 
-.Deposit .Options .Methods {
+.Withdrawal .Options .Cancel:hover {
+	color: rgb(0, 0, 0);
+	text-decoration: underline;
+}
+
+.Withdrawal .Options .Methods {
 	background: rgb(248, 249, 251);
 	border: 1px solid rgb(173, 174, 176);
 	border-radius: 1px;
 	max-height: 300px;
 	overflow: hidden auto;
 	position: absolute;
-	top: 76px;
+	top: 60px;
 }
 
-.Deposit .Options .Methods .Method {
+.Withdrawal .Options .Methods .Method {
 	cursor: pointer;
 	font-size: 14px;
 	font-weight: 500;
@@ -75,35 +82,35 @@
 	transition: 0.4s;
 }
 
-.Deposit .Options .Methods .Method:hover {
+.Withdrawal .Options .Methods .Method:hover {
 	background: rgb(238, 239, 241);
 	color: rgb(0, 0, 0);
 }
 
-.Deposit .Options .SelectedMethod {
+.Withdrawal .Options .SelectedMethod {
 	border-bottom: 1px solid rgb(173, 174, 176);
 	padding: 16px 0 12px 8px;
 	transition: 0.4s;
 	width: 308px;
 }
 
-.Deposit .Options .SelectedMethod:hover {
+.Withdrawal .Options .SelectedMethod:hover {
 	border-bottom: 1px solid rgb(29, 29, 32);
 	color: rgb(48, 48, 52);
 	cursor: pointer;
 }
 
-.Deposit .Options .SelectedMethod .Icon {
+.Withdrawal .Options .SelectedMethod .Icon {
 	fill: rgb(88, 88, 92);
 	height: 24px;
 	left: 340px;
 	position: absolute;
 	transition: 0.4s;
-	top: 38px;
+	top: 28px;
 	width: 24px;
 }
 
-.Deposit .InitiateDeposit {
+.Withdrawal .InitiateWithdrawal {
 	all: initial;
 	background: rgb(18, 25, 44);
 	border: 1px solid rgb(18, 25, 44);
@@ -118,13 +125,13 @@
 	width: fit-content;
 }
 
-.Deposit .InitiateDeposit:hover {
+.Withdrawal .InitiateWithdrawal:hover {
 	background: rgb(248, 249, 251);
 	color: rgb(48, 48, 52);
 	cursor: pointer;
 }
 
-.Deposit .Title {
+.Withdrawal .Title {
 	font-family: 'Playfair Display', serif;
 	font-size: 42px;
 	margin: 0 36px;

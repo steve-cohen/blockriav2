@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { AmazonCognitoIdentity } from 'amazon-cognito-identity-js'
 import UserPool from '../../UserPool'
 import './SignUp.css'
 
@@ -24,16 +25,23 @@ const SignUp = () => {
 			return
 		}
 
-		// UserPool.signUp(email, password, [], null, (error, data) => {
-		// 	setIsLoading(false)
+		const customAttributes = [
+			{ Name: 'given_name', Value: firstName },
+			{ Name: 'family_name', Value: lastName },
+			{ Name: 'phone_number', Value: phoneNumber },
+			{ Name: 'custom:firm_name', Value: firmName }
+		]
 
-		// 	if (error) {
-		// 		alert(error.message)
-		// 	} else {
-		// 		console.log(data)
-		// 		navigate('/advisor')
-		// 	}
-		// })
+		UserPool.signUp(email, password, customAttributes, null, (error, data) => {
+			setIsLoading(false)
+
+			if (error) {
+				alert(error.message)
+			} else {
+				console.log(data)
+				navigate('/advisor')
+			}
+		})
 	}
 
 	return (

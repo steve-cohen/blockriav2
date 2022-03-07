@@ -1,3 +1,3 @@
 import { CognitoUserPool } from 'amazon-cognito-identity-js'
 
-export default new CognitoUserPool({ UserPoolId: 'us-west-1_j2Lp0w9qZ', ClientId: '2gm6bc9ia7ngaf3c2mb75ingm6' })
+export default new CognitoUserPool({ UserPoolId: 'us-west-1_cq7TRYjgb', ClientId: '6ovesvi8q12oaap68euvqem85l' })

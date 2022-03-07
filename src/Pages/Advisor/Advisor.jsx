@@ -11,12 +11,12 @@ import Edit from './Portfolios/Edit/Edit'
 import Invites from './Invites/Invites'
 import Navigation from './Navigation/Navigation'
 import Portfolios from './Portfolios/Portfolios'
-import Withdraw from './Clients/Client/Withdraw/Withdraw'
-import WithdrawConfirm from './Clients/Client/Withdraw/WithdrawConfirm/WithdrawConfirm'
+import Withdrawal from './Clients/Client/Withdrawal/Withdrawal'
+import WithdrawalConfirm from './Clients/Client/Withdrawal/WithdrawalConfirm/WithdrawalConfirm'
 
 import './Advisor.css'
 
-const Advisor = ({ clients, email, portfolios, setPortfolios }) => {
+const Advisor = ({ advisor, clients, portfolios, setPortfolios }) => {
 	return (
 		<div className='Advisor'>
 			<div className='Metadata'>
@@ -24,10 +24,10 @@ const Advisor = ({ clients, email, portfolios, setPortfolios }) => {
 					B
 				</Link>
 				<Link className='Firm' to='/advisor'>
-					Hardy Capital
+					{advisor.idToken.payload['custom:firm_name']}
 				</Link>
 				<Link className='Advisor' to='/advisor'>
-					Arynton Hardy
+					{advisor.idToken.payload.given_name} {advisor.idToken.payload.family_name}
 				</Link>
 			</div>
 			<div className='Content'>
@@ -44,8 +44,11 @@ const Advisor = ({ clients, email, portfolios, setPortfolios }) => {
 						<Route path='portfolios/assign' element={<Assign portfolios={portfolios} />} />
 						<Route path='portfolios/confirm' element={<Confirm portfolios={portfolios} />} />
 						<Route path='portfolios/edit' element={<Edit portfolios={portfolios} setPortfolios={setPortfolios} />} />
-						<Route path='clients/client/withdraw' element={<Withdraw clients={clients} />} />
-						<Route path='clients/client/withdrawconfirm' element={<WithdrawConfirm clients={clients} />} />
+						<Route path='clients/client/withdrawal' element={<Withdrawal clients={clients} />} />
+						<Route
+							path='clients/client/withdrawal/withdrawalconfirm'
+							element={<WithdrawalConfirm clients={clients} />}
+						/>
 					</Routes>
 				</div>
 			</div>

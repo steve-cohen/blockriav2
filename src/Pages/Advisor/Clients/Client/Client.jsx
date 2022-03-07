@@ -48,7 +48,7 @@ const Client = ({ clients, portfolios }) => {
 					<Link className='Option2' to={`deposit?clientName=${clientName}&clientId=${searchParams.get('clientId')}`}>
 						Initiate Deposit(s)
 					</Link>
-					<Link className='Option1' to={`withdraw?clientName=${clientName}&clientId=${searchParams.get('clientId')}`}>
+					<Link className='Option1' to={`withdrawal?clientName=${clientName}&clientId=${searchParams.get('clientId')}`}>
 						Initiate Withdrawal(s)
 					</Link>
 				</div>
