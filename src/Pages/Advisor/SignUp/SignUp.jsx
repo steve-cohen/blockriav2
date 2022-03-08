@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { AmazonCognitoIdentity } from 'amazon-cognito-identity-js'
-import UserPool from '../../UserPool'
+import UserPool from '../../../UserPool'
 import './SignUp.css'
 
 const SignUp = () => {
@@ -115,7 +114,7 @@ const SignUp = () => {
 				<button disabled={isLoading} type='submit'>
 					{isLoading ? 'Loading…' : 'Sign Up - Free for 30 days'}
 				</button>
-				<Link to='/signin'>Already have an account? Sign In</Link>
+				<Link to='/advisor/signin'>Already have an account? Sign In</Link>
 			</form>
 		</div>
 	)

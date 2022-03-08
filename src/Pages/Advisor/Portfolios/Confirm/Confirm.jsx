@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import './Confirm.css'
 
-function renderAllocation({ currency, percent }, index) {
+function renderAllocation({ holding, percent }, index) {
 	return (
 		<div className='Allocation' key={`Allocation ${index}`}>
 			<div className='Flex'>
-				<div className='Currency'>{currency}</div>
+				<div className='Holding'>{holding}</div>
 				<div className='Percent'>{`${percent.toFixed(2)}%`}</div>
 			</div>
 		</div>

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { AccountContext } from '../../Account'
+import { AccountContext } from '../../../Account'
 import './SignIn.css'
 
 const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
@@ -11,8 +11,8 @@ const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [password, setPassword] = useState('')
 
-	function getAdvisorClients(advisorId) {
-		return fetch(`https://blockria.com/advisor/clients?advisorId=${advisorId}`)
+	function getAdvisorClients(newAdvisor) {
+		return fetch(`https://blockria.com/advisor/clients?advisorId=${newAdvisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.then(newClients => {
 				console.log(newClients)
@@ -21,8 +21,8 @@ const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
 			.catch(error => alert(error))
 	}
 
-	function getAdvisorPortfolios(advisorId) {
-		return fetch(`https://blockria.com/portfolios/query?advisorId=${advisorId}`)
+	function getAdvisorPortfolios(newAdvisor) {
+		return fetch(`https://blockria.com/portfolios/query?advisorId=${newAdvisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.then(newPortfolios => {
 				console.log(newPortfolios)
@@ -42,9 +42,10 @@ const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
 		}
 
 		authenticate(email, password)
-			.then(async data => {
+			.then(async newAdvisor => {
 				setIsLoading(false)
-				await setAdvisor(data)
+				setAdvisor(newAdvisor)
+				await Promise.all([getAdvisorClients(newAdvisor), getAdvisorPortfolios(newAdvisor)])
 				navigate('/advisor')
 			})
 			.catch(({ message }) => {
@@ -95,7 +96,7 @@ const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
 				<button disabled={isLoading} type='submit'>
 					{isLoading ? 'Loading…' : 'Sign In'}
 				</button>
-				<Link to='/signup'>Need an account? Sign Up</Link>
+				<Link to='/advisor/signup'>Need an account? Sign Up</Link>
 			</form>
 		</div>
 	)

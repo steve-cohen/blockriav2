@@ -13,10 +13,10 @@ const Home = () => {
 					<div className='Name'>Block RIA</div>
 				</div>
 				<div>
-					<Link className='ToSignIn' to='/signin'>
+					<Link className='ToSignIn' to='/advisor/signin'>
 						Sign In
 					</Link>
-					<Link className='ToSignUp' to='/signup'>
+					<Link className='ToSignUp' to='/advisor/signup'>
 						Get Started
 					</Link>
 				</div>
@@ -33,10 +33,10 @@ const Home = () => {
 					<div>✓ Automatically rebalance and adjust portfolios</div>
 					<div>✓ Individually customize billing plans</div>
 					<div>✓ Quickly generate tax and performance reports</div>
-					<Link className='ToSignUp' to='/signup'>
+					<Link className='ToSignUp' to='/advisor/signup'>
 						Get Started
 					</Link>
-					<Link className='ToSignIn' to='/signin'>
+					<Link className='ToSignIn' to='/advisor/signin'>
 						Sign In
 					</Link>
 				</div>

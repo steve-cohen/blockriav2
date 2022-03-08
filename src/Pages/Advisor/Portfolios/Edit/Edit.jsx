@@ -9,9 +9,9 @@ const Edit = ({ portfolios, setPortfolios }) => {
 	const [searchParams] = useSearchParams()
 
 	const [allocations, setAllocations] = useState([
-		{ currency: '', percent: '' },
-		{ currency: '', percent: '' },
-		{ currency: '', percent: '' }
+		{ holding: '', percent: '' },
+		{ holding: '', percent: '' },
+		{ holding: '', percent: '' }
 	])
 	const [isLoading, setIsLoading] = useState(false)
 	const [portfolioName, setPortfolioName] = useState('')
@@ -29,15 +29,15 @@ const Edit = ({ portfolios, setPortfolios }) => {
 		}
 	}, [])
 
-	function addCurrency() {
+	function addHolding() {
 		let newAllocations = JSON.parse(JSON.stringify(allocations))
-		newAllocations.push({ currency: '', percent: '' })
+		newAllocations.push({ holding: '', percent: '' })
 		setAllocations(newAllocations)
 	}
 
-	function handleCurrency(e, index) {
+	function handleHolding(e, index) {
 		let newAllocations = JSON.parse(JSON.stringify(allocations))
-		newAllocations[index].currency = e.target.value
+		newAllocations[index].holding = e.target.value
 		setAllocations(newAllocations)
 	}
 
@@ -89,23 +89,23 @@ const Edit = ({ portfolios, setPortfolios }) => {
 		// 	})
 	}
 
-	function removeCurrency(index) {
+	function removeHolding(index) {
 		let newAllocations = JSON.parse(JSON.stringify(allocations))
 		newAllocations.splice(index, 1)
 		setAllocations(newAllocations)
 	}
 
-	function renderAllocation({ currency, percent }, index) {
+	function renderAllocation({ holding, percent }, index) {
 		return (
 			<div className='Allocation' key={`Allocation ${index}`}>
 				<div className='Flex'>
 					<input
-						className='Currency'
+						className='Holding'
 						minLength={1}
-						onChange={e => handleCurrency(e, index)}
+						onChange={e => handleHolding(e, index)}
 						placeholder='Holding'
 						required
-						value={currency}
+						value={holding}
 					/>
 					<input
 						className='Percent'
@@ -117,7 +117,7 @@ const Edit = ({ portfolios, setPortfolios }) => {
 					/>
 				</div>
 				{index > 0 && (
-					<div className='RemoveCurrency' onClick={() => removeCurrency(index)}>
+					<div className='RemoveHolding' onClick={() => removeHolding(index)}>
 						Remove
 					</div>
 				)}
@@ -138,7 +138,7 @@ const Edit = ({ portfolios, setPortfolios }) => {
 					value={portfolioName}
 				/>
 				{allocations.map(renderAllocation)}
-				<div className='AddCurrency' onClick={addCurrency}>
+				<div className='AddHolding' onClick={addHolding}>
 					+ Add Holding
 				</div>
 				{/* <button disabled={isLoading} type='submit'>
@@ -150,6 +150,9 @@ const Edit = ({ portfolios, setPortfolios }) => {
 				<button disabled={isLoading} type='submit'>
 					{isLoading ? 'Loading…' : 'Save Portfolio'}
 				</button>
+				<div className='Cancel' onClick={() => navigate(-1)}>
+					Cancel
+				</div>
 			</form>
 		</div>
 	)

@@ -19,7 +19,7 @@ const Assign = ({ portfolios }) => {
 				<td>
 					{JSON.parse(allocations.S)
 						.sort((a, b) => b.percent - a.percent)
-						.map(({ currency, percent }) => `${currency} ${percent}%`)
+						.map(({ holding, percent }) => `${holding} ${percent}%`)
 						.join(', ')}
 				</td>
 			</tr>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, Route, Routes } from 'react-router-dom'
 
 import Assign from './Portfolios/Assign/Assign'
@@ -11,12 +11,20 @@ import Edit from './Portfolios/Edit/Edit'
 import Invites from './Invites/Invites'
 import Navigation from './Navigation/Navigation'
 import Portfolios from './Portfolios/Portfolios'
+import SignIn from './SignIn/SignIn'
+import SignUp from './SignUp/SignUp'
 import Withdrawal from './Clients/Client/Withdrawal/Withdrawal'
 import WithdrawalConfirm from './Clients/Client/Withdrawal/WithdrawalConfirm/WithdrawalConfirm'
 
+import { demoAdvisor, demoClients, demoPortfolios } from './demoData'
+
 import './Advisor.css'
 
-const Advisor = ({ advisor, clients, portfolios, setPortfolios }) => {
+const Advisor = () => {
+	const [advisor, setAdvisor] = useState(demoAdvisor)
+	const [clients, setClients] = useState(demoClients)
+	const [portfolios, setPortfolios] = useState(demoPortfolios)
+
 	return (
 		<div className='Advisor'>
 			<div className='Metadata'>
@@ -48,6 +56,14 @@ const Advisor = ({ advisor, clients, portfolios, setPortfolios }) => {
 						<Route
 							path='clients/client/withdrawal/withdrawalconfirm'
 							element={<WithdrawalConfirm clients={clients} />}
+						/>
+						<Route
+							path='signin'
+							element={<SignIn setAdvisor={setAdvisor} setClients={setClients} setPortfolios={setPortfolios} />}
+						/>
+						<Route
+							path='signup'
+							element={<SignUp setAdvisor={setAdvisor} setClients={setClients} setPortfolios={setPortfolios} />}
 						/>
 					</Routes>
 				</div>

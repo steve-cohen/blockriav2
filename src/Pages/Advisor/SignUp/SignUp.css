@@ -1,24 +1,28 @@
-.SignIn {
+.SignUp {
 	background: rgb(248, 249, 251);
 	display: flex;
 	flex-wrap: wrap;
 	height: 80vh;
 	justify-content: center;
+	left: 0;
 	padding-top: 20vh;
+	position: absolute;
+	top: 0;
+	width: 100vw;
 }
 
-.SignIn form {
+.SignUp form {
 	margin: 0 36px;
 	width: 300px;
 }
 
-.SignIn form a {
+.SignUp form a {
 	display: block;
 	font-size: 14px;
 	margin-top: 24px;
 }
 
-.SignIn form button {
+.SignUp form button {
 	all: initial;
 	background: rgb(18, 25, 44);
 	border: 1px solid rgb(18, 25, 44);
@@ -31,13 +35,13 @@
 	transition: background-color 0.4s, color 0.4s;
 }
 
-.SignIn form button:hover {
+.SignUp form button:hover {
 	background: rgb(248, 249, 251);
 	color: rgb(48, 48, 52);
 	cursor: pointer;
 }
 
-.SignIn form input {
+.SignUp form input {
 	all: initial;
 	border-bottom: 1px solid rgb(173, 174, 176);
 	color: inherit;
@@ -52,23 +56,27 @@
 	width: 100%;
 }
 
-.SignIn form input:active,
-.SignIn form input:hover {
+.SignUp form input:active,
+.SignUp form input:hover {
 	border-bottom: 1px solid black;
 	color: rgb(0, 0, 0);
 	opacity: 1;
 }
 
-.SignIn form input::placeholder {
+.SignUp form input::placeholder {
 	color: inherit;
 }
 
-.SignIn .Description {
+.SignUp .Description {
 	margin: 0 36px;
 	width: 300px;
 }
 
-.SignIn .Description .Title {
+.SignUp .Description p span {
+	opacity: 0.8;
+}
+
+.SignUp .Description .Title {
 	font-family: 'Playfair Display', serif;
 	font-size: 42px;
 	margin-bottom: 24px;

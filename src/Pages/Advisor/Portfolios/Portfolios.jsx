@@ -9,7 +9,7 @@ function renderPortfolios({ allocations, portfolioId, portfolioName }) {
 			<td>
 				{JSON.parse(allocations.S)
 					.sort((a, b) => b.percent - a.percent)
-					.map(({ currency, percent }) => `${currency} ${percent}%`)
+					.map(({ holding, percent }) => `${holding} ${percent}%`)
 					.join('\n')}
 			</td>
 			<td>
