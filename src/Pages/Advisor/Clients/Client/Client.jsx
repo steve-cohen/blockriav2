@@ -19,31 +19,6 @@ const Client = ({ advisor, client, setClient }) => {
 		setIsLoading(false)
 	}, [])
 
-	// useEffect(() => {
-	// 	setIsLoading(true)
-
-	// 	const advisorId = advisor.idToken.payload.sub
-	// 	const clientId = searchParams.get('clientId')
-	// 	fetch(`https://blockria.com/coinbase/client?advisorId=${advisorId}&clientId=${clientId}`)
-	// 		.then(response => response.json())
-	// 		.then(newClient => {
-	// 			console.log(newClient)
-
-	// 			if (newClient && newClient.accounts && newClient.accounts.length) {
-	// 				setAccounts(newClient.accounts)
-	// 				setNonzeroAccounts(newClient.accounts.filter(({ balance }) => Number(balance.amount)))
-	// 			}
-
-	// 			if (newClient && newClient.portfolioId) setPortfolioId(newClient.portfolioId)
-
-	// 			setIsLoading(false)
-	// 		})
-	// 		.catch(error => {
-	// 			setIsLoading(false)
-	// 			alert(error)
-	// 		})
-	// }, [])
-
 	function renderAccount({ balance, id, name, native_balance }) {
 		if (Number(balance.amount)) {
 			return (

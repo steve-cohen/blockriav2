@@ -9,6 +9,17 @@ export const demoAdvisor = {
 	}
 }
 
+export const demoAdvisorEmpty = {
+	idToken: {
+		payload: {
+			'custom:firm_name': '',
+			family_name: '',
+			given_name: '',
+			sub: ''
+		}
+	}
+}
+
 export const demoClient = {
 	accounts: [
 		{

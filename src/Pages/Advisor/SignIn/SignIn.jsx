@@ -1,6 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AccountContext } from '../../../Account'
+import { demoAdvisorEmpty } from '../demoData'
 import './SignIn.css'
 
 const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
@@ -10,6 +11,11 @@ const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
 	const [email, setEmail] = useState('')
 	const [isLoading, setIsLoading] = useState(false)
 	const [password, setPassword] = useState('')
+
+	useEffect(() => {
+		localStorage.clear()
+		setAdvisor(demoAdvisorEmpty)
+	}, [])
 
 	function getAdvisorClients(newAdvisor) {
 		return fetch(`https://blockria.com/advisor/clients?advisorId=${newAdvisor.idToken.payload.sub}`)
@@ -43,32 +49,18 @@ const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
 
 		authenticate(email, password)
 			.then(async newAdvisor => {
-				setIsLoading(false)
 				setAdvisor(newAdvisor)
+				localStorage.setItem('advisor', JSON.stringify(newAdvisor))
+
 				await Promise.all([getAdvisorClients(newAdvisor), getAdvisorPortfolios(newAdvisor)])
+
+				setIsLoading(false)
 				navigate('/advisor')
 			})
 			.catch(({ message }) => {
 				setIsLoading(false)
 				alert(message)
 			})
-
-		// authenticate(email, password)
-		// 	.then(async data => {
-		// 		if (data.idToken.payload.email_verified) {
-		// 			const advisorId = data.idToken.payload.sub
-		// 			await Promise.all([getAdvisorClients(advisorId), getAdvisorPortfolios(advisorId)])
-		// 			setIsLoading(false)
-		// 			navigate('/advisor/overview')
-		// 		} else {
-		// 			setIsLoading(false)
-		// 			navigate('/verifyemail')
-		// 		}
-		// 	})
-		// 	.catch(({ message }) => {
-		// 		setIsLoading(false)
-		// 		alert(message)
-		// 	})
 	}
 
 	return (

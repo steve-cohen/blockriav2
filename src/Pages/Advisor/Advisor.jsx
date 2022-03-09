@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link, Route, Routes } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, Navigate, Route, Routes } from 'react-router-dom'
 
 import Assign from './Portfolios/Assign/Assign'
 import Client from './Clients/Client/Client'
@@ -14,13 +14,13 @@ import SignIn from './SignIn/SignIn'
 import SignUp from './SignUp/SignUp'
 import Withdrawal from './Clients/Client/Withdrawal/Withdrawal'
 
-import { demoAdvisor, demoClient, demoClients, demoPortfolios } from './demoData'
+import { demoAdvisor, demoAdvisorEmpty, demoClient, demoClients, demoPortfolios } from './demoData'
 
 import './Advisor.css'
 
 const Advisor = () => {
 	// Advisor Data
-	const [advisor, setAdvisor] = useState(demoAdvisor)
+	const [advisor, setAdvisor] = useState(JSON.parse(localStorage.getItem('advisor')) || demoAdvisorEmpty)
 	const [client, setClient] = useState(demoClient)
 	const [clients, setClients] = useState(demoClients)
 	const [portfolios, setPortfolios] = useState(demoPortfolios)
@@ -42,16 +42,28 @@ const Advisor = () => {
 				<Navigation />
 				<div className='Body'>
 					<Routes>
-						<Route path='' element={<Clients clients={clients} portfolios={portfolios} />} />
-						<Route path='clients' element={<Clients clients={clients} portfolios={portfolios} />} />
-						<Route path='clients/client' element={<Client advisor={advisor} client={client} setClient={setClient} />} />
-						<Route path='clients/client/deposit' element={<Deposit advisor={advisor} client={client} />} />
-						<Route path='invites' element={<Invites />} />
-						<Route path='portfolios' element={<Portfolios portfolios={portfolios} />} />
-						<Route path='portfolios/assign' element={<Assign portfolios={portfolios} />} />
-						<Route path='portfolios/confirm' element={<Confirm portfolios={portfolios} />} />
-						<Route path='portfolios/edit' element={<Edit portfolios={portfolios} setPortfolios={setPortfolios} />} />
-						<Route path='clients/client/withdrawal' element={<Withdrawal advisor={advisor} client={client} />} />
+						{advisor.idToken.payload.sub ? (
+							<>
+								<Route path='' element={<Clients clients={clients} portfolios={portfolios} />} />
+								<Route path='clients' element={<Clients clients={clients} portfolios={portfolios} />} />
+								<Route
+									path='clients/client'
+									element={<Client advisor={advisor} client={client} setClient={setClient} />}
+								/>
+								<Route path='clients/client/deposit' element={<Deposit advisor={advisor} client={client} />} />
+								<Route path='invites' element={<Invites />} />
+								<Route path='portfolios' element={<Portfolios portfolios={portfolios} />} />
+								<Route path='portfolios/assign' element={<Assign portfolios={portfolios} />} />
+								<Route path='portfolios/confirm' element={<Confirm portfolios={portfolios} />} />
+								<Route
+									path='portfolios/edit'
+									element={<Edit portfolios={portfolios} setPortfolios={setPortfolios} />}
+								/>
+								<Route path='clients/client/withdrawal' element={<Withdrawal advisor={advisor} client={client} />} />
+							</>
+						) : (
+							<Route path='*' element={<Navigate to='signin' />} />
+						)}
 						<Route
 							path='signin'
 							element={<SignIn setAdvisor={setAdvisor} setClients={setClients} setPortfolios={setPortfolios} />}
