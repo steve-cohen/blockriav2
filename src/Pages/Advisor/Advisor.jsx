@@ -13,7 +13,6 @@ import Portfolios from './Portfolios/Portfolios'
 import SignIn from './SignIn/SignIn'
 import SignUp from './SignUp/SignUp'
 import Withdrawal from './Clients/Client/Withdrawal/Withdrawal'
-import WithdrawalConfirm from './Clients/Client/Withdrawal/WithdrawalConfirm/WithdrawalConfirm'
 
 import { demoAdvisor, demoClient, demoClients, demoPortfolios } from './demoData'
 
