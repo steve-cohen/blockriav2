@@ -21,9 +21,9 @@ import './Advisor.css'
 const Advisor = () => {
 	// Advisor Data
 	const [advisor, setAdvisor] = useState(JSON.parse(localStorage.getItem('advisor')) || demoAdvisorEmpty)
-	const [client, setClient] = useState(demoClient)
-	const [clients, setClients] = useState(demoClients)
-	const [portfolios, setPortfolios] = useState(demoPortfolios)
+	const [client, setClient] = useState(JSON.parse(localStorage.getItem('client')) || demoClient)
+	const [clients, setClients] = useState(JSON.parse(localStorage.getItem('clients')) || demoClients)
+	const [portfolios, setPortfolios] = useState(JSON.parse(localStorage.getItem('portfolios')) || demoPortfolios)
 
 	return (
 		<div className='Advisor'>

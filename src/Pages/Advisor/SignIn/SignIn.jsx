@@ -22,6 +22,7 @@ const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
 			.then(response => response.json())
 			.then(newClients => {
 				console.log(newClients)
+				localStorage.setItem('clients', JSON.stringify(newClients))
 				setClients(newClients)
 			})
 			.catch(error => alert(error))
@@ -32,6 +33,7 @@ const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
 			.then(response => response.json())
 			.then(newPortfolios => {
 				console.log(newPortfolios)
+				localStorage.setItem('portfolios', JSON.stringify(newPortfolios))
 				setPortfolios(newPortfolios)
 			})
 			.catch(error => alert(error))

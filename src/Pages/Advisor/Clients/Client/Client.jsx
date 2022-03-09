@@ -13,7 +13,11 @@ const Client = ({ advisor, client, setClient }) => {
 
 		await fetch(`https://blockria.com/coinbase/client?advisorId=${advisorId}&clientId=${clientId}`)
 			.then(response => response.json())
-			.then(newClient => setClient(newClient))
+			.then(newClient => {
+				console.log(newClient)
+				localStorage.setItem('client', JSON.stringify(newClient))
+				setClient(newClient)
+			})
 			.catch(error => alert(error))
 
 		setIsLoading(false)

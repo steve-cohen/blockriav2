@@ -57,7 +57,7 @@ const Clients = ({ clients, portfolios }) => {
 				<td>
 					<Link to={`/advisor/clients/client?clientName=${clientName.S}&clientId=${clientId.S}`}>{clientName.S}</Link>
 				</td>
-				<td>{balance.toLocaleString('en-US', { style: 'currency', currency: native_currency })}</td>
+				{/* <td>{balance.toLocaleString('en-US', { style: 'currency', currency: native_currency })}</td> */}
 				<td>
 					{portfolioId.S
 						? renderPortfolio(clientId.S, clientName.S, portfolioId.S, portfolios)
@@ -110,7 +110,7 @@ const Clients = ({ clients, portfolios }) => {
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Balance</th>
+						{/* <th>Balance</th> */}
 						<th>Portfolio</th>
 						<th>Custodian</th>
 					</tr>
