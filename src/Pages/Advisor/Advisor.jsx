@@ -6,7 +6,6 @@ import Client from './Clients/Client/Client'
 import Clients from './Clients/Clients'
 import Confirm from './Portfolios/Confirm/Confirm'
 import Deposit from './Clients/Client/Deposit/Deposit'
-import DepositConfirm from './Clients/Client/Deposit/DepositConfirm/DepositConfirm'
 import Edit from './Portfolios/Edit/Edit'
 import Invites from './Invites/Invites'
 import Navigation from './Navigation/Navigation'
@@ -45,14 +44,13 @@ const Advisor = () => {
 						<Route path='' element={<Clients clients={clients} portfolios={portfolios} />} />
 						<Route path='clients' element={<Clients clients={clients} portfolios={portfolios} />} />
 						<Route path='clients/client' element={<Client clients={clients} portfolios={portfolios} />} />
-						<Route path='clients/client/deposit' element={<Deposit clients={clients} />} />
-						<Route path='clients/client/deposit/depositconfirm' element={<DepositConfirm clients={clients} />} />
+						<Route path='clients/client/deposit' element={<Deposit advisor={advisor} />} />
 						<Route path='invites' element={<Invites />} />
 						<Route path='portfolios' element={<Portfolios portfolios={portfolios} />} />
 						<Route path='portfolios/assign' element={<Assign portfolios={portfolios} />} />
 						<Route path='portfolios/confirm' element={<Confirm portfolios={portfolios} />} />
 						<Route path='portfolios/edit' element={<Edit portfolios={portfolios} setPortfolios={setPortfolios} />} />
-						<Route path='clients/client/withdrawal' element={<Withdrawal clients={clients} />} />
+						<Route path='clients/client/withdrawal' element={<Withdrawal advisor={advisor} />} />
 						<Route
 							path='clients/client/withdrawal/withdrawalconfirm'
 							element={<WithdrawalConfirm clients={clients} />}

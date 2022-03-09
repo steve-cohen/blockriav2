@@ -3,7 +3,8 @@ export const demoAdvisor = {
 		payload: {
 			'custom:firm_name': 'Cohen Capital',
 			family_name: 'Cohen',
-			given_name: 'Steve'
+			given_name: 'Steve',
+			sub: 'aukn3kq-asda3-asdsa3-asdaw-asdweasd'
 		}
 	}
 }

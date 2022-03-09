@@ -2,37 +2,46 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import './Withdrawal.css'
 
-const Withdrawal = ({ clients }) => {
+const Withdrawal = ({ advisor }) => {
 	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
 
 	const [amount, setAmount] = useState('')
+	const [showWithdrawalMethods, setShowWithdrawalMethods] = useState(false)
 	const [withdrawalMethod, setWithdrawalMethod] = useState({
 		id: -1,
 		limits: { deposit: [{ description: '' }] },
-		name: 'No Withdraw Methods Available'
+		name: 'Loading...'
 	})
 	const [withdrawalMethods, setWithdrawalMethods] = useState([])
-	const [showWithdrawalMethods, setShowWithdrawalMethods] = useState(false)
 
 	useEffect(() => {
-		const client = clients.filter(({ clientId }) => clientId.S === searchParams.get('clientId'))
-
-		if (client.length) {
-			console.log(client)
-			console.log(JSON.parse(client[0].paymentMethods.S))
-
-			let newWithdrawalMethods = []
-			JSON.parse(client[0].paymentMethods.S)
-				.filter(({ allow_withdraw }) => allow_withdraw)
-				.forEach(method => newWithdrawalMethods.push(method))
-
-			console.log(newWithdrawalMethods)
-			setWithdrawalMethods(newWithdrawalMethods)
-
-			newWithdrawalMethods.forEach(newWithdrawalMethod => setWithdrawalMethod(newWithdrawalMethod))
-		}
+		getPaymentMethods(advisor.idToken.payload.sub, searchParams.get('clientId'))
 	}, [])
+
+	async function getPaymentMethods(advisorId, clientId) {
+		console.log({ advisorId, clientId })
+		return await fetch(`https://blockria.com/coinbase/paymentmethods?advisorId=${advisorId}&clientId=${clientId}`)
+			.then(response => response.json())
+			.then(newPaymentMethods => {
+				console.log(newPaymentMethods)
+
+				if (newPaymentMethods && newPaymentMethods.data && newPaymentMethods.data.length) {
+					const newWithdrawalMethods = newPaymentMethods.data.filter(({ allow_withdraw }) => allow_withdraw)
+
+					console.log(newWithdrawalMethods)
+					setWithdrawalMethods(newWithdrawalMethods)
+					setWithdrawalMethod(newWithdrawalMethods[0])
+				} else {
+					setWithdrawalMethod({
+						id: -1,
+						limits: { deposit: [{ description: '' }] },
+						name: 'No Withdrawal Method Found'
+					})
+				}
+			})
+			.catch(error => alert(error))
+	}
 
 	function handleSubmit() {
 		let url = 'withdrawalconfirm?'
@@ -42,7 +51,6 @@ const Withdrawal = ({ clients }) => {
 	}
 
 	function renderWithdrawalMethod(newWithdrawalMethod) {
-		console.log(newWithdrawalMethod.id)
 		return (
 			<div
 				className='Method'

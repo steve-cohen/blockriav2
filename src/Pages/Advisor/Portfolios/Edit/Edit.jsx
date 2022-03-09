@@ -61,32 +61,48 @@ const Edit = ({ portfolios, setPortfolios }) => {
 		const advisorId = getAdvisorId()
 		let newAllocations = JSON.stringify(allocations)
 		let newPortfolioId = portfolioId || new Date().getTime().toString()
+		let newPortfolioName = portfolioName
 
 		let url = `https://blockria.com/portfolios/update`
-		url += `?advisorId=${advisorId}&portfolioId=${newPortfolioId}&portfolioName=${portfolioName}&allocations=${newAllocations}`
+		url += `?advisorId=${advisorId}&portfolioId=${newPortfolioId}&portfolioName=${newPortfolioName}&allocations=${newAllocations}`
 
 		console.log(url)
-		// fetch(url)
-		// 	.then(response => {
-		// 		console.log(response)
+		fetch(url)
+			.then(response => {
+				console.log(response)
 
-		// 		console.log(portfolios)
-		// 		let newPortfolios = JSON.parse(JSON.stringify(portfolios))
-		// 		newPortfolios.push({
-		// 			portfolioId: { S: portfolioId },
-		// 			portfolioName: { S: portfolioName },
-		// 			allocations: { S: newAllocations }
-		// 		})
-		// 		console.log(newPortfolios)
+				console.log(portfolios)
+				let newPortfolios = JSON.parse(JSON.stringify(portfolios))
 
-		// 		setPortfolios(newPortfolios)
-		// 		setIsLoading(false)
-		// 		navigate('/advisor/portfolios')
-		// 	})
-		// 	.catch(error => {
-		// 		setIsLoading(false)
-		// 		alert(error)
-		// 	})
+				if (portfolioId) {
+					let newPortfoliosObject = {}
+					newPortfolios.forEach(newPortfolio => (newPortfoliosObject[newPortfolio.portfolioId.S] = newPortfolio))
+					console.log({ newPortfoliosObject })
+
+					newPortfoliosObject[portfolioId] = {
+						portfolioId: { S: portfolioId },
+						portfolioName: { S: newPortfolioName },
+						allocations: { S: newAllocations }
+					}
+
+					newPortfolios = Object.values(newPortfoliosObject)
+				} else {
+					newPortfolios.push({
+						portfolioId: { S: newPortfolioId },
+						portfolioName: { S: newPortfolioName },
+						allocations: { S: newAllocations }
+					})
+				}
+				console.log(newPortfolios)
+
+				setPortfolios(newPortfolios)
+				setIsLoading(false)
+				navigate('/advisor/portfolios')
+			})
+			.catch(error => {
+				setIsLoading(false)
+				alert(error)
+			})
 	}
 
 	function removeHolding(index) {
