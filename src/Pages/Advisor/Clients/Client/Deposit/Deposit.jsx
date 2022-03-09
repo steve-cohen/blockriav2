@@ -2,57 +2,37 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import './Deposit.css'
 
-const Deposit = ({ advisor }) => {
+const Deposit = ({ advisor, client }) => {
 	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
 
-	const [accountId, setAccountId] = useState(-1)
+	const [accountId, setAccountId] = useState(0)
 	const [amount, setAmount] = useState('')
-	const [confirmDeposit, setConfirmDeposit] = useState(false)
 	const [depositMethod, setDepositMethod] = useState({
-		id: -1,
+		id: 0,
 		limits: { deposit: [{ description: '' }] },
 		name: 'Loading...'
 	})
+
+	const [confirmDeposit, setConfirmDeposit] = useState(false)
 	const [depositMethods, setDepositMethods] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [showDepositMethods, setShowDepositMethods] = useState(false)
 
 	useEffect(() => {
-		getDepositMethods()
+		if (client && client.paymentMethods && client.paymentMethods.length) {
+			// Deposit Methods
+			const newDepositMethods = client.paymentMethods.filter(({ allow_deposit }) => allow_deposit)
+			setDepositMethods(newDepositMethods)
+			setDepositMethod(newDepositMethods[0])
+
+			// AccountId
+			const newAccountId = client.paymentMethods.filter(({ fiat_account }) => fiat_account && fiat_account.id)
+			if (newAccountId && newAccountId.length) setAccountId(newAccountId[0].fiat_account.id)
+		} else {
+			setDepositMethod({ id: 0, limits: { deposit: [{ description: '' }] }, name: 'No Deposit Methods Found' })
+		}
 	}, [])
-
-	async function getDepositMethods() {
-		const advisorId = advisor.idToken.payload.sub
-		const clientId = searchParams.get('clientId')
-		console.log({ advisorId, clientId })
-
-		return await fetch(`https://blockria.com/coinbase/paymentmethods?advisorId=${advisorId}&clientId=${clientId}`)
-			.then(response => response.json())
-			.then(newPaymentMethods => {
-				console.log(newPaymentMethods)
-
-				if (newPaymentMethods && newPaymentMethods.data && newPaymentMethods.data.length) {
-					// Deposit Methods
-					const newDepositMethods = newPaymentMethods.data.filter(({ allow_deposit }) => allow_deposit)
-					console.log(newDepositMethods)
-					setDepositMethods(newDepositMethods)
-					setDepositMethod(newDepositMethods[0])
-
-					// AccountId
-					const newAccountId = newPaymentMethods.data.filter(({ fiat_account }) => fiat_account !== undefined)
-					console.log({ newAccountId })
-					if (newAccountId && newAccountId.length) setAccountId(newAccountId[0].fiat_account.id)
-				} else {
-					setDepositMethod({
-						id: -1,
-						limits: { deposit: [{ description: '' }] },
-						name: 'No Deposit Methods Found'
-					})
-				}
-			})
-			.catch(error => alert(JSON.stringify(error)))
-	}
 
 	function handleSubmit(e) {
 		e.preventDefault()
