@@ -60,6 +60,7 @@ const Advisor = () => {
 									element={<Edit portfolios={portfolios} setPortfolios={setPortfolios} />}
 								/>
 								<Route path='clients/client/withdrawal' element={<Withdrawal advisor={advisor} client={client} />} />
+								<Route path='*' element={<Navigate to='' />} />
 							</>
 						) : (
 							<Route path='*' element={<Navigate to='signin' />} />

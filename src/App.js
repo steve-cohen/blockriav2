@@ -12,7 +12,7 @@ function App() {
 		<Account className='App'>
 			<Routes>
 				<Route path='/advisor/*' element={<Advisor />} />
-				<Route path='/' element={<Home />} />
+				<Route path='*' element={<Home />} />
 			</Routes>
 		</Account>
 	)
