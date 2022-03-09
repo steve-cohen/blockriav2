@@ -1,54 +1,83 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import './Client.css'
 
-const Client = ({ clients, portfolios }) => {
-	const navigate = useNavigate()
+const Client = ({ advisor, client, setClient }) => {
 	const [searchParams] = useSearchParams()
+	const [isLoading, setIsLoading] = useState(false)
 
-	const [clientName, setClientName] = useState('')
-	const [nonzeroAccounts, setNonzeroAccounts] = useState([])
-	const [portfolioId, setPortfolioId] = useState('')
+	useEffect(async () => {
+		setIsLoading(true)
+		const advisorId = advisor.idToken.payload.sub
+		const clientId = searchParams.get('clientId')
 
-	useEffect(() => {
-		const client = clients.filter(({ clientId }) => clientId.S === searchParams.get('clientId'))
+		await fetch(`https://blockria.com/coinbase/client?advisorId=${advisorId}&clientId=${clientId}`)
+			.then(response => response.json())
+			.then(newClient => setClient(newClient))
+			.catch(error => alert(error))
 
-		if (client.length) {
-			setClientName(client[0].clientName.S)
-			setPortfolioId(client[0].portfolioId.S)
-			setNonzeroAccounts(JSON.parse(client[0].nonzeroAccounts.S))
-		}
+		setIsLoading(false)
 	}, [])
 
-	function renderNonZeroAccount({ balance, id, name, native_balance }) {
-		console.log(nonzeroAccounts)
+	// useEffect(() => {
+	// 	setIsLoading(true)
 
-		return (
-			<tr key={`NonZeroAccount ${id}`}>
-				{/* <td></td> */}
-				<td>
-					{Number(native_balance.amount).toLocaleString('en-US', {
-						style: 'currency',
-						currency: native_balance.currency
-					})}
-				</td>
-				<td>{balance.currency}</td>
-				<td>{name}</td>
-				<td>{balance.amount}</td>
-			</tr>
-		)
+	// 	const advisorId = advisor.idToken.payload.sub
+	// 	const clientId = searchParams.get('clientId')
+	// 	fetch(`https://blockria.com/coinbase/client?advisorId=${advisorId}&clientId=${clientId}`)
+	// 		.then(response => response.json())
+	// 		.then(newClient => {
+	// 			console.log(newClient)
+
+	// 			if (newClient && newClient.accounts && newClient.accounts.length) {
+	// 				setAccounts(newClient.accounts)
+	// 				setNonzeroAccounts(newClient.accounts.filter(({ balance }) => Number(balance.amount)))
+	// 			}
+
+	// 			if (newClient && newClient.portfolioId) setPortfolioId(newClient.portfolioId)
+
+	// 			setIsLoading(false)
+	// 		})
+	// 		.catch(error => {
+	// 			setIsLoading(false)
+	// 			alert(error)
+	// 		})
+	// }, [])
+
+	function renderAccount({ balance, id, name, native_balance }) {
+		if (Number(balance.amount)) {
+			return (
+				<tr key={`Account ${id}`}>
+					<td>
+						{Number(native_balance.amount).toLocaleString('en-US', {
+							style: 'currency',
+							currency: native_balance.currency
+						})}
+					</td>
+					<td>{balance.currency}</td>
+					<td>{name}</td>
+					<td>{balance.amount}</td>
+				</tr>
+			)
+		}
 	}
 
 	return (
 		<div className='Client'>
-			<div className='Title'>{clientName}</div>
+			<div className='Title'>{searchParams.get('clientName')}</div>
 			<div className='Options'>
 				<div></div>
 				<div>
-					<Link className='Option2' to={`deposit?clientName=${clientName}&clientId=${searchParams.get('clientId')}`}>
+					<Link
+						className='Option2'
+						to={`deposit?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get('clientId')}`}
+					>
 						Initiate Deposit(s)
 					</Link>
-					<Link className='Option1' to={`withdrawal?clientName=${clientName}&clientId=${searchParams.get('clientId')}`}>
+					<Link
+						className='Option1'
+						to={`withdrawal?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get('clientId')}`}
+					>
 						Initiate Withdrawal(s)
 					</Link>
 				</div>
@@ -63,7 +92,15 @@ const Client = ({ clients, portfolios }) => {
 						<th>AMOUNT</th>
 					</tr>
 				</thead>
-				<tbody>{nonzeroAccounts.map(renderNonZeroAccount)}</tbody>
+				<tbody>
+					{isLoading ? (
+						<tr>
+							<td>Loading...</td>
+						</tr>
+					) : (
+						client.accounts.map(renderAccount)
+					)}
+				</tbody>
 			</table>
 		</div>
 	)

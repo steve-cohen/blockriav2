@@ -55,7 +55,7 @@ const Clients = ({ clients, portfolios }) => {
 		return (
 			<tr key={clientId.S}>
 				<td>
-					<Link to={`/advisor/clients/client?clientId=${clientId.S}`}>{clientName.S}</Link>
+					<Link to={`/advisor/clients/client?clientName=${clientName.S}&clientId=${clientId.S}`}>{clientName.S}</Link>
 				</td>
 				<td>{balance.toLocaleString('en-US', { style: 'currency', currency: native_currency })}</td>
 				<td>

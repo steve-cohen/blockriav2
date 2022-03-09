@@ -9,6 +9,169 @@ export const demoAdvisor = {
 	}
 }
 
+export const demoClient = {
+	accounts: [
+		{
+			id: '2fec3a62-52fa-5aaa-9a6f-b4f29su823ns9',
+			name: 'Cash (USD)',
+			primary: false,
+			type: 'fiat',
+			currency: 'USD',
+			balance: {
+				amount: '42.00',
+				currency: 'USD'
+			},
+			created_at: '2021-10-26T08:14:57Z',
+			updated_at: '2022-03-09T05:01:48Z',
+			resource: 'account',
+			resource_path: '/v2/accounts/2fec3a62-52fa-5aaa-9a6f-b4f29su823ns9',
+			allow_deposits: true,
+			allow_withdrawals: true,
+			native_balance: {
+				amount: '42.00',
+				currency: 'USD'
+			}
+		},
+		{
+			id: '2f839f04-c867-59c7-a4dc-98831cc92mjd',
+			name: 'BTC Wallet',
+			primary: true,
+			type: 'wallet',
+			currency: 'BTC',
+			balance: {
+				amount: '0.00000036',
+				currency: 'BTC'
+			},
+			created_at: '2021-10-26T08:12:06Z',
+			updated_at: '2022-02-17T07:51:35Z',
+			resource: 'account',
+			resource_path: '/v2/accounts/2f839f04-c867-59c7-a4dc-98831cc92mjd',
+			allow_deposits: true,
+			allow_withdrawals: true,
+			native_balance: {
+				amount: '0.01',
+				currency: 'USD'
+			}
+		},
+		{
+			id: 'ETH',
+			name: 'ETH Wallet',
+			primary: false,
+			type: 'wallet',
+			currency: 'ETH',
+			balance: {
+				amount: '0.00000000',
+				currency: 'ETH'
+			},
+			created_at: null,
+			updated_at: null,
+			resource: 'account',
+			resource_path: '/v2/accounts/ETH',
+			allow_deposits: true,
+			allow_withdrawals: true,
+			native_balance: {
+				amount: '0.00',
+				currency: 'USD'
+			}
+		}
+	],
+	clientId: 'io8jhwaoidsfd32r',
+	clientName: 'Steve Cohen',
+	paymentMethods: [
+		{
+			id: '20dc79dc-3d72-5cf8-9894-c14jd9fbt109',
+			type: 'fiat_account',
+			name: 'Cash (USD)',
+			currency: 'USD',
+			primary_buy: false,
+			primary_sell: true,
+			instant_buy: true,
+			instant_sell: true,
+			created_at: '2021-10-26T08:14:57Z',
+			updated_at: '2021-10-26T08:14:57Z',
+			resource: 'payment_method',
+			resource_path: '/v2/payment-methods/20dc79dc-3d72-5cf8-9894-c14jd9fbt109',
+			limits: {
+				type: 'fiat_account',
+				name: 'Coinbase Account'
+			},
+			allow_buy: true,
+			allow_sell: true,
+			allow_deposit: false,
+			allow_withdraw: false,
+			fiat_account: {
+				id: '2fec3a62-52fa-5aaa-9a6f-b4f29e0b9d90',
+				resource: 'account',
+				resource_path: '/v2/accounts/2fec3a62-52fa-5aaa-9a6f-b4f29e0b9d90'
+			},
+			verified: true,
+			minimum_purchase_amount: {
+				amount: '1.00',
+				currency: 'USD'
+			}
+		},
+		{
+			id: 'e4227a07-1daf-595c-8547-dc38djtb5840',
+			type: 'ach_bank_account',
+			name: 'BANK OF AMERICA, N.A. ********4019',
+			currency: 'USD',
+			primary_buy: true,
+			primary_sell: false,
+			instant_buy: true,
+			instant_sell: false,
+			created_at: '2022-02-16T00:29:05Z',
+			updated_at: '2022-02-16T00:29:06Z',
+			resource: 'payment_method',
+			resource_path: '/v2/payment-methods/e4227a07-1daf-595c-8547-dc38djtb5840',
+			limits: {
+				type: 'bank',
+				name: 'Bank Account',
+				buy: [
+					{
+						period_in_days: 1,
+						total: {
+							amount: '35000.00',
+							currency: 'USD'
+						},
+						remaining: {
+							amount: '35000.00',
+							currency: 'USD'
+						},
+						description: '$35,000 of your $35,000 daily bank limit remaining',
+						label: 'Daily bank limit',
+						next_requirement: null
+					}
+				],
+				deposit: [
+					{
+						period_in_days: 1,
+						total: {
+							amount: '35000.00',
+							currency: 'USD'
+						},
+						remaining: {
+							amount: '35000.00',
+							currency: 'USD'
+						},
+						description: '$35,000 of your $35,000 daily bank limit remaining',
+						label: 'Daily bank limit'
+					}
+				]
+			},
+			allow_buy: true,
+			allow_sell: false,
+			allow_deposit: true,
+			allow_withdraw: true,
+			verified: true,
+			minimum_purchase_amount: {
+				amount: '1.00',
+				currency: 'USD'
+			}
+		}
+	],
+	portfolioId: ''
+}
+
 export const demoClients = [
 	{
 		clientId: { S: 'io8jhwaoidsfd32r' },

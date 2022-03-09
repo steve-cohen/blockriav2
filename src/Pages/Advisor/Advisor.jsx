@@ -15,12 +15,14 @@ import SignUp from './SignUp/SignUp'
 import Withdrawal from './Clients/Client/Withdrawal/Withdrawal'
 import WithdrawalConfirm from './Clients/Client/Withdrawal/WithdrawalConfirm/WithdrawalConfirm'
 
-import { demoAdvisor, demoClients, demoPortfolios } from './demoData'
+import { demoAdvisor, demoClient, demoClients, demoPortfolios } from './demoData'
 
 import './Advisor.css'
 
 const Advisor = () => {
+	// Advisor Data
 	const [advisor, setAdvisor] = useState(demoAdvisor)
+	const [client, setClient] = useState(demoClient)
 	const [clients, setClients] = useState(demoClients)
 	const [portfolios, setPortfolios] = useState(demoPortfolios)
 
@@ -43,8 +45,8 @@ const Advisor = () => {
 					<Routes>
 						<Route path='' element={<Clients clients={clients} portfolios={portfolios} />} />
 						<Route path='clients' element={<Clients clients={clients} portfolios={portfolios} />} />
-						<Route path='clients/client' element={<Client clients={clients} portfolios={portfolios} />} />
-						<Route path='clients/client/deposit' element={<Deposit advisor={advisor} />} />
+						<Route path='clients/client' element={<Client advisor={advisor} client={client} setClient={setClient} />} />
+						<Route path='clients/client/deposit' element={<Deposit advisor={advisor} client={client} />} />
 						<Route path='invites' element={<Invites />} />
 						<Route path='portfolios' element={<Portfolios portfolios={portfolios} />} />
 						<Route path='portfolios/assign' element={<Assign portfolios={portfolios} />} />
