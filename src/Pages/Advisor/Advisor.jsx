@@ -52,11 +52,7 @@ const Advisor = () => {
 						<Route path='portfolios/assign' element={<Assign portfolios={portfolios} />} />
 						<Route path='portfolios/confirm' element={<Confirm portfolios={portfolios} />} />
 						<Route path='portfolios/edit' element={<Edit portfolios={portfolios} setPortfolios={setPortfolios} />} />
-						<Route path='clients/client/withdrawal' element={<Withdrawal advisor={advisor} />} />
-						<Route
-							path='clients/client/withdrawal/withdrawalconfirm'
-							element={<WithdrawalConfirm clients={clients} />}
-						/>
+						<Route path='clients/client/withdrawal' element={<Withdrawal advisor={advisor} client={client} />} />
 						<Route
 							path='signin'
 							element={<SignIn setAdvisor={setAdvisor} setClients={setClients} setPortfolios={setPortfolios} />}

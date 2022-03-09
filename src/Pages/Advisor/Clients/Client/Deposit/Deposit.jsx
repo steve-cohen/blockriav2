@@ -50,7 +50,7 @@ const Deposit = ({ advisor, client }) => {
 		url += `&advisorId=${advisor.idToken.payload.sub}`
 		url += `&amount=${amount}`
 		url += `&clientId=${searchParams.get('clientId')}`
-		url += `&currency=USD`
+		url += `&currency=${depositMethod.limits.deposit[0].remaining.currency}`
 		url += `&paymentMethod=${depositMethod.id}`
 
 		await fetch(url)
@@ -58,14 +58,16 @@ const Deposit = ({ advisor, client }) => {
 			.then(data => {
 				console.log(data)
 				if (data.errors) {
-					alert(data.errors)
+					setIsLoading(false)
+					alert(data.errors[0].message)
 				} else {
 					navigate(`/advisor/clients/client?clientId=${searchParams.get('clientId')}`)
 				}
 			})
-			.catch(error => alert(error))
-
-		setIsLoading(false)
+			.catch(error => {
+				setIsLoading(false)
+				alert(JSON.stringify(error))
+			})
 	}
 
 	function renderDepositMethod(newDepositMethod) {

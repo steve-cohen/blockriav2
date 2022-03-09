@@ -52,14 +52,7 @@
 	cursor: pointer;
 	display: inline-block;
 	margin-left: 2px;
-	opacity: 0.8;
 	padding: 8px 16px;
-	transition: 0.4s;
-}
-
-.Withdrawal .Options .Cancel:hover {
-	color: rgb(0, 0, 0);
-	text-decoration: underline;
 }
 
 .Withdrawal .Options .Methods {
@@ -103,14 +96,16 @@
 .Withdrawal .Options .SelectedMethod .Icon {
 	fill: rgb(88, 88, 92);
 	height: 24px;
-	left: 340px;
+	left: 320px;
+	padding-left: 20px;
 	position: absolute;
 	transition: 0.4s;
-	top: 28px;
+	top: 30px;
 	width: 24px;
 }
 
-.Withdrawal .InitiateWithdrawal {
+.Withdrawal .InitiateWithdrawal,
+.Withdrawal .InitiateWithdrawalConfirm {
 	all: initial;
 	background: rgb(18, 25, 44);
 	border: 1px solid rgb(18, 25, 44);
@@ -125,7 +120,12 @@
 	width: fit-content;
 }
 
-.Withdrawal .InitiateWithdrawal:hover {
+.Withdrawal .InitiateWithdrawalConfirm {
+	margin-top: 72px;
+}
+
+.Withdrawal .InitiateWithdrawal:hover,
+.Withdrawal .InitiateWithdrawalConfirm:hover {
 	background: rgb(248, 249, 251);
 	color: rgb(48, 48, 52);
 	cursor: pointer;
