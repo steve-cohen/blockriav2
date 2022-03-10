@@ -212,6 +212,18 @@ export const demoClients = [
 	}
 ]
 
+export const demoPortfolio = {
+	portfolioId: {
+		S: '1645518066986'
+	},
+	portfolioName: {
+		S: 'Classic'
+	},
+	allocations: {
+		S: '[{"holding":"BTC","percent":60},{"holding":"ETH","percent":40}]'
+	}
+}
+
 export const demoPortfolios = [
 	{
 		portfolioId: {

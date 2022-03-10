@@ -2,19 +2,24 @@ import React from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import './Assign.css'
 
-const Assign = ({ portfolios }) => {
+const Assign = ({ portfolios, setPortfolio }) => {
 	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
 
-	function renderPortfolios({ allocations, portfolioId, portfolioName }) {
+	async function handlePortfolio(portfolio) {
+		await setPortfolio(portfolio)
+
 		let url = '/advisor/portfolios/confirm?'
 		url += `clientName=${searchParams.get('clientName')}`
 		url += `&clientId=${searchParams.get('clientId')}`
-		// url += `&portfolioId=${searchParams.get('portfolioId')}`
-		url += `&newPortfolioId=${portfolioId.S}`
+		await navigate(url)
+	}
+
+	function renderPortfolios(portfolio) {
+		const { allocations, portfolioId, portfolioName } = portfolio
 
 		return (
-			<tr key={`Portfolio ${portfolioId.S}`} onClick={() => navigate(url)}>
+			<tr key={`Portfolio ${portfolioId.S}`} onClick={() => handlePortfolio(portfolio)}>
 				<td>{portfolioName.S}</td>
 				<td>
 					{JSON.parse(allocations.S)

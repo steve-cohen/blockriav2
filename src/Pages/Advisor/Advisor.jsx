@@ -14,7 +14,7 @@ import SignIn from './SignIn/SignIn'
 import SignUp from './SignUp/SignUp'
 import Withdrawal from './Clients/Client/Withdrawal/Withdrawal'
 
-import { demoAdvisor, demoAdvisorEmpty, demoClient, demoClients, demoPortfolios } from './demoData'
+import { demoAdvisor, demoAdvisorEmpty, demoClient, demoClients, demoPortfolio, demoPortfolios } from './demoData'
 
 import './Advisor.css'
 
@@ -23,6 +23,7 @@ const Advisor = () => {
 	const [advisor, setAdvisor] = useState(JSON.parse(localStorage.getItem('advisor')) || demoAdvisorEmpty)
 	const [client, setClient] = useState(JSON.parse(localStorage.getItem('client')) || demoClient)
 	const [clients, setClients] = useState(JSON.parse(localStorage.getItem('clients')) || demoClients)
+	const [portfolio, setPortfolio] = useState(JSON.parse(localStorage.getItem('portfolio')) || demoPortfolio)
 	const [portfolios, setPortfolios] = useState(JSON.parse(localStorage.getItem('portfolios')) || demoPortfolios)
 
 	return (
@@ -53,8 +54,14 @@ const Advisor = () => {
 								<Route path='clients/client/deposit' element={<Deposit advisor={advisor} client={client} />} />
 								<Route path='invites' element={<Invites />} />
 								<Route path='portfolios' element={<Portfolios portfolios={portfolios} />} />
-								<Route path='portfolios/assign' element={<Assign portfolios={portfolios} />} />
-								<Route path='portfolios/confirm' element={<Confirm portfolios={portfolios} />} />
+								<Route
+									path='portfolios/assign'
+									element={<Assign portfolios={portfolios} setPortfolio={setPortfolio} />}
+								/>
+								<Route
+									path='portfolios/confirm'
+									element={<Confirm advisor={advisor} client={client} portfolio={portfolio} />}
+								/>
 								<Route
 									path='portfolios/edit'
 									element={<Edit portfolios={portfolios} setPortfolios={setPortfolios} />}
