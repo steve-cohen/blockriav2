@@ -183,6 +183,14 @@ export const demoClient = {
 	portfolioId: ''
 }
 
+export const demoClientEmpty = {
+	accounts: [],
+	clientId: '',
+	clientName: '',
+	paymentMethods: [],
+	portfolioId: ''
+}
+
 export const demoClients = [
 	{
 		clientId: { S: 'io8jhwaoidsfd32r' },

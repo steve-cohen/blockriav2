@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Portfolios.css'
 
@@ -23,7 +23,19 @@ function renderPortfolios({ allocations, portfolioId, portfolioName }) {
 	)
 }
 
-const Portfolios = ({ portfolios }) => {
+const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
+	useEffect(async () => {
+		setPortfolios([])
+		fetch(`https://blockria.com/portfolios/query?advisorId=${advisor.idToken.payload.sub}`)
+			.then(response => response.json())
+			.then(newPortfolios => {
+				console.log(newPortfolios)
+				localStorage.setItem('portfolios', JSON.stringify(newPortfolios))
+				setPortfolios(newPortfolios)
+			})
+			.catch(error => alert(error))
+	}, [])
+
 	return (
 		<div className='Portfolios'>
 			<div className='Title'>Portfolios</div>

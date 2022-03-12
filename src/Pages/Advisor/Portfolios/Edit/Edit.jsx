@@ -10,7 +10,6 @@ const Edit = ({ portfolios, setPortfolios }) => {
 
 	const [allocations, setAllocations] = useState([
 		{ holding: '', percent: '' },
-		{ holding: '', percent: '' },
 		{ holding: '', percent: '' }
 	])
 	const [isLoading, setIsLoading] = useState(false)

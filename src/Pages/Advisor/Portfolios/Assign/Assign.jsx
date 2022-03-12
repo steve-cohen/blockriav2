@@ -6,13 +6,14 @@ const Assign = ({ portfolios, setPortfolio }) => {
 	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
 
-	async function handlePortfolio(portfolio) {
-		await setPortfolio(portfolio)
+	function handlePortfolio(portfolio) {
+		localStorage.setItem('portfolio', JSON.stringify(portfolio))
+		setPortfolio(portfolio)
 
 		let url = '/advisor/portfolios/confirm?'
 		url += `clientName=${searchParams.get('clientName')}`
 		url += `&clientId=${searchParams.get('clientId')}`
-		await navigate(url)
+		navigate(url)
 	}
 
 	function renderPortfolios(portfolio) {

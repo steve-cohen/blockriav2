@@ -4,7 +4,7 @@ import { AccountContext } from '../../../Account'
 import { demoAdvisorEmpty } from '../demoData'
 import './SignIn.css'
 
-const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
+const SignIn = ({ setAdvisor }) => {
 	const { authenticate } = useContext(AccountContext)
 	const navigate = useNavigate()
 
@@ -16,28 +16,6 @@ const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
 		localStorage.clear()
 		setAdvisor(demoAdvisorEmpty)
 	}, [])
-
-	function getAdvisorClients(newAdvisor) {
-		return fetch(`https://blockria.com/advisor/clients?advisorId=${newAdvisor.idToken.payload.sub}`)
-			.then(response => response.json())
-			.then(newClients => {
-				console.log(newClients)
-				localStorage.setItem('clients', JSON.stringify(newClients))
-				setClients(newClients)
-			})
-			.catch(error => alert(error))
-	}
-
-	function getAdvisorPortfolios(newAdvisor) {
-		return fetch(`https://blockria.com/portfolios/query?advisorId=${newAdvisor.idToken.payload.sub}`)
-			.then(response => response.json())
-			.then(newPortfolios => {
-				console.log(newPortfolios)
-				localStorage.setItem('portfolios', JSON.stringify(newPortfolios))
-				setPortfolios(newPortfolios)
-			})
-			.catch(error => alert(error))
-	}
 
 	function handleSubmit(e) {
 		e.preventDefault()
@@ -51,10 +29,9 @@ const SignIn = ({ setAdvisor, setClients, setPortfolios }) => {
 
 		authenticate(email, password)
 			.then(async newAdvisor => {
-				setAdvisor(newAdvisor)
+				console.log(newAdvisor)
 				localStorage.setItem('advisor', JSON.stringify(newAdvisor))
-
-				await Promise.all([getAdvisorClients(newAdvisor), getAdvisorPortfolios(newAdvisor)])
+				setAdvisor(newAdvisor)
 
 				setIsLoading(false)
 				navigate('/advisor')

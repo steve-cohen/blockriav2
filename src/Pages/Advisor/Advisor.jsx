@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
 
 import Assign from './Portfolios/Assign/Assign'
@@ -22,9 +22,8 @@ const Advisor = () => {
 	// Advisor Data
 	const [advisor, setAdvisor] = useState(JSON.parse(localStorage.getItem('advisor')) || demoAdvisorEmpty)
 	const [client, setClient] = useState(JSON.parse(localStorage.getItem('client')) || demoClient)
-	const [clients, setClients] = useState(JSON.parse(localStorage.getItem('clients')) || demoClients)
 	const [portfolio, setPortfolio] = useState(JSON.parse(localStorage.getItem('portfolio')) || demoPortfolio)
-	const [portfolios, setPortfolios] = useState(JSON.parse(localStorage.getItem('portfolios')) || demoPortfolios)
+	const [portfolios, setPortfolios] = useState(JSON.parse(localStorage.getItem('portfolios')) || [] || demoPortfolios)
 
 	return (
 		<div className='Advisor'>
@@ -45,15 +44,24 @@ const Advisor = () => {
 					<Routes>
 						{advisor.idToken.payload.sub ? (
 							<>
-								<Route path='' element={<Clients clients={clients} portfolios={portfolios} />} />
-								<Route path='clients' element={<Clients clients={clients} portfolios={portfolios} />} />
+								<Route
+									path=''
+									element={<Clients advisor={advisor} portfolios={portfolios} setPortfolios={setPortfolios} />}
+								/>
+								<Route
+									path='clients'
+									element={<Clients advisor={advisor} portfolios={portfolios} setPortfolios={setPortfolios} />}
+								/>
 								<Route
 									path='clients/client'
 									element={<Client advisor={advisor} client={client} setClient={setClient} />}
 								/>
 								<Route path='clients/client/deposit' element={<Deposit advisor={advisor} client={client} />} />
 								<Route path='invites' element={<Invites />} />
-								<Route path='portfolios' element={<Portfolios portfolios={portfolios} />} />
+								<Route
+									path='portfolios'
+									element={<Portfolios advisor={advisor} portfolios={portfolios} setPortfolios={setPortfolios} />}
+								/>
 								<Route
 									path='portfolios/assign'
 									element={<Assign portfolios={portfolios} setPortfolio={setPortfolio} />}
@@ -72,14 +80,8 @@ const Advisor = () => {
 						) : (
 							<Route path='*' element={<Navigate to='signin' />} />
 						)}
-						<Route
-							path='signin'
-							element={<SignIn setAdvisor={setAdvisor} setClients={setClients} setPortfolios={setPortfolios} />}
-						/>
-						<Route
-							path='signup'
-							element={<SignUp setAdvisor={setAdvisor} setClients={setClients} setPortfolios={setPortfolios} />}
-						/>
+						<Route path='signin' element={<SignIn setAdvisor={setAdvisor} setPortfolios={setPortfolios} />} />
+						<Route path='signup' element={<SignUp />} />
 					</Routes>
 				</div>
 			</div>

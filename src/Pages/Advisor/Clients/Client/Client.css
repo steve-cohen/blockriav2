@@ -39,38 +39,27 @@
 	width: 100%;
 }
 
-.Client .Options .Option1,
-.Client .Options .Option2 {
-	border: 1px solid rgb(43, 44, 46);
+.Client .Options .Option {
+	background: rgb(18, 25, 44);
+	border: 1px solid rgb(18, 25, 44);
 	border-radius: 1px;
+	color: rgb(248, 249, 251);
 	cursor: pointer;
 	display: inline-block;
 	margin: 0 4px;
 	padding: 12px 16px;
-	transition: background-color 0.15s;
+	transition: 0.4s;
 }
 
-.Client .Options .Option1 {
-	background: rgb(43, 44, 46);
-	color: rgb(250, 250, 250);
-}
-
-.Client .Options .Option1:hover {
+.Client .Options .Option:hover {
 	background: rgb(255, 255, 255);
 	color: inherit;
 	text-decoration: underline;
 }
-
-.Client .Options .Option2 {
-	color: rgb(29, 29, 32);
-}
-
-.Client .Options .Option2:hover {
-	background: rgb(43, 44, 46);
-	color: rgb(250, 250, 250);
-	text-decoration: underline;
-}
-
 .Client .Title {
 	font-size: 24px;
+}
+
+.Client .Totals td {
+	border: none;
 }

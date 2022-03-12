@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { demoClientEmpty } from '../../demoData'
 import './Client.css'
 
 const Client = ({ advisor, client, setClient }) => {
 	const [searchParams] = useSearchParams()
 	const [isLoading, setIsLoading] = useState(false)
+	const [totalBalance, setTotalBalance] = useState(0)
+	const [totalPercent, setTotalPercent] = useState(100)
 
 	useEffect(async () => {
 		setIsLoading(true)
+		setClient(demoClientEmpty)
 		const advisorId = advisor.idToken.payload.sub
 		const clientId = searchParams.get('clientId')
 
@@ -23,10 +27,30 @@ const Client = ({ advisor, client, setClient }) => {
 		setIsLoading(false)
 	}, [])
 
+	useEffect(() => {
+		let newTotalBalance = 0
+		client.accounts.forEach(({ native_balance }) => (newTotalBalance += Number(native_balance.amount)))
+		setTotalBalance(newTotalBalance)
+
+		let newTotalPercent = 0
+		client.accounts.forEach(({ native_balance }) => {
+			const percentRounded = (Number(native_balance.amount) / newTotalBalance).toFixed(2)
+			newTotalPercent += Number(percentRounded)
+		})
+		setTotalPercent(newTotalPercent)
+	}, [client])
+
 	function renderAccount({ balance, id, name, native_balance }) {
 		if (Number(balance.amount)) {
 			return (
 				<tr key={`Account ${id}`}>
+					<td>
+						{(Number(native_balance.amount) / totalBalance).toLocaleString('en-US', {
+							minimumFractionDigits: 2,
+							maximumFractionDigits: 2,
+							style: 'percent'
+						})}
+					</td>
 					<td>
 						{Number(native_balance.amount).toLocaleString('en-US', {
 							style: 'currency',
@@ -48,13 +72,13 @@ const Client = ({ advisor, client, setClient }) => {
 				<div></div>
 				<div>
 					<Link
-						className='Option2'
+						className='Option'
 						to={`withdrawal?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get('clientId')}`}
 					>
 						Initiate Withdrawal(s)
 					</Link>
 					<Link
-						className='Option1'
+						className='Option'
 						to={`deposit?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get('clientId')}`}
 					>
 						Initiate Deposit(s)
@@ -64,7 +88,7 @@ const Client = ({ advisor, client, setClient }) => {
 			<table>
 				<thead>
 					<tr>
-						{/* <th>ALLOCATION</th> */}
+						<th>ALLOCATION</th>
 						<th>BALANCE</th>
 						<th>HOLDING</th>
 						<th>NAME</th>
@@ -74,10 +98,29 @@ const Client = ({ advisor, client, setClient }) => {
 				<tbody>
 					{isLoading ? (
 						<tr>
-							<td>Loading...</td>
+							<td style={{ border: 'none' }}>Loading...</td>
 						</tr>
 					) : (
-						client.accounts.map(renderAccount)
+						<>
+							{client.accounts
+								.sort((a, b) => Number(b.native_balance.amount) - Number(a.native_balance.amount))
+								.map(renderAccount)}
+							<tr className='Totals'>
+								<td>
+									{totalPercent.toLocaleString('en-US', {
+										minimumFractionDigits: 2,
+										maximumFractionDigits: 2,
+										style: 'percent'
+									})}
+								</td>
+								<td>
+									{totalBalance.toLocaleString('en-US', {
+										style: 'currency',
+										currency: client.accounts[0].native_balance.currency
+									})}
+								</td>
+							</tr>
+						</>
 					)}
 				</tbody>
 			</table>
