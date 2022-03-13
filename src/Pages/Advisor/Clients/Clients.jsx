@@ -15,7 +15,7 @@ function renderPortfolio(clientId, clientName, currentPortfolioId, portfolios) {
 				{/* <Link to={`/advisor/portfolios?portfolioId=${currentPortfolioId}`}>{portfolioName}</Link> ( */}
 				{portfolio[0].portfolioName.S} (
 				<Link
-					to={`/advisor/portfolios/assign?clientName=${clientName}&clientId=${clientId}&portfolioId=${currentPortfolioId}`}
+					to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${currentPortfolioId}`}
 				>
 					change
 				</Link>
@@ -35,7 +35,7 @@ function renderPortfolioAssign(clientName, clientId) {
 			</svg>
 			<Link
 				className='AssignPortfolio'
-				to={`/advisor/portfolios/assign?clientName=${clientName}&clientId=${clientId}&portfolioId=`}
+				to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=`}
 			>
 				Assign a Portfolio
 			</Link>

@@ -1,0 +1,161 @@
+.SetPortfolio {
+	background: rgb(255, 255, 255);
+	display: flex;
+	flex-wrap: wrap;
+	height: calc(80vh - 60px);
+	justify-content: center;
+	left: 0;
+	overflow: hidden auto;
+	padding-top: 20vh;
+	position: absolute;
+	top: 60px;
+	width: 100vw;
+}
+
+.SetPortfolio form {
+	color: rgb(89, 89, 93);
+	font-size: 14px;
+	font-weight: 500;
+	letter-spacing: 0.5px;
+	margin: 0 36px;
+	transition: 0.4s;
+	width: 360px;
+}
+
+.SetPortfolio form button {
+	all: initial;
+	background: rgb(18, 25, 44);
+	border: 1px solid rgb(18, 25, 44);
+	color: rgb(248, 249, 251);
+	font-family: inherit;
+	font-size: 14px;
+	letter-spacing: 0.5px;
+	margin-top: 28px;
+	padding: 8px 12px;
+	transition: 0.4s;
+}
+
+.SetPortfolio form button:hover {
+	background: rgb(248, 249, 251);
+	color: rgb(48, 48, 52);
+	cursor: pointer;
+}
+
+.SetPortfolio form .Cancel {
+	border: none;
+	cursor: pointer;
+	display: inline-block;
+	margin-left: 2px;
+	padding: 8px 16px;
+	text-transform: capitalize;
+	transition: 0.4s;
+}
+
+.SetPortfolio form .Cancel:hover {
+	color: black;
+	text-decoration: underline;
+}
+
+.SetPortfolio form .Selections {
+	background: rgb(255, 255, 255);
+	border: 1px solid rgb(173, 174, 176);
+	border-top: none;
+	max-height: 400px;
+	overflow: hidden auto;
+	position: absolute;
+	width: 358px;
+	z-index: 1;
+}
+
+.SetPortfolio form .Selections .Selection {
+	border-bottom: 1px solid rgb(173, 174, 176);
+	cursor: pointer;
+	padding: 16px;
+	transition: 0.4s;
+}
+
+.SetPortfolio form .Selections .Portfolio {
+	line-height: 1.4;
+}
+
+.SetPortfolio form .Selections .Selection:last-child {
+	border-bottom: none;
+}
+
+.SetPortfolio form .Selections .Selection:hover {
+	background: rgb(243, 244, 246);
+	color: rgb(0, 0, 0);
+}
+
+.SetPortfolio form .Selections .Selection div {
+	max-width: 100%;
+}
+
+.SetPortfolio form .Select {
+	all: inherit;
+	border-bottom: 1px solid rgb(173, 174, 176);
+	cursor: pointer;
+	line-height: 36px;
+	margin: 0;
+	padding: 16px 8px 0 8px;
+	position: relative;
+	transition: 0.4s;
+	width: 344px;
+}
+
+.SetPortfolio form .Select:hover {
+	border-bottom: 1px solid rgb(0, 0, 0);
+	color: rgb(0, 0, 0);
+}
+
+.SetPortfolio form .Select svg {
+	fill: rgb(88, 88, 92);
+	height: 24px;
+	left: 346px;
+	padding-left: 24px;
+	position: absolute;
+	transition: 0.4s;
+	bottom: 7px;
+	width: 24px;
+}
+
+.SetPortfolio .Title {
+	font-family: 'Playfair Display', serif;
+	font-size: 42px;
+	width: 360px;
+}
+
+.SelectionPortfolio {
+	padding-bottom: 8px !important;
+}
+
+.SelectionPortfolio div {
+	line-height: 1.4;
+}
+
+.SetPortfolio .Allocation .Flex {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.SetPortfolio .Allocation .Flex div {
+	border-bottom: 1px solid rgb(173, 174, 176);
+	line-height: 36px;
+	padding: 16px 8px 0 8px;
+}
+
+.SetPortfolio .Allocation .Flex .Holding {
+	width: 235px;
+}
+
+.SetPortfolio .Allocation .Flex .Percent {
+	text-align: right;
+	width: 60px;
+}
+
+.SetPortfolioConfirm .Select:hover {
+	border-bottom: 1px solid rgb(173, 174, 176) !important;
+	color: rgb(89, 89, 93) !important;
+	cursor: default;
+}

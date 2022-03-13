@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
 
-import Assign from './Portfolios/Assign/Assign'
 import Client from './Clients/Client/Client'
 import Clients from './Clients/Clients'
-import Confirm from './Portfolios/Confirm/Confirm'
 import Deposit from './Clients/Client/Deposit/Deposit'
 import Edit from './Portfolios/Edit/Edit'
 import Invites from './Invites/Invites'
 import Navigation from './Navigation/Navigation'
 import Portfolios from './Portfolios/Portfolios'
+import SetPortfolio from './Clients/Client/SetPortfolio/SetPortfolio'
 import SignIn from './SignIn/SignIn'
 import SignUp from './SignUp/SignUp'
 import Withdrawal from './Clients/Client/Withdrawal/Withdrawal'
@@ -23,12 +22,12 @@ const Advisor = () => {
 	const [advisor, setAdvisor] = useState(JSON.parse(localStorage.getItem('advisor')) || demoAdvisorEmpty)
 	const [client, setClient] = useState(JSON.parse(localStorage.getItem('client')) || demoClient)
 	const [portfolio, setPortfolio] = useState(JSON.parse(localStorage.getItem('portfolio')) || demoPortfolio)
-	const [portfolios, setPortfolios] = useState(JSON.parse(localStorage.getItem('portfolios')) || [] || demoPortfolios)
+	const [portfolios, setPortfolios] = useState(JSON.parse(localStorage.getItem('portfolios')) || [])
 
 	return (
 		<div className='Advisor'>
 			<div className='Metadata'>
-				<Link className='Logo' to='/'>
+				<Link className='Logo' to='/advisor'>
 					B
 				</Link>
 				<Link className='Firm' to='/advisor'>
@@ -57,18 +56,14 @@ const Advisor = () => {
 									element={<Client advisor={advisor} client={client} setClient={setClient} />}
 								/>
 								<Route path='clients/client/deposit' element={<Deposit advisor={advisor} client={client} />} />
+								<Route
+									path='clients/client/setportfolio'
+									element={<SetPortfolio advisor={advisor} portfolios={portfolios} />}
+								/>
 								<Route path='invites' element={<Invites />} />
 								<Route
 									path='portfolios'
 									element={<Portfolios advisor={advisor} portfolios={portfolios} setPortfolios={setPortfolios} />}
-								/>
-								<Route
-									path='portfolios/assign'
-									element={<Assign portfolios={portfolios} setPortfolio={setPortfolio} />}
-								/>
-								<Route
-									path='portfolios/confirm'
-									element={<Confirm advisor={advisor} client={client} portfolio={portfolio} />}
 								/>
 								<Route
 									path='portfolios/edit'
