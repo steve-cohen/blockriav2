@@ -180,7 +180,71 @@ export const demoClient = {
 			}
 		}
 	],
-	portfolioId: ''
+	portfolioId: '',
+	user: {
+		id: '5d38952d-fbdc-53c8-9930-b4f29su823ns9',
+		name: 'Steve Cohen',
+		username: null,
+		profile_location: null,
+		profile_bio: null,
+		profile_url: null,
+		avatar_url:
+			'https://images.coinbase.com/avatar?h=6177b855270f6b009bd97wwt3qb2YPgpOCN4%2FWq6GFDcpqiL54u1CF%2FXYG0%2F%0ANj9N&s=128',
+		resource: 'user',
+		resource_path: '/v2/user',
+		email: 'scohen1995@gmail.com',
+		legacy_id: '6177b855270f6b009basdui7',
+		time_zone: 'Pacific Time (US & Canada)',
+		native_currency: 'USD',
+		bitcoin_unit: 'BTC',
+		state: 'CA',
+		country: {
+			code: 'US',
+			name: 'United States of America',
+			is_in_europe: false
+		},
+		nationality: {
+			code: 'US',
+			name: 'United States of America'
+		},
+		region_supports_fiat_transfers: true,
+		region_supports_crypto_to_crypto_transfers: true,
+		created_at: '2021-10-26T08:12:05Z',
+		supports_rewards: true,
+		tiers: {
+			completed_description: 'Level 3',
+			upgrade_button_text: null,
+			header: null,
+			body: null
+		},
+		referral_money: {
+			amount: '10.00',
+			currency: 'USD',
+			currency_symbol: '$',
+			referral_threshold: '100.00'
+		},
+		second_factor: {
+			method: 'sms',
+			totp: {
+				digits: 6
+			},
+			sms: {
+				digits: 7
+			},
+			authy: {
+				minDigits: 6,
+				maxDigits: 8
+			},
+			u2f: {}
+		},
+		has_blocking_buy_restrictions: false,
+		has_made_a_purchase: true,
+		has_buy_deposit_payment_methods: true,
+		has_unverified_buy_deposit_payment_methods: false,
+		needs_kyc_remediation: false,
+		show_instant_ach_ux: false,
+		user_type: 'individual'
+	}
 }
 
 export const demoClientEmpty = {
@@ -188,7 +252,8 @@ export const demoClientEmpty = {
 	clientId: '',
 	clientName: '',
 	paymentMethods: [],
-	portfolioId: ''
+	portfolioId: '',
+	user: { email: '' }
 }
 
 export const demoClients = [

@@ -4,6 +4,12 @@
 	width: 100%;
 }
 
+.Client table caption {
+	font-size: 20px;
+	padding: 0 0 20px 8px;
+	text-align: left;
+}
+
 .Client table tbody tr td,
 .Client table thead tr th {
 	border-bottom: 1px solid rgb(223, 224, 226);

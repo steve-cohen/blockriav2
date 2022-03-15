@@ -67,7 +67,10 @@ const Client = ({ advisor, client, setClient }) => {
 
 	return (
 		<div className='Client'>
-			<div className='Title'>{searchParams.get('clientName')}</div>
+			<div className='Title'>
+				{searchParams.get('clientName')}
+				{client.user.email ? `- ${client.user.email}` : ''}
+			</div>
 			<div className='Options'>
 				<div></div>
 				<div>
@@ -86,6 +89,7 @@ const Client = ({ advisor, client, setClient }) => {
 				</div>
 			</div>
 			<table>
+				<caption>Overview</caption>
 				<thead>
 					<tr>
 						<th>ALLOCATION</th>
