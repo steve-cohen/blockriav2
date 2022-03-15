@@ -1,10 +1,11 @@
 .Edit {
-	background: rgb(248, 249, 251);
+	background: rgb(255, 255, 255);
 	display: flex;
 	flex-wrap: wrap;
 	height: calc(80vh - 60px);
 	justify-content: center;
 	left: 0;
+	overflow: hidden auto;
 	padding-top: 20vh;
 	position: absolute;
 	top: 60px;
@@ -101,6 +102,33 @@
 .Edit form .Allocation .Flex .Percent {
 	width: 60px;
 	text-align: right;
+}
+
+.Edit form .Allocation .Holdings {
+	background: rgb(255, 255, 255);
+	border: 1px solid rgb(173, 174, 176);
+	color: rgb(89, 89, 93);
+	font-size: 14px;
+	font-weight: 500;
+	letter-spacing: 0.5px;
+	max-height: 400px;
+	overflow: hidden auto;
+	position: absolute;
+	transition: 0.4s;
+	width: 298px;
+	z-index: 1;
+}
+
+.Edit form .Allocation .Holdings div:hover {
+	background: rgb(243, 244, 246);
+	color: rgb(0, 0, 0);
+}
+
+.Edit form .Allocation .Holdings div {
+	border-bottom: 1px solid rgb(173, 174, 176);
+	cursor: pointer;
+	padding: 16px;
+	transition: 0.4s;
 }
 
 .Edit form .Cancel {

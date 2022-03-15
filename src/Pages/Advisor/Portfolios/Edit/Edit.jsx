@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { AccountContext } from '../../../../Account'
+import coinbaseTokens from './coinbaseTokens.json'
 import './Edit.css'
 
 const Edit = ({ portfolios, setPortfolios }) => {
@@ -9,8 +10,8 @@ const Edit = ({ portfolios, setPortfolios }) => {
 	const [searchParams] = useSearchParams()
 
 	const [allocations, setAllocations] = useState([
-		{ holding: '', percent: '' },
-		{ holding: '', percent: '' }
+		{ holding: '', holdings: coinbaseTokens, percent: '', showHoldings: false },
+		{ holding: '', holdings: coinbaseTokens, percent: '', showHoldings: false }
 	])
 	const [isLoading, setIsLoading] = useState(false)
 	const [portfolioName, setPortfolioName] = useState('')
@@ -30,13 +31,26 @@ const Edit = ({ portfolios, setPortfolios }) => {
 
 	function addHolding() {
 		let newAllocations = JSON.parse(JSON.stringify(allocations))
-		newAllocations.push({ holding: '', percent: '' })
+		newAllocations.push({ holding: '', holdings: [], percent: '', showHoldings: false })
 		setAllocations(newAllocations)
 	}
 
 	function handleHolding(e, index) {
 		let newAllocations = JSON.parse(JSON.stringify(allocations))
-		newAllocations[index].holding = e.target.value
+		newAllocations.forEach((_, index) => (newAllocations[index].showHoldings = false))
+
+		newAllocations[index].holding = e.target.value.toUpperCase()
+		newAllocations[index].holdings = coinbaseTokens.filter(token => token.includes(e.target.value.toUpperCase()))
+		newAllocations[index].showHoldings = true
+		console.log(newAllocations)
+		setAllocations(newAllocations)
+	}
+
+	function handleHoldingDropDown(holding, index) {
+		let newAllocations = JSON.parse(JSON.stringify(allocations))
+		newAllocations[index].holding = holding
+		newAllocations[index].holdings = coinbaseTokens.filter(token => token.includes(holding))
+		newAllocations[index].showHoldings = false
 		setAllocations(newAllocations)
 	}
 
@@ -110,14 +124,16 @@ const Edit = ({ portfolios, setPortfolios }) => {
 		setAllocations(newAllocations)
 	}
 
-	function renderAllocation({ holding, percent }, index) {
+	function renderAllocation({ holding, holdings, percent, showHoldings }, index) {
 		return (
 			<div className='Allocation' key={`Allocation ${index}`}>
 				<div className='Flex'>
 					<input
 						className='Holding'
 						minLength={1}
+						id='holding'
 						onChange={e => handleHolding(e, index)}
+						onClick={() => flipHoldings(index)}
 						placeholder='Holding'
 						required
 						value={holding}
@@ -131,6 +147,15 @@ const Edit = ({ portfolios, setPortfolios }) => {
 						value={percent}
 					/>
 				</div>
+				{showHoldings && (
+					<div className='Holdings'>
+						{holdings.map(holding => (
+							<div key={holding} id='holding' onClick={() => handleHoldingDropDown(holding, index)}>
+								{holding}
+							</div>
+						))}
+					</div>
+				)}
 				{index > 0 && (
 					<div className='RemoveHolding' onClick={() => removeHolding(index)}>
 						Remove
@@ -140,8 +165,26 @@ const Edit = ({ portfolios, setPortfolios }) => {
 		)
 	}
 
+	function closeAllHoldings(e) {
+		console.log(e.target.id)
+		if (e.target.id !== 'holding') {
+			let newAllocations = JSON.parse(JSON.stringify(allocations))
+			newAllocations.forEach((_, index) => (newAllocations[index].showHoldings = false))
+			setAllocations(newAllocations)
+		}
+	}
+
+	function flipHoldings(index) {
+		let newAllocations = JSON.parse(JSON.stringify(allocations))
+		newAllocations.forEach((_, allocationIndex) => {
+			if (allocationIndex === index) newAllocations[index].showHoldings = !newAllocations[index].showHoldings
+			else newAllocations[allocationIndex].showHoldings = false
+		})
+		setAllocations(newAllocations)
+	}
+
 	return (
-		<div className='Edit'>
+		<div className='Edit' onClick={closeAllHoldings}>
 			<div className='Title'>{searchParams.get('portfolioId') ? 'Edit Portfolio' : 'Create a Portfolio'}</div>
 			<form onSubmit={handleSubmit}>
 				<input
@@ -156,15 +199,12 @@ const Edit = ({ portfolios, setPortfolios }) => {
 				<div className='AddHolding' onClick={addHolding}>
 					+ Add Holding
 				</div>
-				{/* <button disabled={isLoading} type='submit'>
-					{isLoading ? 'Loading…' : 'Save'}
-				</button>
-				<button disabled={isLoading} style={{ float: 'right' }} type='submit'>
-					{isLoading ? 'Loading…' : 'Save + Assign to Client(s)'}
-				</button> */}
 				<button disabled={isLoading} type='submit'>
 					{isLoading ? 'Loading…' : 'Save Portfolio'}
 				</button>
+				{/* <button disabled={isLoading} style={{ float: 'right' }} type='submit'>
+					{isLoading ? 'Loading…' : 'Save + Assign to Client(s)'}
+				</button> */}
 				<div className='Cancel' onClick={() => navigate(-1)}>
 					Cancel
 				</div>
