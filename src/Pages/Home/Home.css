@@ -4,7 +4,7 @@
 }
 
 .Home .Hero {
-	background: rgb(248, 249, 251);
+	background: rgb(255, 255, 255);
 	display: flex;
 	flex-wrap: wrap;
 	height: 75vh;
@@ -82,7 +82,7 @@
 }
 
 .Home .Hero .Features .ToSignUp:hover {
-	background: rgb(248, 249, 251);
+	background: rgb(255, 255, 255);
 	color: rgb(48, 48, 52);
 	cursor: pointer;
 }
@@ -141,7 +141,7 @@
 }
 
 .Home .Menu .ToSignUp:hover {
-	background: rgb(248, 249, 251);
+	background: rgb(255, 255, 255);
 	color: rgb(48, 48, 52);
 }
 

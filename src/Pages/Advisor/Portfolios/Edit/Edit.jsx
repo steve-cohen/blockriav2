@@ -31,7 +31,7 @@ const Edit = ({ portfolios, setPortfolios }) => {
 
 	function addHolding() {
 		let newAllocations = JSON.parse(JSON.stringify(allocations))
-		newAllocations.push({ holding: '', holdings: [], percent: '', showHoldings: false })
+		newAllocations.push({ holding: '', holdings: coinbaseTokens, percent: '', showHoldings: false })
 		setAllocations(newAllocations)
 	}
 
@@ -42,7 +42,6 @@ const Edit = ({ portfolios, setPortfolios }) => {
 		newAllocations[index].holding = e.target.value.toUpperCase()
 		newAllocations[index].holdings = coinbaseTokens.filter(token => token.includes(e.target.value.toUpperCase()))
 		newAllocations[index].showHoldings = true
-		console.log(newAllocations)
 		setAllocations(newAllocations)
 	}
 
@@ -67,6 +66,15 @@ const Edit = ({ portfolios, setPortfolios }) => {
 		if (!e.currentTarget.checkValidity()) {
 			e.stopPropagation()
 			setIsLoading(false)
+			return
+		}
+
+		let allocationTotalPercent = 0
+		allocations.forEach(({ percent }) => (allocationTotalPercent += Number(percent)))
+		if (allocationTotalPercent < 99.99 || allocationTotalPercent > 100) {
+			e.stopPropagation()
+			setIsLoading(false)
+			alert('Percentages must add up to 100%')
 			return
 		}
 
@@ -157,7 +165,7 @@ const Edit = ({ portfolios, setPortfolios }) => {
 					</div>
 				)}
 				{index > 0 && (
-					<div className='RemoveHolding' onClick={() => removeHolding(index)}>
+					<div className='RemoveHolding' id='holding' onClick={() => removeHolding(index)}>
 						Remove
 					</div>
 				)}
@@ -166,7 +174,6 @@ const Edit = ({ portfolios, setPortfolios }) => {
 	}
 
 	function closeAllHoldings(e) {
-		console.log(e.target.id)
 		if (e.target.id !== 'holding') {
 			let newAllocations = JSON.parse(JSON.stringify(allocations))
 			newAllocations.forEach((_, index) => (newAllocations[index].showHoldings = false))
@@ -196,7 +203,7 @@ const Edit = ({ portfolios, setPortfolios }) => {
 					value={portfolioName}
 				/>
 				{allocations.map(renderAllocation)}
-				<div className='AddHolding' onClick={addHolding}>
+				<div className='AddHolding' id='holding' onClick={addHolding}>
 					+ Add Holding
 				</div>
 				<button disabled={isLoading} type='submit'>

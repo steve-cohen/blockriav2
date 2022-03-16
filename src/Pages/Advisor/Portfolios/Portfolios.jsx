@@ -29,7 +29,16 @@ const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
 		fetch(`https://blockria.com/portfolios/query?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.then(newPortfolios => {
+				newPortfolios = [
+					...newPortfolios,
+					{
+						allocations: { S: '[{"holding":"BTC","percent":60},{"holding":"ETH","percent":40}]' },
+						portfolioName: { S: 'Classic' },
+						portfolioId: { S: 'Classic' }
+					}
+				]
 				console.log(newPortfolios)
+
 				localStorage.setItem('portfolios', JSON.stringify(newPortfolios))
 				setPortfolios(newPortfolios)
 			})

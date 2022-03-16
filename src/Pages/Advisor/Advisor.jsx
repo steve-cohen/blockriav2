@@ -9,6 +9,7 @@ import Invites from './Invites/Invites'
 import Navigation from './Navigation/Navigation'
 import Portfolios from './Portfolios/Portfolios'
 import SetPortfolio from './Clients/Client/SetPortfolio/SetPortfolio'
+import Settings from './Settings/Settings'
 import SignIn from './SignIn/SignIn'
 import SignUp from './SignUp/SignUp'
 import Withdrawal from './Clients/Client/Withdrawal/Withdrawal'
@@ -22,7 +23,7 @@ const Advisor = () => {
 	const [advisor, setAdvisor] = useState(JSON.parse(localStorage.getItem('advisor')) || demoAdvisorEmpty)
 	const [client, setClient] = useState(JSON.parse(localStorage.getItem('client')) || demoClient)
 	const [portfolio, setPortfolio] = useState(JSON.parse(localStorage.getItem('portfolio')) || demoPortfolio)
-	const [portfolios, setPortfolios] = useState(JSON.parse(localStorage.getItem('portfolios')) || [])
+	const [portfolios, setPortfolios] = useState([])
 
 	return (
 		<div className='Advisor'>
@@ -60,6 +61,7 @@ const Advisor = () => {
 									path='clients/client/setportfolio'
 									element={<SetPortfolio advisor={advisor} portfolios={portfolios} />}
 								/>
+								<Route path='clients/client/withdrawal' element={<Withdrawal advisor={advisor} client={client} />} />
 								<Route path='invites' element={<Invites />} />
 								<Route
 									path='portfolios'
@@ -69,7 +71,7 @@ const Advisor = () => {
 									path='portfolios/edit'
 									element={<Edit portfolios={portfolios} setPortfolios={setPortfolios} />}
 								/>
-								<Route path='clients/client/withdrawal' element={<Withdrawal advisor={advisor} client={client} />} />
+								<Route path='settings' element={<Settings advisor={advisor} />} />
 								<Route path='*' element={<Navigate to='' />} />
 							</>
 						) : (

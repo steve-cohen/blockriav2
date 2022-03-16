@@ -91,6 +91,13 @@ const Deposit = ({ advisor, client }) => {
 				<>
 					<div className='Description'>
 						<div className='Title'>Initiate a Deposit into {searchParams.get('clientName')}'s Coinbase Account.</div>
+						<p>
+							<b>New and exisiting bank accounts </b>
+							<span>
+								may take up to 24 hours to appear while the client undergoes Coinbase verification and Know Your
+								Customer (KYC) procedures.
+							</span>
+						</p>
 					</div>
 					<form className='Options' onSubmit={handleSubmit}>
 						<div className='SelectedMethod' onClick={() => setShowDepositMethods(!showDepositMethods)}>

@@ -1,5 +1,5 @@
 .Deposit {
-	background: rgb(248, 249, 251);
+	background: rgb(255, 255, 255);
 	display: flex;
 	flex-wrap: wrap;
 	height: calc(80vh - 60px);
@@ -11,6 +11,22 @@
 	width: 100vw;
 }
 
+.Deposit .Description {
+	margin: 0 36px;
+	width: 360px;
+}
+
+.Deposit .Description span {
+	color: rgb(88, 88, 92);
+}
+
+.Deposit .Description .Title {
+	color: black;
+	font-family: 'Playfair Display', serif;
+	font-size: 42px;
+	margin-bottom: 24px;
+}
+
 .Deposit .Options {
 	color: rgb(88, 88, 92);
 	font-size: 14px;
@@ -18,6 +34,7 @@
 	letter-spacing: 0.5px;
 	padding: 16px 0 0 8px;
 	transition: 0.4s;
+	margin: 0 36px;
 	position: relative;
 	white-space: pre;
 	width: 300px;
@@ -56,7 +73,7 @@
 }
 
 .Deposit .Options .Methods {
-	background: rgb(248, 249, 251);
+	background: rgb(255, 255, 255);
 	border: 1px solid rgb(173, 174, 176);
 	border-radius: 1px;
 	max-height: 300px;
@@ -125,14 +142,7 @@
 
 .Deposit .InitiateDeposit:hover,
 .Deposit .InitiateDepositConfirm:hover {
-	background: rgb(248, 249, 251);
+	background: rgb(255, 255, 255);
 	color: rgb(48, 48, 52);
 	cursor: pointer;
-}
-
-.Deposit .Title {
-	font-family: 'Playfair Display', serif;
-	font-size: 42px;
-	margin: 0 36px;
-	width: 360px;
 }

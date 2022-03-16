@@ -36,7 +36,7 @@
 }
 
 .SignIn form button:hover {
-	background: rgb(248, 249, 251);
+	background: rgb(255, 255, 255);
 	color: rgb(48, 48, 52);
 	cursor: pointer;
 }

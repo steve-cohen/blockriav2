@@ -27,7 +27,7 @@ const SignUp = () => {
 		const customAttributes = [
 			{ Name: 'given_name', Value: firstName },
 			{ Name: 'family_name', Value: lastName },
-			{ Name: 'phone_number', Value: phoneNumber },
+			{ Name: 'phone_number', Value: `+1${phoneNumber}` },
 			{ Name: 'custom:firm_name', Value: firmName }
 		]
 
@@ -105,14 +105,13 @@ const SignUp = () => {
 					value={firmName}
 				/>
 				<input
-					minLength={10}
-					onChange={e => setPhoneNumber(e.target.value)}
+					onChange={e => setPhoneNumber(e.target.value.slice(0, 10))}
 					placeholder='PHONE NUMBER'
-					type='tel'
+					type='number'
 					value={phoneNumber}
 				/>
 				<button disabled={isLoading} type='submit'>
-					{isLoading ? 'Loading…' : 'Sign Up - Free for 30 days'}
+					{isLoading ? 'Loading…' : 'Sign Up'}
 				</button>
 				<Link to='/advisor/signin'>Already have an account? Sign In</Link>
 			</form>
