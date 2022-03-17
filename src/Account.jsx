@@ -20,7 +20,7 @@ const Account = props => {
 					resolve(data)
 				},
 				onFailure: ({ message }) => {
-					alert(message)
+					console.log('onFailure: ', message)
 					reject(message)
 				},
 				newPasswordRequired: data => {

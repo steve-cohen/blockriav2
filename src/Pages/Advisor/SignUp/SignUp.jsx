@@ -38,7 +38,7 @@ const SignUp = () => {
 				alert(error.message)
 			} else {
 				console.log(data)
-				navigate('/advisor')
+				navigate('/advisor/verifyemail', { state: { clientId: data.userSub, email: data.user.username } })
 			}
 		})
 	}

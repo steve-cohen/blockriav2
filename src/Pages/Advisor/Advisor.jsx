@@ -13,6 +13,7 @@ import Settings from './Settings/Settings'
 import SignIn from './SignIn/SignIn'
 import SignUp from './SignUp/SignUp'
 import Withdrawal from './Clients/Client/Withdrawal/Withdrawal'
+import VerifyEmail from './VerifyEmail/VerifyEmail'
 
 import { demoAdvisor, demoAdvisorEmpty, demoClient, demoClients, demoPortfolio, demoPortfolios } from './demoData'
 
@@ -79,6 +80,7 @@ const Advisor = () => {
 						)}
 						<Route path='signin' element={<SignIn setAdvisor={setAdvisor} setPortfolios={setPortfolios} />} />
 						<Route path='signup' element={<SignUp />} />
+						<Route path='verifyemail' element={<VerifyEmail />} />
 					</Routes>
 				</div>
 			</div>

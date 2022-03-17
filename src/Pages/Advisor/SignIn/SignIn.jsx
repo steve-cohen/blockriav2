@@ -29,16 +29,15 @@ const SignIn = ({ setAdvisor }) => {
 
 		authenticate(email, password)
 			.then(async newAdvisor => {
-				console.log(newAdvisor)
 				localStorage.setItem('advisor', JSON.stringify(newAdvisor))
 				setAdvisor(newAdvisor)
-
 				setIsLoading(false)
 				navigate('/advisor')
 			})
-			.catch(({ message }) => {
+			.catch(error => {
 				setIsLoading(false)
-				alert(message)
+				if (error === 'User is not confirmed.') navigate('/advisor/verifyemail', { state: { email } })
+				else alert(error)
 			})
 	}
 
