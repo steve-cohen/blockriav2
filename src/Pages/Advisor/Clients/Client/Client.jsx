@@ -5,9 +5,14 @@ import './Client.css'
 
 const Client = ({ advisor, client, setClient }) => {
 	const [searchParams] = useSearchParams()
+
+	const [accounts, setAccounts] = useState([])
+	const [accountsNonTradeable, setAccountsNonTradeable] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [totalBalance, setTotalBalance] = useState(0)
+	const [totalBalanceNonTradeable, setTotalBalanceNonTradeable] = useState(0)
 	const [totalPercent, setTotalPercent] = useState(100)
+	const [totalPercentNonTradeable, setTotalPercentNonTradeable] = useState(100)
 
 	useEffect(async () => {
 		setIsLoading(true)
@@ -29,23 +34,40 @@ const Client = ({ advisor, client, setClient }) => {
 
 	useEffect(() => {
 		let newTotalBalance = 0
-		client.accounts.forEach(({ native_balance }) => (newTotalBalance += Number(native_balance.amount)))
+		let newTotalBalanceNonTradeable = 0
+		client.accounts.forEach(({ currency, native_balance, type }) => {
+			if (currency !== 'ETH2' && type !== 'vault') newTotalBalance += Number(native_balance.amount)
+			else newTotalBalanceNonTradeable += Number(native_balance.amount)
+		})
 		setTotalBalance(newTotalBalance)
+		setTotalBalanceNonTradeable(newTotalBalanceNonTradeable)
 
 		let newTotalPercent = 0
-		client.accounts.forEach(({ native_balance }) => {
-			const percentRounded = (Number(native_balance.amount) / newTotalBalance).toFixed(2)
-			newTotalPercent += Number(percentRounded)
+		let newTotalPercentNonTradeable = 0
+		client.accounts.forEach(({ currency, native_balance, type }) => {
+			if (currency !== 'ETH2' && type !== 'vault' && newTotalBalance !== 0) {
+				const percentRounded = (Number(native_balance.amount) / newTotalBalance).toFixed(2)
+				newTotalPercent += Number(percentRounded)
+			} else if ((currency === 'ETH2' || type === 'vault') && newTotalBalanceNonTradeable !== 0) {
+				const percentRounded = (Number(native_balance.amount) / newTotalBalanceNonTradeable).toFixed(2)
+				newTotalPercentNonTradeable += Number(percentRounded)
+			}
 		})
 		setTotalPercent(newTotalPercent)
+		setTotalPercentNonTradeable(newTotalPercentNonTradeable)
+
+		setAccounts(client.accounts.filter(({ currency, type }) => currency !== 'ETH2' && type !== 'vault'))
+		setAccountsNonTradeable(client.accounts.filter(({ currency, type }) => currency === 'ETH2' || type === 'vault'))
 	}, [client])
 
-	function renderAccount({ balance, id, name, native_balance }) {
+	function renderAccount({ balance, id, name, native_balance }, tradeable = true) {
+		const denominator = tradeable ? totalBalance : totalBalanceNonTradeable
+		console.log(name, denominator)
 		if (Number(balance.amount)) {
 			return (
 				<tr key={`Account ${id}`}>
 					<td>
-						{(Number(native_balance.amount) / totalBalance).toLocaleString('en-US', {
+						{(Number(native_balance.amount) / denominator).toLocaleString('en-US', {
 							minimumFractionDigits: 2,
 							maximumFractionDigits: 2,
 							style: 'percent'
@@ -106,9 +128,9 @@ const Client = ({ advisor, client, setClient }) => {
 						</tr>
 					) : (
 						<>
-							{client.accounts
+							{accounts
 								.sort((a, b) => Number(b.native_balance.amount) - Number(a.native_balance.amount))
-								.map(renderAccount)}
+								.map(account => renderAccount(account, true))}
 							<tr className='Totals'>
 								<td>
 									{totalPercent.toLocaleString('en-US', {
@@ -120,7 +142,7 @@ const Client = ({ advisor, client, setClient }) => {
 								<td>
 									{totalBalance.toLocaleString('en-US', {
 										style: 'currency',
-										currency: client.accounts[0].native_balance.currency
+										currency: accounts.length ? accounts[0].native_balance.currency : 'USD'
 									})}
 								</td>
 							</tr>
@@ -128,6 +150,40 @@ const Client = ({ advisor, client, setClient }) => {
 					)}
 				</tbody>
 			</table>
+			{accountsNonTradeable.length && totalBalanceNonTradeable > 0 ? (
+				<table style={{ marginTop: '72px' }}>
+					<caption>Non-Tradeable Accounts</caption>
+					<thead>
+						<tr>
+							<th>ALLOCATION</th>
+							<th>BALANCE</th>
+							<th>HOLDING</th>
+							<th>NAME</th>
+							<th>AMOUNT</th>
+						</tr>
+					</thead>
+					<tbody>
+						{accountsNonTradeable
+							.sort((a, b) => Number(b.native_balance.amount) - Number(a.native_balance.amount))
+							.map(accountNonTradeable => renderAccount(accountNonTradeable, false))}
+						<tr className='Totals'>
+							<td>
+								{totalPercentNonTradeable.toLocaleString('en-US', {
+									minimumFractionDigits: 2,
+									maximumFractionDigits: 2,
+									style: 'percent'
+								})}
+							</td>
+							<td>
+								{totalBalanceNonTradeable.toLocaleString('en-US', {
+									style: 'currency',
+									currency: accountsNonTradeable.length ? accountsNonTradeable[0].native_balance.currency : 'USD'
+								})}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			) : null}
 		</div>
 	)
 }
