@@ -53,8 +53,8 @@ const Client = ({ advisor, client, setClient }) => {
 					</td>
 					<td>
 						{Number(native_balance.amount).toLocaleString('en-US', {
-							style: 'currency',
-							currency: native_balance.currency
+							currency: native_balance.currency,
+							style: 'currency'
 						})}
 					</td>
 					<td>{balance.currency}</td>

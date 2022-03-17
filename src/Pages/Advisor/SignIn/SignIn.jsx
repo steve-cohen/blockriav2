@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { AccountContext } from '../../../Account'
 import { demoAdvisorEmpty } from '../demoData'
 import './SignIn.css'
@@ -7,6 +7,7 @@ import './SignIn.css'
 const SignIn = ({ setAdvisor }) => {
 	const { authenticate } = useContext(AccountContext)
 	const navigate = useNavigate()
+	const [searchParams] = useSearchParams()
 
 	const [email, setEmail] = useState('')
 	const [isLoading, setIsLoading] = useState(false)
@@ -45,6 +46,7 @@ const SignIn = ({ setAdvisor }) => {
 		<div className='SignIn'>
 			<div className='Description'>
 				<div className='Title'>Sign into your Account.</div>
+				{searchParams.get('verified') ? <p>Your email was verified</p> : ''}
 			</div>
 			<form onSubmit={handleSubmit}>
 				<input
