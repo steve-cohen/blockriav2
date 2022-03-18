@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AccountContext } from '../../../../Account'
-import coinbaseTokens from './coinbaseTokens.json'
+import coinbaseTokenNames from '../../coinbaseTokenNames.json'
+import coinbaseTokenOrder from './coinbaseTokenOrder.json'
 import './Edit.css'
+
+const coinbaseHoldings = coinbaseTokenOrder.map(token => `${token} - ${coinbaseTokenNames[token]}`)
 
 const Edit = ({ portfolios, setPortfolios }) => {
 	const { getAdvisorId } = useContext(AccountContext)
@@ -10,8 +13,8 @@ const Edit = ({ portfolios, setPortfolios }) => {
 	const [searchParams] = useSearchParams()
 
 	const [allocations, setAllocations] = useState([
-		{ holding: '', holdings: coinbaseTokens, percent: '', showHoldings: false },
-		{ holding: '', holdings: coinbaseTokens, percent: '', showHoldings: false }
+		{ holding: '', holdings: coinbaseHoldings, percent: '', showHoldings: false },
+		{ holding: '', holdings: coinbaseHoldings, percent: '', showHoldings: false }
 	])
 	const [isLoading, setIsLoading] = useState(false)
 	const [portfolioName, setPortfolioName] = useState('')
@@ -22,7 +25,17 @@ const Edit = ({ portfolios, setPortfolios }) => {
 			const portfolio = portfolios.filter(({ portfolioId }) => portfolioId.S === searchParams.get('portfolioId'))
 
 			if (portfolio.length) {
-				setAllocations(JSON.parse(portfolio[0].allocations.S))
+				const newAllocations = []
+				JSON.parse(portfolio[0].allocations.S).forEach(({ holding, percent }) => {
+					const newHoldings = coinbaseHoldings.filter(token => token.toUpperCase().includes(holding.toUpperCase()))
+					newAllocations.push({
+						holding: `${holding} - ${coinbaseTokenNames[holding]}`,
+						holdings: newHoldings,
+						percent,
+						showHoldings: false
+					})
+				})
+				setAllocations(newAllocations)
 				setPortfolioName(portfolio[0].portfolioName.S)
 				setPortfolioId(portfolio[0].portfolioId.S)
 			}
@@ -31,7 +44,7 @@ const Edit = ({ portfolios, setPortfolios }) => {
 
 	function addHolding() {
 		let newAllocations = JSON.parse(JSON.stringify(allocations))
-		newAllocations.push({ holding: '', holdings: coinbaseTokens, percent: '', showHoldings: false })
+		newAllocations.push({ holding: '', holdings: coinbaseHoldings, percent: '', showHoldings: false })
 		setAllocations(newAllocations)
 	}
 
@@ -39,8 +52,10 @@ const Edit = ({ portfolios, setPortfolios }) => {
 		let newAllocations = JSON.parse(JSON.stringify(allocations))
 		newAllocations.forEach((_, index) => (newAllocations[index].showHoldings = false))
 
-		newAllocations[index].holding = e.target.value.toUpperCase()
-		newAllocations[index].holdings = coinbaseTokens.filter(token => token.includes(e.target.value.toUpperCase()))
+		newAllocations[index].holding = e.target.value
+		newAllocations[index].holdings = coinbaseHoldings.filter(token =>
+			token.toUpperCase().includes(e.target.value.toUpperCase())
+		)
 		newAllocations[index].showHoldings = true
 		setAllocations(newAllocations)
 	}
@@ -48,14 +63,14 @@ const Edit = ({ portfolios, setPortfolios }) => {
 	function handleHoldingDropDown(holding, index) {
 		let newAllocations = JSON.parse(JSON.stringify(allocations))
 		newAllocations[index].holding = holding
-		newAllocations[index].holdings = coinbaseTokens.filter(token => token.includes(holding))
+		newAllocations[index].holdings = coinbaseHoldings.filter(token => token.includes(holding))
 		newAllocations[index].showHoldings = false
 		setAllocations(newAllocations)
 	}
 
 	function handlePercent(e, index) {
 		let newAllocations = JSON.parse(JSON.stringify(allocations))
-		newAllocations[index].percent = e.target.value
+		newAllocations[index].percent = e.target.value.slice(0, 6)
 		setAllocations(newAllocations)
 	}
 
@@ -80,7 +95,11 @@ const Edit = ({ portfolios, setPortfolios }) => {
 
 		// Upload New Portfolio
 		const advisorId = getAdvisorId()
-		let newAllocations = JSON.stringify(allocations)
+		let newAllocations = JSON.stringify(
+			allocations.map(({ holding, percent }) => {
+				return { holding: holding.trim().split(' ')[0], percent: Number(percent) }
+			})
+		)
 		let newPortfolioId = portfolioId || new Date().getTime().toString()
 		let newPortfolioName = portfolioName
 
@@ -137,6 +156,7 @@ const Edit = ({ portfolios, setPortfolios }) => {
 			<div className='Allocation' key={`Allocation ${index}`}>
 				<div className='Flex'>
 					<input
+						autoComplete='off'
 						className='Holding'
 						minLength={1}
 						id='holding'
@@ -147,11 +167,15 @@ const Edit = ({ portfolios, setPortfolios }) => {
 						value={holding}
 					/>
 					<input
+						autoComplete='off'
 						className='Percent'
 						minLength={1}
+						min='0'
+						max='100'
 						onChange={e => handlePercent(e, index)}
 						placeholder='0.00%'
 						required
+						type='number'
 						value={percent}
 					/>
 				</div>
@@ -195,6 +219,7 @@ const Edit = ({ portfolios, setPortfolios }) => {
 			<div className='Title'>{searchParams.get('portfolioId') ? 'Edit Portfolio' : 'Create a Portfolio'}</div>
 			<form onSubmit={handleSubmit}>
 				<input
+					autoComplete='off'
 					autoFocus
 					className='PortfolioName'
 					onChange={e => setPortfolioName(e.target.value)}

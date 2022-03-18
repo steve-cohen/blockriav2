@@ -14,7 +14,7 @@
 
 .Edit form {
 	margin: 0 36px;
-	width: 300px;
+	width: 360px;
 }
 
 .Edit form a {
@@ -96,7 +96,9 @@
 }
 
 .Edit form .Allocation .Flex .Holding {
-	width: 180px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 235px;
 }
 
 .Edit form .Allocation .Flex .Percent {
@@ -115,7 +117,7 @@
 	overflow: hidden auto;
 	position: absolute;
 	transition: 0.4s;
-	width: 298px;
+	width: 358px;
 	z-index: 1;
 }
 
@@ -148,7 +150,7 @@
 .Edit form .RemoveHolding {
 	color: rgb(230, 39, 28);
 	font-size: 14px;
-	left: 330px;
+	left: 395px;
 	position: absolute;
 	top: 26px;
 	width: fit-content;
@@ -160,12 +162,12 @@
 }
 
 .Edit form .PortfolioName {
-	width: calc(300px - 18px);
+	width: calc(360px - 18px);
 }
 
 .Edit .Title {
 	font-family: 'Playfair Display', serif;
 	font-size: 42px;
 	margin: 0 36px;
-	width: 300px;
+	width: 360px;
 }

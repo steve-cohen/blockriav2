@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { demoClientEmpty } from '../../demoData'
+import coinbaseTokenNames from '../../coinbaseTokenNames.json'
 import './Client.css'
 
 const Client = ({ advisor, client, setClient }) => {
@@ -60,9 +61,9 @@ const Client = ({ advisor, client, setClient }) => {
 		setAccountsNonTradeable(client.accounts.filter(({ currency, type }) => currency === 'ETH2' || type === 'vault'))
 	}, [client])
 
-	function renderAccount({ balance, id, name, native_balance }, tradeable = true) {
+	function renderAccount({ balance, id, native_balance }, tradeable = true) {
 		const denominator = tradeable ? totalBalance : totalBalanceNonTradeable
-		console.log(name, denominator)
+
 		if (Number(balance.amount)) {
 			return (
 				<tr key={`Account ${id}`}>
@@ -80,7 +81,7 @@ const Client = ({ advisor, client, setClient }) => {
 						})}
 					</td>
 					<td>{balance.currency}</td>
-					<td>{name}</td>
+					<td>{coinbaseTokenNames[balance.currency]}</td>
 					<td>{balance.amount}</td>
 				</tr>
 			)
