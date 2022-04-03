@@ -68,7 +68,7 @@ const SignIn = ({ setAdvisor }) => {
 				<button disabled={isLoading} type='submit'>
 					{isLoading ? 'Loading…' : 'Sign In'}
 				</button>
-				<Link to='/advisor/signup'>Need an account? Sign Up</Link>
+				{searchParams.get('verified') ? '' : <Link to='/advisor/signup'>Need an account? Sign Up</Link>}
 			</form>
 		</div>
 	)

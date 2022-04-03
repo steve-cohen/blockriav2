@@ -22,11 +22,12 @@ const Edit = ({ portfolios, setPortfolios }) => {
 
 	useEffect(() => {
 		if (searchParams.get('portfolioId')) {
-			const portfolio = portfolios.filter(({ portfolioId }) => portfolioId.S === searchParams.get('portfolioId'))
+			const portfolio = portfolios.filter(({ portfolioId }) => portfolioId === Number(searchParams.get('portfolioId')))
+			console.log(portfolio)
 
 			if (portfolio.length) {
 				const newAllocations = []
-				JSON.parse(portfolio[0].allocations.S).forEach(({ holding, percent }) => {
+				portfolio[0].allocations.forEach(({ holding, percent }) => {
 					const newHoldings = coinbaseHoldings.filter(token => token.toUpperCase().includes(holding.toUpperCase()))
 					newAllocations.push({
 						holding: `${holding} - ${coinbaseTokenNames[holding]}`,
@@ -36,8 +37,8 @@ const Edit = ({ portfolios, setPortfolios }) => {
 					})
 				})
 				setAllocations(newAllocations)
-				setPortfolioName(portfolio[0].portfolioName.S)
-				setPortfolioId(portfolio[0].portfolioId.S)
+				setPortfolioName(portfolio[0].portfolioName)
+				setPortfolioId(portfolio[0].portfolioId)
 			}
 		}
 	}, [])
@@ -116,7 +117,7 @@ const Edit = ({ portfolios, setPortfolios }) => {
 
 				if (portfolioId) {
 					let newPortfoliosObject = {}
-					newPortfolios.forEach(newPortfolio => (newPortfoliosObject[newPortfolio.portfolioId.S] = newPortfolio))
+					newPortfolios.forEach(newPortfolio => (newPortfoliosObject[newPortfolio.portfolioId] = newPortfolio))
 					console.log({ newPortfoliosObject })
 
 					newPortfoliosObject[portfolioId] = {

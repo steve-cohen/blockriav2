@@ -4,7 +4,7 @@ import { demoClients } from '../demoData'
 import './Clients.css'
 
 function renderPortfolio(clientId, clientName, currentPortfolioId, portfolios) {
-	const portfolio = portfolios.filter(({ portfolioId }) => portfolioId.S === currentPortfolioId)
+	const portfolio = portfolios.filter(({ portfolioId }) => portfolioId === currentPortfolioId)
 
 	if (portfolio.length) {
 		return (
@@ -13,7 +13,7 @@ function renderPortfolio(clientId, clientName, currentPortfolioId, portfolios) {
 					<path d='M304 16.58C304 7.555 310.1 0 320 0C443.7 0 544 100.3 544 224C544 233 536.4 240 527.4 240H304V16.58zM32 272C32 150.7 122.1 50.34 238.1 34.25C248.2 32.99 256 40.36 256 49.61V288L412.5 444.5C419.2 451.2 418.7 462.2 411 467.7C371.8 495.6 323.8 512 272 512C139.5 512 32 404.6 32 272zM558.4 288C567.6 288 575 295.8 573.8 305C566.1 360.9 539.1 410.6 499.9 447.3C493.9 452.1 484.5 452.5 478.7 446.7L320 288H558.4z' />
 				</svg>
 				{/* <Link to={`/advisor/portfolios?portfolioId=${currentPortfolioId}`}>{portfolioName}</Link> ( */}
-				{portfolio[0].portfolioName.S} (
+				{portfolio[0].portfolioName} (
 				<Link
 					to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${currentPortfolioId}`}
 				>
@@ -49,80 +49,54 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 	useEffect(async () => {
 		setClients([])
 		setPortfolios([])
+
 		const [newClients, newPortfolios] = await Promise.all([getClients(), getPortfolios()])
+		console.log({ newClients, newPortfolios })
+
 		setClients(newClients)
 		setPortfolios(newPortfolios)
-
 		localStorage.setItem('clients', JSON.stringify(newClients))
 		localStorage.setItem('portfolios', JSON.stringify(newPortfolios))
-		console.log({ newClients, newPortfolios })
 	}, [])
 
 	function getClients() {
-		return fetch(`https://blockria.com/advisor/clients?advisorId=${advisor.idToken.payload.sub}`)
+		return fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.catch(error => alert(error))
 	}
 
 	function getPortfolios() {
-		return fetch(`https://blockria.com/portfolios/query?advisorId=${advisor.idToken.payload.sub}`)
+		return fetch(`https://blockria.com/api/portfolios?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.catch(error => alert(error))
 	}
 
-	function renderClient({ clientId, clientName, nonzeroAccounts, portfolioId }) {
-		nonzeroAccounts = JSON.parse(nonzeroAccounts.S)
-
+	function renderClient({ accounts, clientId, clientName, portfolioId }) {
 		// Calculate Client's Total Native Balance and Native Currency
 		let balance = 0
 		let native_currency = 'USD'
-		nonzeroAccounts.forEach(({ native_balance }) => {
-			if (native_balance && native_balance.amount) {
-				balance += Number(native_balance.amount)
-				native_currency = native_balance.currency
-			}
-		})
+		// accounts.forEach(({ native_balance }) => {
+		// 	if (native_balance && native_balance.amount) {
+		// 		balance += Number(native_balance.amount)
+		// 		native_currency = native_balance.currency
+		// 	}
+		// })
 
 		return (
-			<tr key={clientId.S}>
+			<tr key={clientId}>
 				<td>
-					<Link to={`/advisor/clients/client?clientName=${clientName.S}&clientId=${clientId.S}`}>{clientName.S}</Link>
+					<Link to={`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`}>{clientName}</Link>
 				</td>
 				{/* <td>{balance.toLocaleString('en-US', { style: 'currency', currency: native_currency })}</td> */}
 				<td>
-					{portfolioId.S
-						? renderPortfolio(clientId.S, clientName.S, portfolioId.S, portfolios)
-						: renderPortfolioAssign(clientName.S, clientId.S)}
+					{portfolioId
+						? renderPortfolio(clientId, clientName, portfolioId, portfolios)
+						: renderPortfolioAssign(clientName, clientId)}
 				</td>
 				<td>Coinbase</td>
 			</tr>
 		)
 	}
-
-	// function renderTotalNativeBalance() {
-	// 	let totalNativeBalance = 0
-	// 	let totalNativeCurrency = 'USD'
-
-	// 	clients.forEach(({ nonzeroAccounts }) => {
-	// 		nonzeroAccounts = JSON.parse(nonzeroAccounts.S)
-
-	// 		nonzeroAccounts.forEach(({ native_balance }) => {
-	// 			if (native_balance && native_balance.amount) {
-	// 				totalNativeBalance += Number(native_balance.amount)
-	// 				totalNativeCurrency = native_balance.currency
-	// 			}
-	// 		})
-	// 	})
-
-	// 	return (
-	// 		<div className='TotalNativeBalance'>
-	// 			{`Total Balance: ${totalNativeBalance.toLocaleString('en-US', {
-	// 				style: 'currency',
-	// 				currency: totalNativeCurrency
-	// 			})}`}
-	// 		</div>
-	// 	)
-	// }
 
 	return (
 		<div className='Clients'>

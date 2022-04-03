@@ -13,15 +13,15 @@ const frequencies = [
 ]
 
 const portfolioDefault = {
-	allocations: { S: '[]' },
-	portfolioId: { S: '' },
-	portfolioName: { S: 'Select a Portfolio' }
+	allocations: [],
+	portfolioId: 0,
+	portfolioName: 'Select a Portfolio'
 }
 
 const portfolioEmpty = {
-	allocations: { S: '[]' },
-	portfolioId: { S: '' },
-	portfolioName: { S: 'No Portfolio' }
+	allocations: [],
+	portfolioId: 0,
+	portfolioName: 'No Portfolio'
 }
 
 const SetPortfolio = ({ advisor, portfolios }) => {
@@ -57,7 +57,7 @@ const SetPortfolio = ({ advisor, portfolios }) => {
 		let url = 'https://blockria.com/coinbase/update/portfolioid?'
 		url += `advisorId=${advisor.idToken.payload.sub}`
 		url += `&clientId=${searchParams.get('clientId')}`
-		url += `&portfolioId=${portfolioSelection.portfolioId.S}`
+		url += `&portfolioId=${portfolioSelection.portfolioId}`
 		url += `&rebalanceFrequency=${frequency.replace('Rebalance ', '')}`
 		await fetch(url)
 			.then(console.log)
@@ -99,20 +99,21 @@ const SetPortfolio = ({ advisor, portfolios }) => {
 		return (
 			<div
 				className='Selection'
-				key={`Portfolio ${portfolioId.S}`}
+				key={`Portfolio ${portfolioId}`}
 				onClick={() => {
 					setPortfolioSelection(portfolio)
 					setShowPortfolios(false)
 				}}
 			>
-				<div>{portfolioName.S}</div>
+				<div>{portfolioName}</div>
 				<div className='Allocations'>{renderPortfolioAllocations(allocations)}</div>
 			</div>
 		)
 	}
 
 	function renderPortfolioAllocations(allocations) {
-		return JSON.parse(allocations.S)
+		console.log(allocations)
+		return allocations
 			.sort((a, b) => b.percent - a.percent)
 			.map(({ holding, percent }) => `${holding} ${percent}%`)
 			.join(', ')
@@ -125,7 +126,7 @@ const SetPortfolio = ({ advisor, portfolios }) => {
 			</div>
 			<form onSubmit={handleSubmit}>
 				<div className='Select SelectionPortfolio' onClick={() => handleSelect('Portfolio')}>
-					<div>{portfolioSelection.portfolioName.S}</div>
+					<div>{portfolioSelection.portfolioName}</div>
 					<div>{renderPortfolioAllocations(portfolioSelection.allocations)}</div>
 				</div>
 				{showPortfolios && (
@@ -156,8 +157,8 @@ const SetPortfolio = ({ advisor, portfolios }) => {
 				<div className='Title'>Confirm the Portfolio for {searchParams.get('clientName')}.</div>
 			</div>
 			<form onSubmit={handleSubmitConfirm}>
-				<input className='Select' readOnly required value={portfolioSelection.portfolioName.S} />
-				{JSON.parse(portfolioSelection.allocations.S).map(renderAllocation)}
+				<input className='Select' readOnly required value={portfolioSelection.portfolioName} />
+				{portfolioSelection.allocations.map(renderAllocation)}
 				<input className='Select' readOnly required value={frequency} />
 				<button disabled={isLoading} type='submit'>
 					{isLoading ? 'Loading…' : 'Confirm New Portfolio'}

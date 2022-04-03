@@ -8,15 +8,18 @@ function renderPhone(phone_number) {
 }
 
 const Settings = ({ advisor }) => {
+	const [isLoading, setIsLoading] = useState(false)
 	const [stripeId, setStripeId] = useState('')
 	const [subscription, setSubscription] = useState({})
 
 	useEffect(async () => {
+		setIsLoading(true)
+
 		console.log(advisor)
 		const newSubscriptionResponse = await getSubscription()
 		console.log(newSubscriptionResponse)
 
-		if (newSubscriptionResponse.Item.stripeSubscription) {
+		if (newSubscriptionResponse.Item && newSubscriptionResponse.Item.stripeSubscription) {
 			const newSubscription = JSON.parse(newSubscriptionResponse.Item.stripeSubscription)
 			console.log(newSubscription)
 			setSubscription(newSubscription)
@@ -25,12 +28,17 @@ const Settings = ({ advisor }) => {
 				setStripeId(newSubscription.data.object.customer)
 			}
 		}
+
+		setIsLoading(false)
 	}, [])
 
 	function getSubscription() {
-		return fetch(`https://blockria.com/stripe/subscription?advisorId=${advisor.idToken.payload.sub}`)
-			.then(response => response.json())
-			.catch(console.log)
+		return (
+			fetch(`https://blockria.com/stripe/subscription?advisorId=${advisor.idToken.payload.sub}`)
+				// return fetch(`https://blockria.com/stripe/subscription?advisorId=123`)
+				.then(response => response.json())
+				.catch(console.log)
+		)
 	}
 
 	function renderBillingPortal() {
@@ -52,7 +60,8 @@ const Settings = ({ advisor }) => {
 					<path d='M506.3 417l-213.3-364c-16.33-28-57.54-28-73.98 0l-213.2 364C-10.59 444.9 9.849 480 42.74 480h426.6C502.1 480 522.6 445 506.3 417zM232 168c0-13.25 10.75-24 24-24S280 154.8 280 168v128c0 13.25-10.75 24-23.1 24S232 309.3 232 296V168zM256 416c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 401.9 273.4 416 256 416z' />
 				</svg>
 				<a
-					href={`https://blockria.com/stripe/checkoutsession?advisorId=${advisor.idToken.payload.sub}`}
+					// href={`https://blockria.com/stripe/advisor?advisorId=${advisor.idToken.payload.sub}`}
+					href={`https://blockria.com/stripe/advisor?advisorId=123`}
 					target='_blank'
 					rel='noopener noreferrer'
 				>
@@ -92,11 +101,13 @@ const Settings = ({ advisor }) => {
 				<div className='BoxTitle'>Billing Details</div>
 				<div className='Inline'>
 					<div>Plan</div>
-					{stripeId ? renderBillingPortal() : renderPlanSignUp()}
+					{isLoading ? 'Loading..' : stripeId ? renderBillingPortal() : renderPlanSignUp()}
 				</div>
 				<div className='Inline'>
 					<div>Billing Cycle</div>
-					{subscription.data ? (
+					{isLoading ? (
+						'Loading...'
+					) : subscription.data ? (
 						<div style={{ textTransform: 'capitalize' }}>
 							{subscription.data.object.items.data[0].plan.interval + 'ly'}
 						</div>

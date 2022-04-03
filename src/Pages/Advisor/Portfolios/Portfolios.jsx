@@ -4,19 +4,19 @@ import './Portfolios.css'
 
 function renderPortfolios({ allocations, portfolioId, portfolioName }) {
 	return (
-		<tr key={`Portfolio ${portfolioId.S}`}>
-			<td>{portfolioName.S}</td>
+		<tr key={`Portfolio ${portfolioId}`}>
+			<td>{portfolioName}</td>
 			<td>
-				{JSON.parse(allocations.S)
+				{allocations
 					.sort((a, b) => b.percent - a.percent)
 					.map(({ holding, percent }) => `${holding} ${percent}%`)
 					.join('\n')}
 			</td>
 			<td>
-				<Link to={`/advisor/portfolios/edit?portfolioId=${portfolioId.S}`}>Edit Portfolio</Link>
+				<Link to={`/advisor/portfolios/edit?portfolioId=${portfolioId}`}>Edit Portfolio</Link>
 			</td>
 			{/* <td>
-				<Link to={`/advisor/portfolios/assign?portfolioId=${portfolioId.S}`}>Assign Portfolio to Client(s)</Link>
+				<Link to={`/advisor/portfolios/assign?portfolioId=${portfolioId}`}>Assign Portfolio to Client(s)</Link>
 			</td> */}
 			<td></td>
 		</tr>
@@ -26,7 +26,7 @@ function renderPortfolios({ allocations, portfolioId, portfolioName }) {
 const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
 	useEffect(async () => {
 		setPortfolios([])
-		fetch(`https://blockria.com/portfolios/query?advisorId=${advisor.idToken.payload.sub}`)
+		fetch(`https://blockria.com/api/portfolios?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.then(newPortfolios => {
 				console.log(newPortfolios)
