@@ -112,7 +112,6 @@ const SetPortfolio = ({ advisor, portfolios }) => {
 	}
 
 	function renderPortfolioAllocations(allocations) {
-		console.log(allocations)
 		return allocations
 			.sort((a, b) => b.percent - a.percent)
 			.map(({ holding, percent }) => `${holding} ${percent}%`)

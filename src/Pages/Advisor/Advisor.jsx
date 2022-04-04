@@ -15,14 +15,14 @@ import SignUp from './SignUp/SignUp'
 import Withdrawal from './Clients/Client/Withdrawal/Withdrawal'
 import VerifyEmail from './VerifyEmail/VerifyEmail'
 
-import { demoAdvisor, demoAdvisorEmpty, demoClient, demoClients, demoPortfolio, demoPortfolios } from './demoData'
+import { demoAdvisor, demoAdvisorEmpty, demoClientEmpty, demoClients, demoPortfolio, demoPortfolios } from './demoData'
 
 import './Advisor.css'
 
 const Advisor = () => {
 	// Advisor Data
 	const [advisor, setAdvisor] = useState(JSON.parse(localStorage.getItem('advisor')) || demoAdvisorEmpty)
-	const [client, setClient] = useState(JSON.parse(localStorage.getItem('client')) || demoClient)
+	const [client, setClient] = useState(JSON.parse(localStorage.getItem('client')) || demoClientEmpty)
 	const [portfolio, setPortfolio] = useState(JSON.parse(localStorage.getItem('portfolio')) || demoPortfolio)
 	const [portfolios, setPortfolios] = useState([])
 

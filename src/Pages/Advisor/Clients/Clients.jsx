@@ -45,49 +45,86 @@ function renderPortfolioAssign(clientName, clientId) {
 
 const Clients = ({ advisor, portfolios, setPortfolios }) => {
 	const [clients, setClients] = useState(JSON.parse(localStorage.getItem('clients')) || [] || demoClients)
+	const [spotPrices, setSpotPrices] = useState({})
 
 	useEffect(async () => {
-		setClients([])
-		setPortfolios([])
-
-		const [newClients, newPortfolios] = await Promise.all([getClients(), getPortfolios()])
-		console.log({ newClients, newPortfolios })
-
-		setClients(newClients)
-		setPortfolios(newPortfolios)
-		localStorage.setItem('clients', JSON.stringify(newClients))
-		localStorage.setItem('portfolios', JSON.stringify(newPortfolios))
+		getClients()
+		getPortfolios()
 	}, [])
 
 	function getClients() {
-		return fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisor.idToken.payload.sub}`)
-			.then(response => response.json())
+		setClients([])
+		localStorage.setItem('clients', '[]')
+
+		fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisor.idToken.payload.sub}`)
+			.then(async response => {
+				// Get Clients
+				const newClients = await response.json()
+				console.log({ newClients })
+				setClients(newClients)
+				localStorage.setItem('clients', JSON.stringify(newClients))
+
+				// Get Spot Prices
+				await getSpotPrices()
+			})
 			.catch(error => alert(error))
 	}
 
 	function getPortfolios() {
+		setPortfolios([])
+		localStorage.setItem('portfolios', '[]')
+
 		return fetch(`https://blockria.com/api/portfolios?advisorId=${advisor.idToken.payload.sub}`)
+			.then(async response => {
+				const newPortfolios = await response.json()
+				console.log({ newPortfolios })
+				setPortfolios(newPortfolios)
+				localStorage.setItem('portfolios', JSON.stringify(newPortfolios))
+			})
+			.catch(error => alert(error))
+	}
+
+	async function getSpotPrices() {
+		// Format Holdings
+		let currencies = {}
+		clients.forEach(client => {
+			client.holdings.forEach(account => {
+				if (account.M.balance.M.currency.S !== 'USD') {
+					currencies[account.M.balance.M.currency.S] = true
+				}
+			})
+		})
+
+		// GET Spot Prices
+		const spotPricesResponse = await Promise.all(Object.keys(currencies).map(getSpotPrice))
+
+		// Format Spot Prices
+		let newSpotPrices = {}
+		spotPricesResponse.forEach(({ data }) => (newSpotPrices[data.base] = Number(data.amount)))
+		console.log(newSpotPrices)
+		setSpotPrices(newSpotPrices)
+	}
+
+	function getSpotPrice(holding) {
+		return fetch(`https://blockria.com/v2/prices/${holding}-USD/spot`)
 			.then(response => response.json())
 			.catch(error => alert(error))
 	}
 
-	function renderClient({ accounts, clientId, clientName, portfolioId }) {
-		// Calculate Client's Total Native Balance and Native Currency
+	function renderClient({ clientId, clientName, holdings, portfolioId }) {
 		let balance = 0
-		let native_currency = 'USD'
-		// accounts.forEach(({ native_balance }) => {
-		// 	if (native_balance && native_balance.amount) {
-		// 		balance += Number(native_balance.amount)
-		// 		native_currency = native_balance.currency
-		// 	}
-		// })
+		holdings.forEach(account => {
+			if (account.M.balance.M.currency.S in spotPrices) {
+				balance += spotPrices[account.M.balance.M.currency.S] * Number(account.M.balance.M.amount.S)
+			}
+		})
 
 		return (
 			<tr key={clientId}>
 				<td>
 					<Link to={`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`}>{clientName}</Link>
 				</td>
-				{/* <td>{balance.toLocaleString('en-US', { style: 'currency', currency: native_currency })}</td> */}
+				<td>{balance && balance.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
 				<td>
 					{portfolioId
 						? renderPortfolio(clientId, clientName, portfolioId, portfolios)
@@ -115,7 +152,7 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 				<thead>
 					<tr>
 						<th>Name</th>
-						{/* <th>Balance</th> */}
+						<th>Balance</th>
 						<th>Portfolio</th>
 						<th>Custodian</th>
 					</tr>

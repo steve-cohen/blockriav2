@@ -248,12 +248,12 @@ export const demoClient = {
 }
 
 export const demoClientEmpty = {
-	accounts: [],
 	clientId: '',
 	clientName: '',
-	paymentMethods: [],
-	portfolioId: '',
-	user: { email: '' }
+	holdings: [],
+	portfolioId: 0,
+	rebalanceFrequency: '',
+	rebalanceNext: ''
 }
 
 export const demoClients = [
