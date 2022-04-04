@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import Transactions from './Transactions/Transactions'
 import coinbaseTokenNames from '../../coinbaseTokenNames.json'
 import './Client.css'
+
+const displayTypes = {
+	buy: 'Buy',
+	fiat_deposit: 'Deposit',
+	fiat_withdrawal: 'Withdrawal',
+	sell: 'Sell',
+	send: 'Send'
+}
 
 function getSpotPrice(holding) {
 	return fetch(`https://blockria.com/v2/prices/${holding}-USD/spot`)
@@ -15,19 +22,24 @@ const Client = ({ advisor }) => {
 
 	const [accounts, setAccounts] = useState([])
 	const [accountsNonTradeable, setAccountsNonTradeable] = useState([])
-
 	const [totalBalance, setTotalBalance] = useState(0)
 	const [totalBalanceNonTradeable, setTotalBalanceNonTradeable] = useState(0)
 	const [totalPercent, setTotalPercent] = useState(1)
 	const [totalPercentNonTradeable, setTotalPercentNonTradeable] = useState(1)
+	const [transactions, setTransactions] = useState([])
 
-	useEffect(async () => {
+	useEffect(() => {
 		const advisorId = advisor.idToken.payload.sub
 		const clientId = searchParams.get('clientId')
 
-		await fetch(`https://blockria.com/api/coinbase/clients/client?advisorId=${advisorId}&clientId=${clientId}`)
+		fetch(`https://blockria.com/api/coinbase/clients/client?advisorId=${advisorId}&clientId=${clientId}`)
 			.then(response => response.json())
 			.then(handleNewClient)
+			.catch(error => alert(error))
+
+		fetch(`https://blockria.com/api/coinbase/clients/client/transactions?clientId=${clientId}&limit=11`)
+			.then(response => response.json())
+			.then(setTransactions)
 			.catch(error => alert(error))
 	}, [])
 
@@ -140,7 +152,7 @@ const Client = ({ advisor }) => {
 
 	function renderHolding({ balance, id, nativeBalance, nativePercent }) {
 		return (
-			<tr key={`Account ${id}`}>
+			<tr key={`Holding ${id}`}>
 				<td>
 					{nativePercent.toLocaleString('en-US', {
 						minimumFractionDigits: 2,
@@ -157,6 +169,47 @@ const Client = ({ advisor }) => {
 				<td>{balance.currency}</td>
 				<td>{coinbaseTokenNames[balance.currency]}</td>
 				<td>{balance.amount}</td>
+			</tr>
+		)
+	}
+
+	function renderTransactions() {
+		return (
+			<table>
+				<caption>Transaction History</caption>
+				<thead>
+					<tr>
+						<th>DATE</th>
+						<th>TYPE</th>
+						<th>DESCRIPTION</th>
+						<th>PAYMENT METHOD</th>
+						<th>STATUS</th>
+					</tr>
+				</thead>
+				<tbody>
+					{transactions.map(renderTransaction)}
+					{transactions.length > 10 ? (
+						<tr key={`Transaction Show More`}>
+							<td style={{ border: 'none' }}>
+								<Link to={`transactions?clientId=${searchParams.get('clientId')}`}>
+									+ Show Full Transaction History
+								</Link>
+							</td>
+						</tr>
+					) : null}
+				</tbody>
+			</table>
+		)
+	}
+
+	function renderTransaction({ details, id, status, type, updated_at }) {
+		return (
+			<tr key={`Transaction ${id}`}>
+				<td>{updated_at}</td>
+				<td>{displayTypes[type]}</td>
+				<td>{details.header}</td>
+				<td>{details.payment_method_name}</td>
+				<td>{status}</td>
 			</tr>
 		)
 	}
@@ -183,7 +236,7 @@ const Client = ({ advisor }) => {
 			</div>
 			{renderHoldings(true)}
 			{totalBalanceNonTradeable !== 0 ? renderHoldings(false) : null}
-			<Transactions advisorId={advisor.idToken.payload.sub} clientId={searchParams.get('clientId')} />
+			{renderTransactions()}
 		</div>
 	)
 }

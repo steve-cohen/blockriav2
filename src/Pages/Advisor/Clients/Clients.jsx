@@ -62,11 +62,13 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 
 		fetch(`https://blockria.com/api/portfolios?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
-			.then(newPortfolios => setPortfolios(newPortfolios))
+			.then(setPortfolios)
 			.catch(error => alert(error))
 	}, [])
 
 	async function handleNewClients(newClients) {
+		console.log({ newClients })
+
 		// [1.0] GET Spot Prices
 		// [1.1] Format Currencies
 		let currencies = {}
@@ -91,6 +93,10 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 			holdings.forEach(({ balance }) => (nativeBalance += spotPrices[balance.currency] * balance.amount))
 			newClients[index].nativeBalance = nativeBalance
 		})
+
+		// [3.0] Sort Clients by Total Native Balance
+		newClients = newClients.sort((a, b) => b.nativeBalance - a.nativeBalance)
+		console.log({ newClients })
 
 		// [3.0] Update State
 		setClients(newClients)
