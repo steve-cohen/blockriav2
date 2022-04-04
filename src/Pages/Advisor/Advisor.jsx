@@ -22,7 +22,8 @@ import './Advisor.css'
 const Advisor = () => {
 	// Advisor Data
 	const [advisor, setAdvisor] = useState(JSON.parse(localStorage.getItem('advisor')) || demoAdvisorEmpty)
-	const [client, setClient] = useState(JSON.parse(localStorage.getItem('client')) || demoClientEmpty)
+	// const [client, setClient] = useState(JSON.parse(localStorage.getItem('client')) || demoClientEmpty)
+	const [client, setClient] = useState(demoClientEmpty)
 	const [portfolio, setPortfolio] = useState(JSON.parse(localStorage.getItem('portfolio')) || demoPortfolio)
 	const [portfolios, setPortfolios] = useState([])
 
@@ -53,10 +54,7 @@ const Advisor = () => {
 									path='clients'
 									element={<Clients advisor={advisor} portfolios={portfolios} setPortfolios={setPortfolios} />}
 								/>
-								<Route
-									path='clients/client'
-									element={<Client advisor={advisor} client={client} setClient={setClient} />}
-								/>
+								<Route path='clients/client' element={<Client advisor={advisor} />} />
 								<Route path='clients/client/deposit' element={<Deposit advisor={advisor} client={client} />} />
 								<Route
 									path='clients/client/setportfolio'

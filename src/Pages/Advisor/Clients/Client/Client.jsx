@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { demoClientEmpty } from '../../demoData'
+import Transactions from './Transactions/Transactions'
 import coinbaseTokenNames from '../../coinbaseTokenNames.json'
 import './Client.css'
 
-const Client = ({ advisor, client, setClient }) => {
+function getSpotPrice(holding) {
+	return fetch(`https://blockria.com/v2/prices/${holding}-USD/spot`)
+		.then(response => response.json())
+		.catch(error => alert(error))
+}
+
+const Client = ({ advisor }) => {
 	const [searchParams] = useSearchParams()
 
 	const [accounts, setAccounts] = useState([])
 	const [accountsNonTradeable, setAccountsNonTradeable] = useState([])
-	const [isLoading, setIsLoading] = useState(false)
-	const [spotPrices, setSpotPrices] = useState({})
 
 	const [totalBalance, setTotalBalance] = useState(0)
 	const [totalBalanceNonTradeable, setTotalBalanceNonTradeable] = useState(0)
@@ -18,35 +22,43 @@ const Client = ({ advisor, client, setClient }) => {
 	const [totalPercentNonTradeable, setTotalPercentNonTradeable] = useState(1)
 
 	useEffect(async () => {
-		setIsLoading(true)
-		setClient(demoClientEmpty)
 		const advisorId = advisor.idToken.payload.sub
 		const clientId = searchParams.get('clientId')
 
 		await fetch(`https://blockria.com/api/coinbase/clients/client?advisorId=${advisorId}&clientId=${clientId}`)
 			.then(response => response.json())
-			.then(async newClient => {
-				await getSpotPrices()
-				console.log(newClient)
-				localStorage.setItem('client', JSON.stringify(newClient))
-				setClient(newClient)
-			})
+			.then(handleNewClient)
 			.catch(error => alert(error))
-
-		setIsLoading(false)
 	}, [])
 
-	useEffect(() => {
-		// Separate Tradeable and NonTradeable Accounts
+	async function handleNewClient(newClient) {
+		console.log({ newClient })
+
+		// [1.0] GET Spot Prices
+		// [1.1] Format Currencies
+		let currencies = {}
+		newClient.holdings.forEach(({ balance }) => {
+			if (balance.currency !== 'USD') currencies[balance.currency] = true
+		})
+
+		// [1.2] GET Spot Prices
+		const spotPricesResponse = await Promise.all(Object.keys(currencies).map(getSpotPrice))
+
+		// [1.3] Format Spot Prices
+		let spotPrices = { USD: 1 }
+		spotPricesResponse.forEach(({ data }) => (spotPrices[data.base] = Number(data.amount)))
+		console.log({ spotPrices })
+
+		// [2.0] Separate Tradeable and NonTradeable Accounts
 		let newAccounts = []
 		let newAccountsNonTradeable = []
-		client.holdings.forEach(holding => {
+		newClient.holdings.forEach(holding => {
 			if (holding.type !== 'vault' && holding.balance.currency !== 'ETH2') newAccounts.push(holding)
 			else newAccountsNonTradeable.push(holding)
 		})
 		console.log(newAccounts)
 
-		// Calculate Tradeable Total Balance and NonTradeable Total Balance
+		// [3.0] Calculate Tradeable Total Balance and NonTradeable Total Balance
 		let newTotalBalance = 0
 		let newTotalBalanceNonTradeable = 0
 		newAccounts.forEach(({ balance }, index) => {
@@ -61,7 +73,7 @@ const Client = ({ advisor, client, setClient }) => {
 		})
 		console.log(newTotalBalance)
 
-		// Calculate Tradeable Total Percent and NonTradeable Total Percent
+		// [4.0] Calculate Tradeable Total Percent and NonTradeable Total Percent
 		let newTotalPercent = 0
 		let newTotalPercentNonTradeable = 0
 		newAccounts.forEach(({ balance }, index) => {
@@ -78,43 +90,55 @@ const Client = ({ advisor, client, setClient }) => {
 		})
 		console.log(newTotalPercent)
 
-		// Sort Accounts by Native Percent
+		// [5.0] Sort Accounts by Native Percent
 		newAccounts = newAccounts.sort((a, b) => b.nativePercent - a.nativePercent)
 		newAccountsNonTradeable = newAccountsNonTradeable.sort((a, b) => b.nativePercent - a.nativePercent)
 
+		// [6.0] Update State
 		setAccounts(newAccounts)
 		setAccountsNonTradeable(newAccountsNonTradeable)
 		setTotalBalance(newTotalBalance)
 		setTotalBalanceNonTradeable(newTotalBalanceNonTradeable)
 		setTotalPercent(newTotalPercent)
 		setTotalPercentNonTradeable(newTotalPercentNonTradeable)
-	}, [client])
+	}
 
-	async function getSpotPrices() {
-		// Format Holdings
-		let currencies = {}
-		client.holdings.forEach(({ balance }) =>
-			balance.currency !== 'USD' ? (currencies[balance.currency] = true) : null
+	function renderHoldings(isTradeable) {
+		const holdings = isTradeable ? accounts : accountsNonTradeable
+		const nativeBalance = isTradeable ? totalBalance : totalBalanceNonTradeable
+		const nativePercent = isTradeable ? totalPercent : totalPercentNonTradeable
+		const title = isTradeable ? 'Holdings' : 'Non-Tradeable Holdings'
+
+		return (
+			<table>
+				<caption>{title}</caption>
+				<thead>
+					<tr>
+						<th>ALLOCATION</th>
+						<th>BALANCE</th>
+						<th>HOLDING</th>
+						<th>NAME</th>
+						<th>AMOUNT</th>
+					</tr>
+				</thead>
+				<tbody>
+					{holdings.map(renderHolding)}
+					<tr className='Totals'>
+						<td>
+							{nativePercent.toLocaleString('en-US', {
+								minimumFractionDigits: 2,
+								maximumFractionDigits: 2,
+								style: 'percent'
+							})}
+						</td>
+						<td>{nativeBalance.toLocaleString('en-US', { currency: 'USD', style: 'currency' })}</td>
+					</tr>
+				</tbody>
+			</table>
 		)
-		console.log(currencies)
-
-		// GET Spot Prices
-		const spotPricesResponse = await Promise.all(Object.keys(currencies).map(getSpotPrice))
-
-		// Format Spot Prices
-		let newSpotPrices = { USD: 1 }
-		spotPricesResponse.forEach(({ data }) => (newSpotPrices[data.base] = Number(data.amount)))
-		console.log(newSpotPrices)
-		setSpotPrices(newSpotPrices)
 	}
 
-	function getSpotPrice(holding) {
-		return fetch(`https://blockria.com/v2/prices/${holding}-USD/spot`)
-			.then(response => response.json())
-			.catch(error => alert(error))
-	}
-
-	function renderAccount({ balance, id, nativeBalance, nativePercent }) {
+	function renderHolding({ balance, id, nativeBalance, nativePercent }) {
 		return (
 			<tr key={`Account ${id}`}>
 				<td>
@@ -139,10 +163,7 @@ const Client = ({ advisor, client, setClient }) => {
 
 	return (
 		<div className='Client'>
-			<div className='Title'>
-				{searchParams.get('clientName')}
-				{client.user && client.user.email ? ` - ${client.user.email}` : ''}
-			</div>
+			<div className='Title'>{searchParams.get('clientName')}</div>
 			<div className='Options'>
 				<div></div>
 				<div>
@@ -160,67 +181,9 @@ const Client = ({ advisor, client, setClient }) => {
 					</Link>
 				</div>
 			</div>
-			<table>
-				<caption>Holdings</caption>
-				<thead>
-					<tr>
-						<th>ALLOCATION</th>
-						<th>BALANCE</th>
-						<th>HOLDING</th>
-						<th>NAME</th>
-						<th>AMOUNT</th>
-					</tr>
-				</thead>
-				<tbody>
-					{isLoading ? (
-						<tr>
-							<td style={{ border: 'none' }}>Loading...</td>
-						</tr>
-					) : (
-						<>
-							{accounts.map(renderAccount)}
-							<tr className='Totals'>
-								<td>
-									{totalBalance !== 0 &&
-										totalPercent.toLocaleString('en-US', {
-											minimumFractionDigits: 2,
-											maximumFractionDigits: 2,
-											style: 'percent'
-										})}
-								</td>
-								<td>{totalBalance.toLocaleString('en-US', { currency: 'USD', style: 'currency' })}</td>
-							</tr>
-						</>
-					)}
-				</tbody>
-			</table>
-			{accountsNonTradeable.length && totalBalanceNonTradeable > 0 ? (
-				<table style={{ marginTop: '72px' }}>
-					<caption>Non-Tradeable Accounts</caption>
-					<thead>
-						<tr>
-							<th>ALLOCATION</th>
-							<th>BALANCE</th>
-							<th>HOLDING</th>
-							<th>NAME</th>
-							<th>AMOUNT</th>
-						</tr>
-					</thead>
-					<tbody>
-						{accountsNonTradeable.map(renderAccount)}
-						<tr className='Totals'>
-							<td>
-								{totalPercentNonTradeable.toLocaleString('en-US', {
-									minimumFractionDigits: 2,
-									maximumFractionDigits: 2,
-									style: 'percent'
-								})}
-							</td>
-							<td>{totalBalanceNonTradeable.toLocaleString('en-US', { currency: 'USD', style: 'currency' })}</td>
-						</tr>
-					</tbody>
-				</table>
-			) : null}
+			{renderHoldings(true)}
+			{totalBalanceNonTradeable !== 0 ? renderHoldings(false) : null}
+			<Transactions advisorId={advisor.idToken.payload.sub} clientId={searchParams.get('clientId')} />
 		</div>
 	)
 }

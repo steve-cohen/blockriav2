@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { demoClients } from '../demoData'
 import './Clients.css'
-
-function getSpotPrice(holding) {
-	return fetch(`https://blockria.com/v2/prices/${holding}-USD/spot`)
-		.then(response => response.json())
-		.catch(error => alert(error))
-}
 
 function renderPortfolio(clientId, clientName, currentPortfolioId, portfolios) {
 	const portfolio = portfolios.filter(({ portfolioId }) => portfolioId === currentPortfolioId)
@@ -49,60 +44,83 @@ function renderPortfolioAssign(clientName, clientId) {
 }
 
 const Clients = ({ advisor, portfolios, setPortfolios }) => {
-	const [clients, setClients] = useState([])
+	const [clients, setClients] = useState(JSON.parse(localStorage.getItem('clients')) || [] || demoClients)
+	const [spotPrices, setSpotPrices] = useState({})
 
-	useEffect(() => {
-		setClients([])
-		setPortfolios([])
-
-		fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisor.idToken.payload.sub}`)
-			.then(response => response.json())
-			.then(handleNewClients)
-			.catch(error => alert(error))
-
-		fetch(`https://blockria.com/api/portfolios?advisorId=${advisor.idToken.payload.sub}`)
-			.then(response => response.json())
-			.then(newPortfolios => setPortfolios(newPortfolios))
-			.catch(error => alert(error))
+	useEffect(async () => {
+		getClients()
+		getPortfolios()
 	}, [])
 
-	async function handleNewClients(newClients) {
-		// [1.0] GET Spot Prices
-		// [1.1] Format Currencies
+	function getClients() {
+		setClients([])
+		localStorage.setItem('clients', '[]')
+
+		fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisor.idToken.payload.sub}`)
+			.then(async response => {
+				// Get Clients
+				const newClients = await response.json()
+				console.log(newClients)
+				setClients(newClients)
+				localStorage.setItem('clients', JSON.stringify(newClients))
+
+				// Get Spot Prices
+				await getSpotPrices()
+			})
+			.catch(error => alert(error))
+	}
+
+	function getPortfolios() {
+		setPortfolios([])
+		localStorage.setItem('portfolios', '[]')
+
+		return fetch(`https://blockria.com/api/portfolios?advisorId=${advisor.idToken.payload.sub}`)
+			.then(async response => {
+				const newPortfolios = await response.json()
+				console.log(newPortfolios)
+				setPortfolios(newPortfolios)
+				localStorage.setItem('portfolios', JSON.stringify(newPortfolios))
+			})
+			.catch(error => alert(error))
+	}
+
+	async function getSpotPrices() {
+		// Format Holdings
 		let currencies = {}
-		newClients.forEach(({ holdings }) => {
+		clients.forEach(({ holdings }) => {
 			holdings.forEach(({ balance }) => {
 				if (balance.currency !== 'USD') currencies[balance.currency] = true
 			})
 		})
-		console.log({ currencies })
 
-		// [1.2] GET Spot Prices
+		// GET Spot Prices
 		const spotPricesResponse = await Promise.all(Object.keys(currencies).map(getSpotPrice))
 
-		// [1.3] Format Spot Prices
-		let spotPrices = { USD: 1 }
-		spotPricesResponse.forEach(({ data }) => (spotPrices[data.base] = Number(data.amount)))
-		console.log({ spotPrices })
-
-		// [2.0] Calculate Total Native Balance for Each Client
-		newClients.forEach(({ holdings }, index) => {
-			let nativeBalance = 0
-			holdings.forEach(({ balance }) => (nativeBalance += spotPrices[balance.currency] * balance.amount))
-			newClients[index].nativeBalance = nativeBalance
-		})
-
-		// [3.0] Update State
-		setClients(newClients)
+		// Format Spot Prices
+		let newSpotPrices = { USD: 1 }
+		spotPricesResponse.forEach(({ data }) => (newSpotPrices[data.base] = Number(data.amount)))
+		console.log(newSpotPrices)
+		setSpotPrices(newSpotPrices)
 	}
 
-	function renderClient({ clientId, clientName, nativeBalance, portfolioId }) {
+	function getSpotPrice(holding) {
+		return fetch(`https://blockria.com/v2/prices/${holding}-USD/spot`)
+			.then(response => response.json())
+			.catch(error => alert(error))
+	}
+
+	function renderClient({ clientId, clientName, holdings, portfolioId }) {
+		let totalBalance = 0
+		holdings.forEach(({ balance }) => {
+			if (balance.currency in spotPrices) totalBalance += spotPrices[balance.currency] * balance.amount
+		})
+
 		return (
 			<tr key={clientId}>
 				<td>
 					<Link to={`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`}>{clientName}</Link>
 				</td>
-				<td>{nativeBalance.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
+				<td>{totalBalance.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
 				<td>
 					{portfolioId
 						? renderPortfolio(clientId, clientName, portfolioId, portfolios)
