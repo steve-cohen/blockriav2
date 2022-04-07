@@ -1,8 +1,11 @@
 .Navigation {
-	background: rgb(243, 244, 246);
+	background: rgb(248, 249, 251);
 	border-right: 1px solid rgb(223, 224, 226);
 	display: flex;
 	flex-direction: column;
+	font-family: -apple-system, 'system-ui', Roboto, 'Helvetica Neue', sans-serif !important;
+	font-feature-settings: 'pnum';
+	font-variant-numeric: proportional-nums;
 	height: calc(100vh - 60px - 1px);
 	justify-content: space-between;
 	padding-top: 1px;
@@ -11,10 +14,10 @@
 }
 
 .Navigation a {
-	color: rgb(74, 75, 77);
+	color: rgb(26, 27, 29);
 	display: block;
-	fill: rgb(74, 75, 77);
-	font-size: 15px;
+	fill: rgb(26, 27, 29);
+	font-size: 14px;
 	font-weight: 500;
 	height: 16px;
 	padding: 12px 36px;
@@ -30,14 +33,14 @@
 	display: inline-block;
 	fill: inherit;
 	height: inherit;
-	margin-right: 12px;
-	width: 20px;
+	margin-right: 11px;
+	width: 16px;
 	vertical-align: top;
 }
 
 .Navigation .Search {
 	background: rgb(255, 255, 255);
-	border: 1px solid rgb(223, 224, 226);
+	border-bottom: 1px solid rgb(223, 224, 226);
 	border-radius: 2px;
 	margin: 36px 20px;
 	width: calc(100% - 40px - 3px);
@@ -45,7 +48,7 @@
 
 .Navigation .Search input {
 	all: initial;
-	color: rgb(74, 75, 77);
+	color: rgb(26, 27, 29);
 	display: inline-block;
 	font-family: inherit;
 	font-size: 15px;
@@ -57,12 +60,12 @@
 }
 
 .Navigation .Search input::placeholder {
-	color: rgb(74, 75, 77);
+	color: rgb(26, 27, 29);
 }
 
 .Navigation .Search .SearchIcon {
 	cursor: pointer;
-	fill: rgb(74, 75, 77);
+	fill: rgb(26, 27, 29);
 	height: 14px;
 	padding: 11px 0 11px 10px;
 }

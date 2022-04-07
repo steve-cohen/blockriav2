@@ -19,6 +19,7 @@ import VerifyEmail from './VerifyEmail/VerifyEmail'
 import { demoAdvisor, demoAdvisorEmpty, demoClientEmpty, demoClients, demoPortfolio, demoPortfolios } from './demoData'
 
 import './Advisor.css'
+import TaxEvents from './Clients/Client/TaxEvents/TaxEvents'
 
 const Advisor = () => {
 	// Advisor Data
@@ -61,7 +62,8 @@ const Advisor = () => {
 									path='clients/client/setportfolio'
 									element={<SetPortfolio advisor={advisor} portfolios={portfolios} />}
 								/>
-								<Route path='clients/client/transactions' element={<Transactions advisor={advisor} />} />
+								<Route path='clients/client/taxevents' element={<TaxEvents />} />
+								<Route path='clients/client/transactions' element={<Transactions />} />
 								<Route path='clients/client/withdrawal' element={<Withdrawal advisor={advisor} client={client} />} />
 								<Route path='invites' element={<Invites />} />
 								<Route

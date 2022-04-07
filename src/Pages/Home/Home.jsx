@@ -23,7 +23,7 @@ const Home = () => {
 			</div>
 			<div className='Hero'>
 				<div className='Description'>
-					<div className='Title'>Model Portfolios for Modern Management</div>
+					<div className='Title'>Digital Asset Management Software for RIAs</div>
 					<div>Curated Digital Asset Portfolio Management</div>
 					<div className='SubTitle'>Built for Advisors by Advisors</div>
 				</div>

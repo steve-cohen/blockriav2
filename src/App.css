@@ -9,9 +9,11 @@ a:hover {
 }
 
 body {
-	color: rgb(48, 48, 52);
+	color: rgb(26, 27, 29);
 	font-family: 'Inter', sans-serif;
 	margin: 0;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -24,4 +26,107 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type='number'] {
 	-moz-appearance: textfield;
+}
+
+table {
+	border: none;
+	border-collapse: separate;
+	border-spacing: 0;
+	color: rgb(64, 68, 82);
+	font-family: -apple-system, 'system-ui', Roboto, 'Helvetica Neue', sans-serif !important;
+	font-feature-settings: 'pnum';
+	font-variant-numeric: proportional-nums;
+	font-size: 14px;
+	font-weight: 400;
+	width: 100%;
+}
+
+table caption .Flex {
+	align-items: flex-end;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 9px;
+}
+
+table caption .Flex .Button {
+	background: rgb(18, 25, 44);
+	border: 1px solid rgb(18, 25, 44);
+	color: rgb(248, 249, 251);
+	cursor: pointer;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 500;
+	margin-left: 12px;
+	padding: 8px 12px;
+}
+
+table caption .Flex .Button:hover {
+	text-decoration: underline;
+}
+
+table caption .Flex .Title {
+	font-size: 18px;
+	font-weight: 500;
+	padding-left: 8px;
+}
+
+table tbody tr td,
+table tfoot tr td,
+table thead tr th {
+	border-bottom: 1px solid rgb(237, 238, 240);
+	height: 20px;
+	padding: 8px;
+}
+
+table tbody tr:hover {
+	background: rgb(248, 249, 251);
+}
+
+table tbody tr td {
+	text-transform: capitalize;
+	width: 1%;
+	white-space: nowrap;
+}
+
+table thead tr {
+	background: rgb(255, 255, 255);
+	color: rgb(26, 27, 29);
+	font-size: 11px;
+	font-weight: 500;
+	text-align: left;
+	position: sticky;
+	top: -48px;
+}
+
+table thead tr th {
+	font-weight: 500 !important;
+}
+
+table tfoot tr td {
+	border-bottom: none;
+}
+
+table .AlignRight {
+	text-align: right;
+}
+
+table .Break {
+	width: 100%;
+}
+
+table .Bold {
+	color: rgb(26, 27, 29);
+	font-weight: 500;
+}
+
+table .DeEmphasize {
+	color: rgb(84, 90, 105);
+}
+
+table .Green {
+	color: darkgreen;
+}
+
+table .Red {
+	color: darkred;
 }
