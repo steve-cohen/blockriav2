@@ -65,6 +65,7 @@ table caption .Flex .Button:hover {
 }
 
 table caption .Flex .Title {
+	color: rgb(26, 27, 29);
 	font-size: 18px;
 	font-weight: 500;
 	padding-left: 8px;
@@ -128,5 +129,5 @@ table .Green {
 }
 
 table .Red {
-	color: darkred;
+	color: rgb(220, 29, 18);
 }

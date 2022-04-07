@@ -133,15 +133,17 @@ const TaxEvents = ({ advisor }) => {
 		})
 
 		return (
-			<tr>
-				<td>{taxEvents.length} Total</td>
-				<td />
-				<td />
-				<td />
-				<td className='AlignRight Bold'>{formatUSD(totalNet)}</td>
-				<td className='AlignRight'>{formatUSD(totalAmount)}</td>
-				<td className='AlignRight'>({formatUSD(totalFee)})</td>
-			</tr>
+			<tfoot>
+				<tr>
+					<td>{taxEvents.length} Total</td>
+					<td />
+					<td />
+					<td />
+					<td className='AlignRight Bold'>{formatUSD(totalNet)}</td>
+					<td className='AlignRight'>{formatUSD(totalAmount)}</td>
+					<td className='AlignRight'>({formatUSD(totalFee)})</td>
+				</tr>
+			</tfoot>
 		)
 	}
 
@@ -172,7 +174,7 @@ const TaxEvents = ({ advisor }) => {
 				</tr>
 			</thead>
 			<tbody>{taxEvents.map(renderTaxEvent)}</tbody>
-			<tfoot>{renderTotals()}</tfoot>
+			{renderTotals()}
 		</table>
 	)
 }

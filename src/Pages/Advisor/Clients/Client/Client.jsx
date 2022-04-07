@@ -179,17 +179,15 @@ const Client = ({ advisor }) => {
 				<tbody>{holdings.map(renderHolding)}</tbody>
 				<tfoot>
 					<tr>
-						<td className='Bold'>{holdings.length} Total</td>
-						<td className='Bold AlignRight'>
+						<td>{holdings.length} Total</td>
+						<td className='AlignRight Bold'>
 							{nativePercent.toLocaleString('en-US', {
 								minimumFractionDigits: 2,
 								maximumFractionDigits: 2,
 								style: 'percent'
 							})}
 						</td>
-						<td className='AlignRight'>
-							{nativeBalance.toLocaleString('en-US', { currency: 'USD', style: 'currency' })}
-						</td>
+						<td className='AlignRight'>{formatUSD(nativeBalance)}</td>
 					</tr>
 				</tfoot>
 			</table>
@@ -219,19 +217,9 @@ const Client = ({ advisor }) => {
 						style: 'percent'
 					})}
 				</td>
-				<td className='AlignRight'>
-					{nativeBalance.toLocaleString('en-US', {
-						currency: 'USD',
-						style: 'currency'
-					})}
-				</td>
+				<td className='AlignRight'>{formatUSD(nativeBalance)}</td>
 				<td>{balance.amount}</td>
-				<td className='AlignRight'>
-					{(spotPrices[balance.currency] || 0).toLocaleString('en-US', {
-						currency: 'USD',
-						style: 'currency'
-					})}
-				</td>
+				<td className='AlignRight'>{formatUSD(spotPrices[balance.currency] || 0)}</td>
 				<td className='Break'>{currency.name}</td>
 				<td>{allow_deposits ? 'Yes' : 'No'}</td>
 				<td>{allow_withdrawals ? 'Yes' : 'No'}</td>
