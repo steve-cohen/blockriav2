@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import coinbaseTokenNames from '../../coinbaseTokenNames.json'
 import './Client.css'
 
 const displayTypes = {
@@ -9,6 +8,14 @@ const displayTypes = {
 	fiat_withdrawal: 'Withdrawal',
 	sell: 'Sell',
 	send: 'Send'
+}
+
+function formatPercent(number) {
+	return number.toLocaleString('en-US', {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+		style: 'percent'
+	})
 }
 
 function formatUSD(number) {
@@ -58,7 +65,7 @@ const Client = ({ advisor }) => {
 			.then(response => response.json())
 			.then(setTransactions)
 			.catch(console.log)
-	}, [])
+	}, [advisor.idToken.payload.sub, searchParams])
 
 	async function handleNewClient(newClient) {
 		console.log({ newClient })
@@ -162,15 +169,14 @@ const Client = ({ advisor }) => {
 				</caption>
 				<thead>
 					<tr>
-						<th>HOLDING</th>
 						<th className='AlignRight'>PERCENT</th>
 						<th className='AlignRight'>BALANCE</th>
-						<th>AMOUNT</th>
-						<th className='AlignRight'>SPOT PRICE</th>
+						<th>HOLDING</th>
 						<th>NAME</th>
+						<th>AMOUNT</th>
+						<th>SPOT PRICE</th>
 						<th>ALLOW DEPOSITS</th>
 						<th>ALLOW WITHDRAWALS</th>
-						<th>PRIMARY</th>
 						<th>TYPE</th>
 						<th>UPDATED</th>
 						<th>CREATED</th>
@@ -179,15 +185,9 @@ const Client = ({ advisor }) => {
 				<tbody>{holdings.map(renderHolding)}</tbody>
 				<tfoot>
 					<tr>
+						<td className='AlignRight Bold'>{formatPercent(nativePercent)}</td>
+						<td className='AlignRight Bold'>{formatUSD(nativeBalance)}</td>
 						<td>{holdings.length} Total</td>
-						<td className='AlignRight Bold'>
-							{nativePercent.toLocaleString('en-US', {
-								minimumFractionDigits: 2,
-								maximumFractionDigits: 2,
-								style: 'percent'
-							})}
-						</td>
-						<td className='AlignRight'>{formatUSD(nativeBalance)}</td>
 					</tr>
 				</tfoot>
 			</table>
@@ -203,27 +203,32 @@ const Client = ({ advisor }) => {
 		id,
 		nativeBalance,
 		nativePercent,
-		primary,
 		type,
 		updated_at
 	}) {
 		return (
 			<tr key={`Holding ${id}`}>
-				<td className='Bold'>{balance.currency}</td>
-				<td className='Bold AlignRight'>
-					{nativePercent.toLocaleString('en-US', {
-						minimumFractionDigits: 2,
-						maximumFractionDigits: 2,
-						style: 'percent'
-					})}
-				</td>
+				<td className='Bold AlignRight'>{formatPercent(nativePercent)}</td>
 				<td className='AlignRight'>{formatUSD(nativeBalance)}</td>
+
+				<td className='Bold'>
+					{balance.currency !== 'USD' ? (
+						<a
+							href={`https://coinbase.com/price/${balance.currency.toLowerCase()}`}
+							target='_blank'
+							rel='noopener noreferrer'
+						>
+							{balance.currency}
+						</a>
+					) : (
+						balance.currency
+					)}
+				</td>
+				<td>{currency.name}</td>
 				<td>{balance.amount}</td>
-				<td className='AlignRight'>{formatUSD(spotPrices[balance.currency] || 0)}</td>
-				<td className='Break'>{currency.name}</td>
+				<td className='Break'>{formatUSD(spotPrices[balance.currency] || 0)}</td>
 				<td>{allow_deposits ? 'Yes' : 'No'}</td>
 				<td>{allow_withdrawals ? 'Yes' : 'No'}</td>
-				<td>{primary ? 'Yes' : 'No'}</td>
 				<td style={{ textTransform: 'capitalize' }}>{type}</td>
 				<td>{updated_at.slice(0, 10)}</td>
 				<td>{created_at.slice(0, 10)}</td>
@@ -277,7 +282,7 @@ const Client = ({ advisor }) => {
 	}
 
 	function renderTransaction({ buy, details, fiat_deposit, fiat_withdrawal, id, sell, status, type, updated_at }) {
-		if (type === 'buy' || type == 'sell') {
+		if (type === 'buy' || type === 'sell') {
 			const change = type === 'buy' ? '-' : '+'
 			const event = type === 'buy' ? buy : sell
 
@@ -286,7 +291,15 @@ const Client = ({ advisor }) => {
 					<td>{updated_at.slice(0, 10)}</td>
 					<td>{updated_at.slice(11, 19)}</td>
 					<td className='Bold'>{type in displayTypes ? displayTypes[type] : type}</td>
-					<td className='Bold'>{event.amount.currency}</td>
+					<td className='Bold'>
+						<a
+							href={`https://coinbase.com/price/${event.amount.currency.toLowerCase()}`}
+							target='_blank'
+							rel='noopener noreferrer'
+						>
+							{event.amount.currency}
+						</a>
+					</td>
 					<td className={`AlignRight Bold ${type === 'sell' ? 'Green' : ''}${type === 'buy' ? 'Red' : ''}`}>
 						{change}
 						{formatUSD(event.total.amount)}
@@ -297,8 +310,8 @@ const Client = ({ advisor }) => {
 					</td>
 					<td className='AlignRight DeEmphasize'>({formatUSD(event.fee.amount)})</td>
 					<td className='AlignRight DeEmphasize'>{formatUSD(event.unit_price.amount)}</td>
-					<td className='Break'>{details.title}</td>
-					<td>{details.payment_method_name}</td>
+					<td>{details.title}</td>
+					<td className='Break'>{details.payment_method_name}</td>
 					<td>{event.hold_days ? `${event.hold_days} Days` : ''}</td>
 					<td>{event.hold_until ? event.hold_until.slice(0, 10) : ''}</td>
 					<td>{event.instant ? 'Yes' : 'No'}</td>
@@ -338,7 +351,7 @@ const Client = ({ advisor }) => {
 
 	return (
 		<div className='Client'>
-			{/* <div className='Title'>{searchParams.get('clientName')}</div> */}
+			<div className='ClientName'>{searchParams.get('clientName')}</div>
 			{renderHoldings(true)}
 			{totalBalanceNonTradeable !== 0 ? renderHoldings(false) : null}
 			{renderTransactions(taxEvents, 'taxEvents')}

@@ -37,14 +37,13 @@ function renderPortfolio(clientId, clientName, currentPortfolioId, portfolios) {
 
 function renderPortfolioAssign(clientName, clientId) {
 	return (
-		<>
-			<Link
-				className='Bold Red'
-				to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=`}
-			>
-				Assign Portfolio
-			</Link>
-		</>
+		<Link
+			className='Bold Red'
+			to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=`}
+			style={{ textTransform: 'none' }}
+		>
+			Assign a Portfolio
+		</Link>
 	)
 }
 
@@ -108,9 +107,7 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 				<td className='Bold'>
 					<Link to={`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`}>{clientName}</Link>
 				</td>
-				<td className='AlignRight Bold'>
-					{nativeBalance.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
-				</td>
+				<td className='AlignRight Bold'>{formatUSD(nativeBalance)}</td>
 				<td className='Break'>
 					{portfolioId
 						? renderPortfolio(clientId, clientName, portfolioId, portfolios)

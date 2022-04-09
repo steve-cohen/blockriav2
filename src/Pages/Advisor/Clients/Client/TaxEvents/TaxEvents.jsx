@@ -89,7 +89,19 @@ const TaxEvents = ({ advisor }) => {
 				<td>{updated_at.slice(0, 10)}</td>
 				<td>{updated_at.slice(11, 19)}</td>
 				<td className='Bold'>{type in displayTypes ? displayTypes[type] : type}</td>
-				<td className='Bold'>{event.amount.currency}</td>
+				<td className='Bold'>
+					{event.amount.currency !== 'USD' ? (
+						<a
+							href={`https://coinbase.com/price/${event.amount.currency.toLowerCase()}`}
+							target='_blank'
+							rel='noopener noreferrer'
+						>
+							{event.amount.currency}
+						</a>
+					) : (
+						event.amount.currency
+					)}
+				</td>
 				<td className={`AlignRight Bold ${type === 'sell' ? 'Green' : ''}${type === 'buy' ? 'Red' : ''}`}>
 					{change}
 					{formatUSD(event.total.amount)}
