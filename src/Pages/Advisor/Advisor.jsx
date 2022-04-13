@@ -12,6 +12,7 @@ import SetPortfolio from './Clients/Client/SetPortfolio/SetPortfolio'
 import Settings from './Settings/Settings'
 import SignIn from './SignIn/SignIn'
 import SignUp from './SignUp/SignUp'
+import Taxes from './Taxes/Taxes'
 import Transactions from './Clients/Client/Transactions/Transactions'
 import Withdrawal from './Clients/Client/Withdrawal/Withdrawal'
 import VerifyEmail from './VerifyEmail/VerifyEmail'
@@ -82,6 +83,7 @@ const Advisor = () => {
 						)}
 						<Route path='signin' element={<SignIn setAdvisor={setAdvisor} setPortfolios={setPortfolios} />} />
 						<Route path='signup' element={<SignUp />} />
+						<Route path='taxes' element={<Taxes advisor={advisor} />} />
 						<Route path='verifyemail' element={<VerifyEmail />} />
 					</Routes>
 				</div>

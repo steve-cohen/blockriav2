@@ -1,24 +1,91 @@
-.Invites .Title {
-	font-size: 24px;
-}
-
 .Invites form {
-	margin: auto;
+	color: rgb(64, 68, 82);
+	display: block;
+	font-family: -apple-system, 'system-ui', Roboto, 'Helvetica Neue', sans-serif !important;
+	font-feature-settings: 'pnum';
+	font-variant-numeric: proportional-nums;
+	font-size: 14px;
+	font-weight: 400;
 	width: 400px;
 }
 
-.Invites form input {
-	height: 32px;
-	margin-bottom: 20px;
+.Invites form div {
+	font-weight: 500;
+	margin: 24px 0 6px 2px;
+}
+
+.Invites form input,
+.Invites form textarea {
+	all: initial;
+	all: inherit;
+	border: 1px solid rgb(213, 214, 216);
+	border-radius: 2px;
+	line-height: 20px;
+	padding: 5px 10px;
 	width: 100%;
 }
 
 .Invites form textarea {
-	all: initial;
+	max-height: 400px;
+	min-height: 260px;
+}
+
+.Invites form .SendEmail {
+	background: rgb(18, 25, 44);
+	border: none;
+	border-radius: 2px;
+	color: rgb(248, 249, 251);
+	cursor: pointer;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 500;
+	margin-top: 24px;
+	padding: 7px 11px;
+	width: fit-content;
+}
+
+.Invites form .SendEmail:hover {
+	text-decoration: underline;
+}
+
+.Invites form .SendAnotherEmail {
 	all: inherit;
-	border: 1px solid black;
-	height: 300px;
-	padding: 10px;
-	margin-bottom: 20px;
-	width: calc(100% - 20px);
+	cursor: pointer;
+	display: inline-block;
+	padding: 7px 11px;
+	width: fit-content;
+}
+
+.Invites form .SendAnotherEmail:hover {
+	text-decoration: underline;
+}
+
+.Invites table {
+	float: right;
+	margin-left: 120px;
+	width: 50%;
+}
+
+.Invites table caption .Flex .Title {
+	color: rgb(26, 27, 29);
+	font-size: 22px;
+	font-weight: 500;
+	margin-bottom: 2px;
+}
+
+.Invites table tbody tr td {
+	text-transform: none;
+}
+
+.Invites .Blue:hover,
+.Invites .Red:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.Invites .Title {
+	color: rgb(26, 27, 29);
+	font-size: 22px;
+	font-weight: 500;
+	margin: 0 0 24px 0;
 }

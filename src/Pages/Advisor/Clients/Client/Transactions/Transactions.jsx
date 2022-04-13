@@ -41,7 +41,7 @@ const Transactions = () => {
 					<td className='Bold'>
 						{event.amount.currency !== 'USD' ? (
 							<a
-								href={`https://coinbase.com/price/${event.amount.currency.toLowerCase()}`}
+								href={`https://coinbase.com/price/${event.amount.currency.replace(/ /g, '-').toLowerCase()}`}
 								target='_blank'
 								rel='noopener noreferrer'
 							>

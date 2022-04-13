@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import coinbaseTokenNames from '../../coinbaseTokenNames.json'
 import './Client.css'
 
 const displayTypes = {
@@ -55,9 +56,9 @@ const Client = ({ advisor }) => {
 			.catch(console.log)
 
 		// GET Tax Events
-		fetch(`https://blockria.com/api/coinbase/clients/client/taxevents?clientId=${clientId}&limit=10`)
+		fetch(`https://blockria.com/api/coinbase/clients/client/taxevents?clientId=${clientId}`)
 			.then(response => response.json())
-			.then(setTaxEvents)
+			.then(newTaxEvents => setTaxEvents(newTaxEvents.filter(({ type }) => type === 'buy' || type === 'sell')))
 			.catch(console.log)
 
 		// GET Transactions
@@ -150,7 +151,9 @@ const Client = ({ advisor }) => {
 			<table>
 				<caption>
 					<div className='Flex'>
-						<div className='Title'>{title}</div>
+						<div className='Title'>
+							{title} for {searchParams.get('clientName')}
+						</div>
 						<div>
 							<Link
 								className='Button'
@@ -214,7 +217,9 @@ const Client = ({ advisor }) => {
 				<td className='Bold'>
 					{balance.currency !== 'USD' ? (
 						<a
-							href={`https://coinbase.com/price/${balance.currency.toLowerCase()}`}
+							href={`https://coinbase.com/price/${coinbaseTokenNames[balance.currency]
+								.replace(/ /g, '-')
+								.toLowerCase()}`}
 							target='_blank'
 							rel='noopener noreferrer'
 						>
@@ -238,8 +243,12 @@ const Client = ({ advisor }) => {
 
 	function renderTransactions(newTransactions, type) {
 		const clientId = searchParams.get('clientId')
+		const clientName = searchParams.get('clientName')
 
-		const link = type === 'taxEvents' ? `taxEvents?clientId=${clientId}` : `transactions?clientId=${clientId}`
+		const link =
+			type === 'taxEvents'
+				? `taxEvents?clientName=${clientName}&clientId=${clientId}`
+				: `transactions?clientName=${clientName}&clientId=${clientId}`
 		const showMore = type === 'taxEvents' ? '+ Show All Taxable Events' : '+ Show Full Transaction History'
 		const title = type === 'taxEvents' ? 'Taxable Events' : 'Transaction History'
 
@@ -247,7 +256,9 @@ const Client = ({ advisor }) => {
 			<table>
 				<caption>
 					<div className='Flex'>
-						<div className='Title'>{title}</div>
+						<div className='Title'>
+							{title} for {searchParams.get('clientName')}
+						</div>
 						<div></div>
 					</div>
 				</caption>
@@ -293,7 +304,9 @@ const Client = ({ advisor }) => {
 					<td className='Bold'>{type in displayTypes ? displayTypes[type] : type}</td>
 					<td className='Bold'>
 						<a
-							href={`https://coinbase.com/price/${event.amount.currency.toLowerCase()}`}
+							href={`https://coinbase.com/price/${coinbaseTokenNames[event.amount.currency]
+								.replace(/ /g, '-')
+								.toLowerCase()}`}
 							target='_blank'
 							rel='noopener noreferrer'
 						>
@@ -351,10 +364,9 @@ const Client = ({ advisor }) => {
 
 	return (
 		<div className='Client'>
-			<div className='ClientName'>{searchParams.get('clientName')}</div>
 			{renderHoldings(true)}
 			{totalBalanceNonTradeable !== 0 ? renderHoldings(false) : null}
-			{renderTransactions(taxEvents, 'taxEvents')}
+			{renderTransactions(taxEvents.slice(0, 10), 'taxEvents')}
 			{renderTransactions(transactions, 'transactions')}
 		</div>
 	)

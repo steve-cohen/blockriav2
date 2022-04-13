@@ -151,25 +151,12 @@ const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
 					<td />
 					<td />
 					<td />
-					{!showPortfolios[index] ? (
-						<>
-							<td className='AlignRight'>{renderPortfolioPerformance(allocations, '1D')}</td>
-							<td className='AlignRight'>{renderPortfolioPerformance(allocations, '1W')}</td>
-							<td className='AlignRight'>{renderPortfolioPerformance(allocations, '1M')}</td>
-							<td className='AlignRight'>{renderPortfolioPerformance(allocations, '3M')}</td>
-							<td className='AlignRight'>{renderPortfolioPerformance(allocations, 'YTD')}</td>
-							<td className='AlignRight'>{renderPortfolioPerformance(allocations, '1Y')}</td>
-						</>
-					) : (
-						<>
-							<td />
-							<td />
-							<td />
-							<td />
-							<td />
-							<td />
-						</>
-					)}
+					<td className='AlignRight'>{renderPortfolioPerformance(allocations, '1D')}</td>
+					<td className='AlignRight'>{renderPortfolioPerformance(allocations, '1W')}</td>
+					<td className='AlignRight'>{renderPortfolioPerformance(allocations, '1M')}</td>
+					<td className='AlignRight'>{renderPortfolioPerformance(allocations, '3M')}</td>
+					<td className='AlignRight'>{renderPortfolioPerformance(allocations, 'YTD')}</td>
+					<td className='AlignRight'>{renderPortfolioPerformance(allocations, '1Y')}</td>
 					<td className='AlignRight Break'>
 						{portfolioCountTotals[portfolioId] !== 1
 							? `${portfolioCountTotals[portfolioId] || 0} Clients`
@@ -192,10 +179,10 @@ const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
 					.map(({ holding, percent }, index) => (
 						<tr key={`Allocation ${index}`}>
 							<td />
-							<td className='AlignRight Bold'>{formatPercent(percent)}</td>
-							<td className='Bold'>
+							<td className='AlignRight'>{formatPercent(percent)}</td>
+							<td>
 								<a
-									href={`https://coinbase.com/price/${coinbaseTokenNames[holding].toLowerCase()}`}
+									href={`https://coinbase.com/price/${coinbaseTokenNames[holding].replace(/ /g, '-').toLowerCase()}`}
 									target='_blank'
 									rel='noopener noreferrer'
 								>
@@ -226,20 +213,8 @@ const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
 							<td></td>
 						</tr>
 					))}
-				<tr className='Bold'>
-					<td />
-					<td />
-					<td />
-					<td />
-					<td />
-					<td className='AlignRight'>{renderPortfolioPerformance(allocations, '1D')}</td>
-					<td className='AlignRight'>{renderPortfolioPerformance(allocations, '1W')}</td>
-					<td className='AlignRight'>{renderPortfolioPerformance(allocations, '1M')}</td>
-					<td className='AlignRight'>{renderPortfolioPerformance(allocations, '3M')}</td>
-					<td className='AlignRight'>{renderPortfolioPerformance(allocations, 'YTD')}</td>
-					<td className='AlignRight'>{renderPortfolioPerformance(allocations, '1Y')}</td>
-					<td />
-					<td />
+				<tr>
+					<td colSpan={13} />
 				</tr>
 			</React.Fragment>
 		)

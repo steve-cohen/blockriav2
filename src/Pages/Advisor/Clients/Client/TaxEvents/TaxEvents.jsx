@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { CSVLink } from 'react-csv'
+import coinbaseTokenNames from '../../../coinbaseTokenNames.json'
 import './TaxEvents.css'
 
 const displayTypes = {
@@ -23,10 +24,15 @@ const TaxEvents = ({ advisor }) => {
 	const [taxEvents, setTaxEvents] = useState([])
 
 	useEffect(() => {
-		console.log(advisor)
 		fetch(`https://blockria.com/api/coinbase/clients/client/taxevents?clientId=${searchParams.get('clientId')}`)
 			.then(response => response.json())
-			.then(setTaxEvents)
+			.then(newTaxEvents => {
+				if (searchParams.get('year')) {
+					setTaxEvents(newTaxEvents.filter(({ updated_at }) => updated_at.slice(0, 4) === searchParams.get('year')))
+				} else {
+					setTaxEvents(newTaxEvents)
+				}
+			})
 			.catch(error => alert(error))
 	}, [])
 
@@ -92,7 +98,9 @@ const TaxEvents = ({ advisor }) => {
 				<td className='Bold'>
 					{event.amount.currency !== 'USD' ? (
 						<a
-							href={`https://coinbase.com/price/${event.amount.currency.toLowerCase()}`}
+							href={`https://coinbase.com/price/${coinbaseTokenNames[event.amount.currency]
+								.replace(/ /g, '-')
+								.toLowerCase()}`}
 							target='_blank'
 							rel='noopener noreferrer'
 						>
@@ -163,7 +171,10 @@ const TaxEvents = ({ advisor }) => {
 		<table>
 			<caption>
 				<div className='Flex'>
-					<div className='Title'>Taxable Events</div>
+					<div className='Title'>
+						Taxable Events for {searchParams.get('clientName')}
+						{searchParams.get('year') ? ` for ${searchParams.get('year')}` : ''}
+					</div>
 					{renderExportCSV()}
 				</div>
 			</caption>

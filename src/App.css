@@ -86,9 +86,9 @@ table thead tr th {
 	padding: 8px;
 }
 
-table tbody tr:hover {
+/* table tbody tr:hover {
 	background: rgb(248, 249, 251);
-}
+} */
 
 table tbody tr td {
 	text-transform: capitalize;
@@ -118,13 +118,17 @@ table .AlignRight {
 	text-align: right;
 }
 
-table .Break {
-	width: 100%;
+table .Blue {
+	color: rgb(0, 102, 204);
 }
 
 table .Bold {
 	color: rgb(26, 27, 29);
 	font-weight: 500;
+}
+
+table .Break {
+	width: 100%;
 }
 
 table .DeEmphasize {

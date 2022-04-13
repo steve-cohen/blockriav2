@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import emailjs from '@emailjs/browser'
 import './Invites.css'
 
@@ -12,23 +12,17 @@ function defaultMessage(advisor) {
 	const lastName = advisor.idToken.payload.family_name
 	const phoneNumber = advisor.idToken.payload.phone_number
 
-	return `${firmName} and your advisor ${firstName} ${lastName} have partnered with Block RIA to manage your Digital Assets right within your Coinbase wallet. 
+	return `${firmName} and your advisor ${firstName} ${lastName} have partnered with Block RIA to manage your Digital Assets right within your Coinbase wallet.
 
-Click this link or the button below to grant access and get started.
+Click the link below to grant access and get started.
 
-[Button - Authorize]
+[[Authorization Link]]
 
 Sincerely,
 ${firstName} ${lastName}
-${email}
 ${phoneNumber}
-
-
-For questions contact your advisor or for platform support email us at support@blockria.com.
-
-
-
-[Disclosures]`
+${email}
+`
 }
 
 function defaultSubject(advisor) {
@@ -38,42 +32,179 @@ function defaultSubject(advisor) {
 const Invites = ({ advisor }) => {
 	const [coinbaseURL] = useState(`${defaultCoinbaseURL}&state=${advisor.idToken.payload.sub}`)
 	const [email, setEmail] = useState('')
+	const [isLoading, setIsLoading] = useState(false)
+	const [isResent, setIsResent] = useState([])
+	const [isSent, setIsSent] = useState(false)
 	const [message, setMessage] = useState(defaultMessage(advisor))
+	const [pendingInvites, setPendingInvites] = useState([])
 	const [subject, setSubject] = useState(defaultSubject(advisor))
 
-	function handleSubmit(e) {
-		e.preventDefault()
-		console.log(advisor)
+	useEffect(() => {
+		fetch(`https://blockria.com/api/invites?advisorId=${advisor.idToken.payload.sub}`)
+			.then(response => response.json())
+			.then(newPendingInvites => {
+				let newIsResent = []
+				for (let i = 0; i < newPendingInvites.length; i++) newIsResent.push(false)
+				setIsResent(newIsResent)
+				setPendingInvites(newPendingInvites)
+			})
+			.catch(console.error)
+	}, [])
 
+	async function handleDelete() {
+		await fetch('https://blockria.com/api/invites', {
+			method: 'DELETE',
+			headers: { 'Content-Type': 'application/json' }
+		})
+	}
+
+	async function handleSubmit(e) {
+		e.preventDefault()
+		setIsLoading(true)
+
+		// [1.0] Send Email
 		const templateParams = {
 			advisorName: `${advisor.idToken.payload.given_name} ${advisor.idToken.payload.family_name}`,
 			email,
-			message,
+			message: message
+				.replace('[[Authorization Link]]', `<a href='${coinbaseURL}'>Authorization Link</a>`)
+				.replace(/\n/g, '<br>'),
 			subject
 		}
-		console.log(templateParams)
-		emailjs
+
+		await emailjs
 			.send('service_1zzl4ah', 'template_zpo8s53', templateParams, 'joD1A0qHJYnXOOY4z')
 			.then(console.log)
 			.catch(console.error)
+
+		// [2.0] Save Records
+		const inviteOptions = {
+			advisorId: advisor.idToken.payload.sub,
+			clientEmailAddress: encodeURIComponent(email),
+			clientEmailLastSent: Date.now(),
+			clientEmailMessage: encodeURIComponent(message),
+			clientEmailSubject: subject
+		}
+		await fetch('https://blockria.com/api/invites', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(inviteOptions)
+		})
+
+		setIsLoading(false)
+		setIsSent(true)
+	}
+
+	function renderPendingInvite(pendingInvite, index) {
+		const day = 24 * 60 * 60 * 1000 // hours * minutes * seconds * milliseconds
+		const today = new Date()
+		const lastSent = new Date(pendingInvite.clientEmailLastSent)
+		const daysSince = Math.round((today - lastSent) / day)
+
+		return (
+			<tr key={`Client Email ${pendingInvite.clientEmailAddress}`}>
+				<td>{decodeURIComponent(pendingInvite.clientEmailAddress)}</td>
+				<td>{daysSince ? (daysSince === 1 ? '1 Day Ago' : `${daysSince} Day Ago`) : 'Today'}</td>
+				{isResent[index] ? (
+					<td className='Bold'>Sent</td>
+				) : (
+					<td className='Blue' onClick={e => resendEmail(e, pendingInvite, index)} style={{ fontWeight: 500 }}>
+						Resend Email
+					</td>
+				)}
+				<td className='Red'>Delete</td>
+			</tr>
+		)
+	}
+
+	async function resendEmail(e, { clientEmailAddress, clientEmailMessage, clientEmailSubject }, index) {
+		e.preventDefault()
+		setIsLoading(true)
+
+		// [0.0]
+		let newIsResent = [...isResent]
+		newIsResent[index] = true
+		setIsResent(newIsResent)
+
+		// [1.0] Send Email
+		const templateParams = {
+			advisorName: `${advisor.idToken.payload.given_name} ${advisor.idToken.payload.family_name}`,
+			email: decodeURIComponent(clientEmailAddress),
+			message: decodeURIComponent(clientEmailMessage)
+				.replace('[[Authorization Link]]', `<a href='${coinbaseURL}'>Authorization Link</a>`)
+				.replace(/\n/g, '<br>'),
+			subject: clientEmailSubject
+		}
+
+		await emailjs
+			.send('service_1zzl4ah', 'template_zpo8s53', templateParams, 'joD1A0qHJYnXOOY4z')
+			.then(console.log)
+			.catch(console.error)
+
+		// [2.0] Save Records
+		const inviteOptions = {
+			advisorId: advisor.idToken.payload.sub,
+			clientEmailAddress,
+			clientEmailLastSent: Date.now(),
+			clientEmailMessage,
+			clientEmailSubject
+		}
+		await fetch('https://blockria.com/api/invites', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(inviteOptions)
+		})
+
+		setIsLoading(false)
+		setIsSent(true)
 	}
 
 	return (
 		<div className='Invites'>
-			<div className='Title'>Invites</div>
-			<form onSubmit={handleSubmit}>
-				<input
-					name='email'
-					onChange={e => setEmail(e.target.value)}
-					placeholder="Enter Your Client's Email"
-					required
-					value={email}
-					type='email'
-				/>
-				<input name='subject' onChange={e => setSubject(e.target.value)} required value={subject} type='text' />
-				<textarea name='message' onChange={e => setMessage(e.target.value)} required value={message} />
-				<input type='submit' />
-			</form>
+			<div style={{ float: 'left', marginBottom: '48px' }}>
+				<form onSubmit={handleSubmit}>
+					<div className='Title'>New Invite</div>
+					<div>Client's Email</div>
+					<input onChange={e => setEmail(e.target.value)} placeholder='' required value={email} />
+					<div>Email Subject</div>
+					<input name='subject' onChange={e => setSubject(e.target.value)} required value={subject} />
+					<div>Email Body</div>
+					<textarea name='message' onChange={e => setMessage(e.target.value)} required value={message} />
+					<input
+						className='SendEmail'
+						disabled={isLoading || isSent ? true : false}
+						style={isLoading || isSent ? { cursor: 'default', textDecoration: 'none' } : {}}
+						type='submit'
+						value={isSent ? 'Sent' : isLoading ? 'Loading...' : 'Send Email Invite'}
+					/>
+					{isSent && (
+						<button className='SendAnotherEmail' onClick={() => window.location.reload()}>
+							Send Another Invite
+						</button>
+					)}
+				</form>
+			</div>
+			{/* <table>
+				<caption>
+					<div className='Flex'>
+						<div className='Title'>Pending Invites</div>
+					</div>
+				</caption>
+				<thead>
+					<tr>
+						<th className='Break'>EMAIL</th>
+						<th>SENT</th>
+						<th>RESEND</th>
+						<th>DELETE</th>
+					</tr>
+				</thead>
+				<tbody>{pendingInvites.map((pendingInvite, index) => renderPendingInvite(pendingInvite, index))}</tbody>
+				<tfoot>
+					<tr>
+						<td>{pendingInvites.length} Total</td>
+					</tr>
+				</tfoot>
+			</table> */}
 		</div>
 	)
 }
