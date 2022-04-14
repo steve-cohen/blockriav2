@@ -57,14 +57,16 @@ table caption .Flex {
 
 table caption .Flex .Button {
 	background: rgb(18, 25, 44);
-	border: 1px solid rgb(18, 25, 44);
+	border: none;
+	border-radius: 2px;
 	color: rgb(248, 249, 251);
 	cursor: pointer;
 	display: inline-block;
 	font-size: 14px;
 	font-weight: 500;
-	margin-left: 12px;
-	padding: 8px 12px;
+	margin: 24px 0 0 12px;
+	padding: 6px 11px;
+	width: fit-content;
 }
 
 table caption .Flex .Button:hover {
