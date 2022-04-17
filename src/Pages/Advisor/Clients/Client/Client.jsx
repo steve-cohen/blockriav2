@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import ClientPortfolio from './ClientPortfolio'
 import coinbaseTokenNames from '../../coinbaseTokenNames.json'
 import './Client.css'
 
@@ -37,6 +38,8 @@ const Client = ({ advisor }) => {
 
 	const [accounts, setAccounts] = useState([])
 	const [accountsNonTradeable, setAccountsNonTradeable] = useState([])
+	const [portfolioId, setPortfolioId] = useState(0)
+	const [rebalanceFrequency, setRebalanceFrequency] = useState('')
 	const [spotPrices, setSpotPrices] = useState({})
 	const [totalBalance, setTotalBalance] = useState(0)
 	const [totalBalanceNonTradeable, setTotalBalanceNonTradeable] = useState(0)
@@ -134,6 +137,8 @@ const Client = ({ advisor }) => {
 		// [6.0] Update State
 		setAccounts(newAccounts)
 		setAccountsNonTradeable(newAccountsNonTradeable)
+		setPortfolioId(newClient.portfolioId)
+		setRebalanceFrequency(newClient.rebalanceFrequency)
 		setSpotPrices(newSpotPrices)
 		setTotalBalance(newTotalBalance)
 		setTotalBalanceNonTradeable(newTotalBalanceNonTradeable)
@@ -172,7 +177,7 @@ const Client = ({ advisor }) => {
 				</caption>
 				<thead>
 					<tr>
-						<th className='AlignRight'>PERCENT</th>
+						<th>PERCENT</th>
 						<th className='AlignRight'>BALANCE</th>
 						<th>HOLDING</th>
 						<th>NAME</th>
@@ -364,6 +369,7 @@ const Client = ({ advisor }) => {
 
 	return (
 		<div className='Client'>
+			<ClientPortfolio advisor={advisor} portfolioId={portfolioId} rebalanceFrequency={rebalanceFrequency} />
 			{renderHoldings(true)}
 			{totalBalanceNonTradeable !== 0 ? renderHoldings(false) : null}
 			{renderTransactions(taxEvents.slice(0, 10), 'taxEvents')}

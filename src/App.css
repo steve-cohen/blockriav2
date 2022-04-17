@@ -64,7 +64,7 @@ table caption .Flex .Button {
 	display: inline-block;
 	font-size: 14px;
 	font-weight: 500;
-	margin: 24px 0 0 12px;
+	margin-left: 12px;
 	padding: 6px 11px;
 	width: fit-content;
 }
@@ -87,10 +87,6 @@ table thead tr th {
 	height: 20px;
 	padding: 8px;
 }
-
-/* table tbody tr:hover {
-	background: rgb(248, 249, 251);
-} */
 
 table tbody tr td {
 	text-transform: capitalize;

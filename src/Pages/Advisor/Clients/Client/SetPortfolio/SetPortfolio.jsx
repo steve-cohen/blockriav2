@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import './SetPortfolio.css'
 
 const frequencies = [
 	'Rebalance Once',
-	'Rebalance Daily',
 	'Rebalance Weekly',
 	'Rebalance Biweekly',
 	'Rebalance Monthly',
@@ -24,16 +23,24 @@ const portfolioEmpty = {
 	portfolioName: 'No Portfolio'
 }
 
-const SetPortfolio = ({ advisor, portfolios }) => {
+const SetPortfolio = ({ advisor }) => {
 	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
 
 	const [confirm, setConfirm] = useState(false)
 	const [frequency, setFrequency] = useState('')
 	const [isLoading, setIsLoading] = useState(false)
+	const [portfolios, setPortfolios] = useState([])
 	const [portfolioSelection, setPortfolioSelection] = useState(portfolioDefault)
 	const [showFrequencies, setShowFrequencies] = useState(false)
 	const [showPortfolios, setShowPortfolios] = useState(false)
+
+	useEffect(() => {
+		fetch(`https://blockria.com/api/portfolios?advisorId=${advisor.idToken.payload.sub}`)
+			.then(response => response.json())
+			.then(setPortfolios)
+			.catch(alert)
+	}, [])
 
 	function handleSelect(select) {
 		setShowFrequencies(false)

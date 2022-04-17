@@ -1,0 +1,13 @@
+.Clients tbody tr:hover {
+	background: rgb(248, 249, 251);
+	cursor: pointer;
+}
+
+.Clients .ClientName {
+	color: rgb(0, 102, 204);
+	font-weight: 500;
+}
+
+.Clients .ClientName:hover {
+	text-decoration: underline;
+}

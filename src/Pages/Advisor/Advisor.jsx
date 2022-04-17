@@ -59,10 +59,7 @@ const Advisor = () => {
 								/>
 								<Route path='clients/client' element={<Client advisor={advisor} />} />
 								<Route path='clients/client/deposit' element={<Deposit advisor={advisor} client={client} />} />
-								<Route
-									path='clients/client/setportfolio'
-									element={<SetPortfolio advisor={advisor} portfolios={portfolios} />}
-								/>
+								<Route path='clients/client/setportfolio' element={<SetPortfolio advisor={advisor} />} />
 								<Route path='clients/client/taxevents' element={<TaxEvents />} />
 								<Route path='clients/client/transactions' element={<Transactions />} />
 								<Route path='clients/client/withdrawal' element={<Withdrawal advisor={advisor} client={client} />} />

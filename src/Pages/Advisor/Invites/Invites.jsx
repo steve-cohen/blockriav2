@@ -125,7 +125,7 @@ const Invites = ({ advisor }) => {
 		return (
 			<tr key={`Client Email ${pendingInvite.clientEmailAddress}`}>
 				<td>{pendingInvite.clientEmailAddress}</td>
-				<td>{daysSince ? (daysSince === 1 ? '1 Day Ago' : `${daysSince} Day Ago`) : 'Today'}</td>
+				<td>{daysSince ? (daysSince === 1 ? '1 Day Ago' : `${daysSince} Days Ago`) : 'Today'}</td>
 				{isResent[index] ? (
 					<td className='Bold'>Sent</td>
 				) : (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './Clients.css'
 
 function formatUSD(number) {
@@ -23,7 +23,9 @@ function renderPortfolio(clientId, clientName, currentPortfolioId, portfolios) {
 			<>
 				{portfolio[0].portfolioName} (
 				<Link
+					id='Change'
 					to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${currentPortfolioId}`}
+					style={{ textTransform: 'none' }}
 				>
 					change
 				</Link>
@@ -39,6 +41,7 @@ function renderPortfolioAssign(clientName, clientId) {
 	return (
 		<Link
 			className='Bold Red'
+			id='Assign'
 			to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=`}
 			style={{ textTransform: 'none' }}
 		>
@@ -48,6 +51,7 @@ function renderPortfolioAssign(clientName, clientId) {
 }
 
 const Clients = ({ advisor, portfolios, setPortfolios }) => {
+	const navigate = useNavigate()
 	const [clients, setClients] = useState([])
 
 	useEffect(() => {
@@ -64,6 +68,13 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 			.then(setPortfolios)
 			.catch(error => alert(error))
 	}, [])
+
+	function handeClient(e, clientId, clientName) {
+		e.preventDefault()
+		if (e.target.id !== 'Assign' && e.target.id !== 'Change') {
+			navigate(`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`)
+		}
+	}
 
 	async function handleNewClients(newClients) {
 		console.log({ newClients })
@@ -103,10 +114,8 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 
 	function renderClient({ clientId, clientName, createdAt, nativeBalance, portfolioId, updatedAt }) {
 		return (
-			<tr key={clientId}>
-				<td className='Bold'>
-					<Link to={`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`}>{clientName}</Link>
-				</td>
+			<tr key={clientId} onClick={e => handeClient(e, clientId, clientName)}>
+				<td className='ClientName'>{clientName}</td>
 				<td className='AlignRight Bold'>{formatUSD(nativeBalance)}</td>
 				<td className='Break'>
 					{portfolioId
@@ -142,7 +151,7 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 	}
 
 	return (
-		<table>
+		<table className='Clients'>
 			<caption>
 				<div className='Flex'>
 					<div className='Title'>Clients</div>
