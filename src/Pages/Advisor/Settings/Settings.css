@@ -1,49 +1,12 @@
-.Settings .Box {
-	margin: 48px 0;
-	width: 600px;
+.Settings table {
+	padding-bottom: 60px;
+	width: 500px;
 }
 
-.Settings .Box .BoxTitle {
-	border-bottom: 1px solid rgb(223, 224, 226);
-	color: rgb(89, 89, 92);
-	font-size: 16px;
-	font-weight: 500;
-	letter-spacing: 0.5px;
-	margin-bottom: 8px;
-	padding: 12px 8px;
+.Settings table tbody tr td:first-of-type {
+	min-width: 145px;
 }
 
-.Settings .Box .Inline div {
-	display: inline-block;
-}
-
-.Settings .Box .Inline div:first-of-type {
-	color: rgb(109, 109, 112);
-	font-size: 15px;
-	font-weight: 500;
-	padding: 6px 8px;
-	width: 160px;
-}
-
-.Settings .Box .Inline div:last-of-type {
-	font-size: 15px;
-}
-
-.Settings .Box .Inline .PlanSignUp a {
-	color: rgb(230, 39, 28);
-	font-size: 15px;
-}
-
-.Settings .Box .Inline .PlanSignUp svg {
-	fill: rgb(230, 39, 28);
-	height: 15px;
-	margin-bottom: 1px;
-	margin-right: 11px;
-	vertical-align: text-bottom;
-	width: 15px;
-}
-
-.Settings .Title {
-	font-size: 24px;
-	padding-left: 8px;
+.Settings .PlanSignUp {
+	text-transform: none;
 }

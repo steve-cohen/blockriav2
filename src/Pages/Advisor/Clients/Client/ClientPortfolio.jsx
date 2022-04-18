@@ -36,7 +36,7 @@ const ClientPortfolio = ({ advisor, portfolioId, rebalanceFrequency }) => {
 			<thead>
 				<tr>
 					<th>PORTFOLIO</th>
-					<th>REBALANCING</th>
+					<th className='Break'>REBALANCING</th>
 					{/* <th className='AlignRight'>1D</th>
 					<th className='AlignRight'>1W</th>
 					<th className='AlignRight'>1M</th>
