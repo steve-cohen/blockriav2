@@ -80,20 +80,16 @@ const Settings = ({ advisor }) => {
 							{isLoading ? 'Loading..' : customerId ? renderBillingPortal() : renderPlanSignUp()}
 						</td>
 					</tr>
-					<tr>
-						<td className='Bold'>Billing Cycle</td>
-						<td>
-							{isLoading ? (
-								'Loading...'
-							) : subscription.Item ? (
+					{subscription.Item ? (
+						<tr>
+							<td className='Bold'>Billing Cycle</td>
+							<td>
 								<div style={{ textTransform: 'capitalize' }}>
 									{subscription.Item.stripeSubscription.M.data.M.object.M.items.M.data.L[0].M.plan.M.interval.S + 'ly'}
 								</div>
-							) : (
-								renderPlanSignUp()
-							)}
-						</td>
-					</tr>
+							</td>
+						</tr>
+					) : null}
 				</tbody>
 			</table>
 			<table>

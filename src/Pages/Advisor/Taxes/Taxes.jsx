@@ -44,7 +44,7 @@ const Taxes = ({ advisor }) => {
 		<table className='Taxes'>
 			<caption>
 				<div className='Flex'>
-					<div className='Title'>Taxes</div>
+					<div className='Title'>Tax Events</div>
 				</div>
 			</caption>
 			<thead>

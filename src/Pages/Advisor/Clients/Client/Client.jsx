@@ -254,8 +254,8 @@ const Client = ({ advisor }) => {
 			type === 'taxEvents'
 				? `taxEvents?clientName=${clientName}&clientId=${clientId}`
 				: `transactions?clientName=${clientName}&clientId=${clientId}`
-		const showMore = type === 'taxEvents' ? '+ Show All Taxable Events' : '+ Show Full Transaction History'
-		const title = type === 'taxEvents' ? 'Taxable Events' : 'Transaction History'
+		const showMore = type === 'taxEvents' ? '+ Show All Tax Events' : '+ Show Full Transaction History'
+		const title = type === 'taxEvents' ? 'Tax Events' : 'Transaction History'
 
 		return (
 			<table>

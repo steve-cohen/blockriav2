@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
 
+import Billing from './Billing/Billing'
 import Client from './Clients/Client/Client'
 import Clients from './Clients/Clients'
 import Deposit from './Clients/Client/Deposit/Deposit'
@@ -27,7 +28,6 @@ const Advisor = () => {
 	const [advisor, setAdvisor] = useState(JSON.parse(localStorage.getItem('advisor')) || demoAdvisorEmpty)
 	// const [client, setClient] = useState(JSON.parse(localStorage.getItem('client')) || demoClientEmpty)
 	const [client, setClient] = useState(demoClientEmpty)
-	const [portfolio, setPortfolio] = useState(JSON.parse(localStorage.getItem('portfolio')) || demoPortfolio)
 	const [portfolios, setPortfolios] = useState([])
 
 	return (
@@ -53,6 +53,7 @@ const Advisor = () => {
 									path=''
 									element={<Clients advisor={advisor} portfolios={portfolios} setPortfolios={setPortfolios} />}
 								/>
+								<Route path='billing' element={<Billing advisor={advisor} />} />
 								<Route
 									path='clients'
 									element={<Clients advisor={advisor} portfolios={portfolios} setPortfolios={setPortfolios} />}
@@ -73,6 +74,7 @@ const Advisor = () => {
 									element={<Edit portfolios={portfolios} setPortfolios={setPortfolios} />}
 								/>
 								<Route path='settings' element={<Settings advisor={advisor} />} />
+								<Route path='taxes' element={<Taxes advisor={advisor} />} />
 								<Route path='*' element={<Navigate to='' />} />
 							</>
 						) : (
@@ -80,7 +82,6 @@ const Advisor = () => {
 						)}
 						<Route path='signin' element={<SignIn setAdvisor={setAdvisor} setPortfolios={setPortfolios} />} />
 						<Route path='signup' element={<SignUp />} />
-						<Route path='taxes' element={<Taxes advisor={advisor} />} />
 						<Route path='verifyemail' element={<VerifyEmail />} />
 					</Routes>
 				</div>
