@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
 
-import AdvisorContract from './AdvisorContract/AdvisorContract'
 import Billing from './Billing/Billing'
 import Client from './Clients/Client/Client'
 import Clients from './Clients/Clients'
@@ -19,7 +18,7 @@ import Transactions from './Clients/Client/Transactions/Transactions'
 import Withdrawal from './Clients/Client/Withdrawal/Withdrawal'
 import VerifyEmail from './VerifyEmail/VerifyEmail'
 
-import { demoAdvisor, demoAdvisorEmpty, demoClientEmpty, demoClients, demoPortfolio, demoPortfolios } from './demoData'
+import { demoAdvisorEmpty, demoClientEmpty } from './demoData'
 
 import './Advisor.css'
 import TaxEvents from './Clients/Client/TaxEvents/TaxEvents'
@@ -27,7 +26,6 @@ import TaxEvents from './Clients/Client/TaxEvents/TaxEvents'
 const Advisor = () => {
 	// Advisor Data
 	const [advisor, setAdvisor] = useState(JSON.parse(localStorage.getItem('advisor')) || demoAdvisorEmpty)
-	// const [client, setClient] = useState(JSON.parse(localStorage.getItem('client')) || demoClientEmpty)
 	const [client, setClient] = useState(demoClientEmpty)
 	const [portfolios, setPortfolios] = useState([])
 
@@ -81,7 +79,6 @@ const Advisor = () => {
 						) : (
 							<Route path='*' element={<Navigate to='signin' />} />
 						)}
-						<Route path='advisorcontract' element={<AdvisorContract />} />
 						<Route path='signin' element={<SignIn setAdvisor={setAdvisor} setPortfolios={setPortfolios} />} />
 						<Route path='signup' element={<SignUp />} />
 						<Route path='verifyemail' element={<VerifyEmail />} />
