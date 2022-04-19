@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
 
+import AdvisorContract from './AdvisorContract/AdvisorContract'
 import Billing from './Billing/Billing'
 import Client from './Clients/Client/Client'
 import Clients from './Clients/Clients'
@@ -80,6 +81,7 @@ const Advisor = () => {
 						) : (
 							<Route path='*' element={<Navigate to='signin' />} />
 						)}
+						<Route path='advisorcontract' element={<AdvisorContract />} />
 						<Route path='signin' element={<SignIn setAdvisor={setAdvisor} setPortfolios={setPortfolios} />} />
 						<Route path='signup' element={<SignUp />} />
 						<Route path='verifyemail' element={<VerifyEmail />} />
