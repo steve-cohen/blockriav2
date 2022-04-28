@@ -1,0 +1,8 @@
+.Agreements table {
+	margin-bottom: 60px;
+}
+
+.Agreements table .Upload:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
