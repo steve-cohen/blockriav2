@@ -5,6 +5,7 @@ import Agreements from './Agreements/Agreements'
 import Billing from './Billing/Billing'
 import Client from './Clients/Client/Client'
 import Clients from './Clients/Clients'
+import ClientOnboarding from './ClientOnboarding/ClientOnboarding'
 import Deposit from './Clients/Client/Deposit/Deposit'
 import Edit from './Portfolios/Edit/Edit'
 import Invites from './Invites/Invites'
@@ -81,6 +82,7 @@ const Advisor = () => {
 						) : (
 							<Route path='*' element={<Navigate to='signin' />} />
 						)}
+						<Route path='clientonboarding' element={<ClientOnboarding />} />
 						<Route path='signin' element={<SignIn setAdvisor={setAdvisor} setPortfolios={setPortfolios} />} />
 						<Route path='signup' element={<SignUp />} />
 						<Route path='verifyemail' element={<VerifyEmail />} />

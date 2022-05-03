@@ -157,7 +157,7 @@ const Transactions = () => {
 				<td className='AlignRight'>($0.00)</td>
 				<td>{formatUSD(native_amount.amount / amount.amount)}</td>
 				<td>{details.title}</td>
-				<td>{details.subtitle}</td>
+				<td style={{ textTransform: 'none' }}>{details.subtitle}</td>
 				<td />
 				<td />
 				<td />

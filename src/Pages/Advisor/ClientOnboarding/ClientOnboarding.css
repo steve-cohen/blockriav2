@@ -1,0 +1,16 @@
+.ClientOnboarding {
+	background: white;
+	font-family: 'Playfair Display', serif;
+	font-size: 42px;
+	margin-bottom: 24px;
+	height: 60vh;
+	left: 0;
+	padding-top: 40vh;
+	overflow: hidden;
+	position: absolute;
+	text-align: center;
+	top: 0;
+	white-space: pre;
+	width: 100vw;
+	z-index: 100;
+}

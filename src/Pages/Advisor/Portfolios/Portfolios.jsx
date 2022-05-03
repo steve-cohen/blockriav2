@@ -124,7 +124,7 @@ const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
 		console.log({ newPerformances })
 
 		// [3.0] Set State
-		setShowPortfolios(newPortfolios.map(() => true))
+		setShowPortfolios(newPortfolios.map(() => false))
 		setPerformances(newPerformances)
 		setSpotPrices(newSpotPrices)
 		setPortfolioCountTotals(newPortfolioCountTotals)

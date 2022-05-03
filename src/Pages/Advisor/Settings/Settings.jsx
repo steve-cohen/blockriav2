@@ -49,7 +49,7 @@ const Settings = ({ advisor }) => {
 			<div className='PlanSignUp'>
 				<a
 					className='Bold Red'
-					href={`https://blockria.com/api/stripe/signup?advisorId=${advisor.idToken.payload.sub}`}
+					href={`https://blockria.com/api/stripe/signup?advisorId=${advisor.idToken.payload.sub}&advisorName=${advisor.idToken.payload.given_name} ${advisor.idToken.payload.family_name}&firmName=${advisor.idToken.payload['custom:firm_name']}`}
 					target='_blank'
 					rel='noopener noreferrer'
 				>

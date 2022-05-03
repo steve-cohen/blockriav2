@@ -154,7 +154,10 @@ const Invites = ({ advisor }) => {
 			advisorName: `${advisor.idToken.payload.given_name} ${advisor.idToken.payload.family_name}`,
 			email: clientEmailAddress,
 			message: decodeURIComponent(clientEmailMessage)
-				.replace('[[Authorization Link]]', `<a href='${coinbaseURL}'>Authorization Link</a>`)
+				.replace(
+					'[[Authorization Link]]',
+					`<a href='${coinbaseURL}&state=["${advisor.idToken.payload.sub}","${clientEmailAddress}"]'>Authorization Link</a>`
+				)
 				.replace(/\n/g, '<br>'),
 			subject: clientEmailSubject
 		}
