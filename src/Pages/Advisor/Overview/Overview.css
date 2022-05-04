@@ -1,0 +1,11 @@
+.Overview {
+	height: 400px;
+	width: 100%;
+}
+
+.Overview text {
+	/* all: inherit; */
+	color: inherit;
+	font-family: inherit;
+	font-size: 12px;
+}

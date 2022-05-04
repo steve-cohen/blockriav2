@@ -10,6 +10,7 @@ import Deposit from './Clients/Client/Deposit/Deposit'
 import Edit from './Portfolios/Edit/Edit'
 import Invites from './Invites/Invites'
 import Navigation from './Navigation/Navigation'
+import Overview from './Overview/Overview'
 import Portfolios from './Portfolios/Portfolios'
 import SetPortfolio from './Clients/Client/SetPortfolio/SetPortfolio'
 import Settings from './Settings/Settings'
@@ -50,10 +51,7 @@ const Advisor = () => {
 					<Routes>
 						{advisor.idToken.payload.sub ? (
 							<>
-								<Route
-									path=''
-									element={<Clients advisor={advisor} portfolios={portfolios} setPortfolios={setPortfolios} />}
-								/>
+								<Route path='' element={<Overview advisor={advisor} />} />
 								<Route path='agreements' element={<Agreements advisor={advisor} />} />
 								<Route path='billing' element={<Billing advisor={advisor} />} />
 								<Route

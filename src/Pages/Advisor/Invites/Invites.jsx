@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react'
 import emailjs from '@emailjs/browser'
 import './Invites.css'
 
-const coinbaseURL =
-	'https://www.coinbase.com/oauth/authorize?account=all&scope=wallet:accounts:read,wallet:accounts:update,wallet:accounts:create,wallet:accounts:delete,wallet:addresses:read,wallet:addresses:create,wallet:buys:read,wallet:buys:create,wallet:deposits:read,wallet:deposits:create,wallet:notifications:read,wallet:payment-methods:read,wallet:payment-methods:delete,wallet:payment-methods:limits,wallet:sells:read,wallet:sells:create,wallet:transactions:read,wallet:transactions:request,wallet:transactions:transfer,wallet:user:read,wallet:user:update,wallet:user:email,wallet:withdrawals:read,wallet:withdrawals:create&response_type=code&client_id=d41fd296f21919731b07190afcf278b4f7a7f2813d029bb48d81fbf872c8fae4'
-
 function defaultMessage(advisor) {
 	const email = advisor.idToken.payload.email
 	const firmName = advisor.idToken.payload['custom:firm_name']
@@ -16,7 +13,7 @@ function defaultMessage(advisor) {
 
 Click the link below to grant access and get started.
 
-[[Authorization Link]]
+{{Authorization Link}}
 
 Sincerely,
 ${firstName} ${lastName}
@@ -26,10 +23,11 @@ ${email}
 }
 
 function defaultSubject(advisor) {
-	return `${advisor.idToken.payload.given_name} ${advisor.idToken.payload.family_name} Needs to Connect to Your Account`
+	return `${advisor.idToken.payload['custom:firm_name']} Needs to Connect to Your Account`
 }
 
 const Invites = ({ advisor }) => {
+	const [authorizationLink, setAuthorizationLink] = useState('')
 	const [email, setEmail] = useState('')
 	const [isLoading, setIsLoading] = useState(false)
 	const [isResent, setIsResent] = useState([])
@@ -41,6 +39,15 @@ const Invites = ({ advisor }) => {
 	useEffect(() => {
 		getPendingInvites()
 	}, [])
+
+	useEffect(() => {
+		let url = 'https://blockria.com/client/sign?'
+		url += `email=${email}`
+		url += `&firmName=${advisor.idToken.payload['custom:firm_name']}`
+		url += `&advisorName=${advisor.idToken.payload.given_name} ${advisor.idToken.payload.family_name}`
+		url += `&advisorId=${advisor.idToken.payload.sub}`
+		setAuthorizationLink(url)
+	}, [advisor, email])
 
 	async function getPendingInvites() {
 		await fetch(`https://blockria.com/api/invites?advisorId=${advisor.idToken.payload.sub}`)
@@ -83,10 +90,7 @@ const Invites = ({ advisor }) => {
 			advisorName: `${advisor.idToken.payload.given_name} ${advisor.idToken.payload.family_name}`,
 			email,
 			message: message
-				.replace(
-					'[[Authorization Link]]',
-					`<a href='${coinbaseURL}&state=["${advisor.idToken.payload.sub}","${email}"]'>Authorization Link</a>`
-				)
+				.replace('{{Authorization Link}}', `<a href='${authorizationLink}'>Authorization Link</a>`)
 				.replace(/\n/g, '<br>'),
 			subject
 		}
@@ -154,10 +158,7 @@ const Invites = ({ advisor }) => {
 			advisorName: `${advisor.idToken.payload.given_name} ${advisor.idToken.payload.family_name}`,
 			email: clientEmailAddress,
 			message: decodeURIComponent(clientEmailMessage)
-				.replace(
-					'[[Authorization Link]]',
-					`<a href='${coinbaseURL}&state=["${advisor.idToken.payload.sub}","${clientEmailAddress}"]'>Authorization Link</a>`
-				)
+				.replace('{{Authorization Link}}', `<a href='${authorizationLink}'>Authorization Link</a>`)
 				.replace(/\n/g, '<br>'),
 			subject: clientEmailSubject
 		}

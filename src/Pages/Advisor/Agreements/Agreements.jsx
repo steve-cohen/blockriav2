@@ -1,56 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import './Agreements.css'
 
-function toBase64(file) {
-	return new Promise((resolve, reject) => {
-		const fileReader = new FileReader()
-		fileReader.readAsDataURL(file)
-		fileReader.onload = () => {
-			resolve(fileReader.result.split('base64,')[1])
-		}
-		fileReader.onerror = error => {
-			reject(error)
-		}
-	})
-}
-
 function renderDate(timestamp) {
 	// return new Date(timestamp).toISOString().slice(0, 19).replace('T', ' ')
 	return new Date(timestamp).toISOString().slice(0, 10)
 }
 
 const Agreements = ({ advisor }) => {
-	const [docuSignHasDocument1, setDocuSignHasDocument1] = useState(false)
-	const [docuSignHasDocument2, setDocuSignHasDocument2] = useState(false)
-	const [docuSignHasDocument3, setDocuSignHasDocument3] = useState(false)
-	const [docuSignHasDocument4, setDocuSignHasDocument4] = useState(false)
-	const [docuSignHasDocument5, setDocuSignHasDocument5] = useState(false)
+	const [agreements, setAgreements] = useState({})
 
-	const [docuSignHasDocument1UpdatedAt, setDocuSignHasDocument1UpdatedAt] = useState(0)
-	const [docuSignHasDocument2UpdatedAt, setDocuSignHasDocument2UpdatedAt] = useState(0)
-	const [docuSignHasDocument3UpdatedAt, setDocuSignHasDocument3UpdatedAt] = useState(0)
-	const [docuSignHasDocument4UpdatedAt, setDocuSignHasDocument4UpdatedAt] = useState(0)
-	const [docuSignHasDocument5UpdatedAt, setDocuSignHasDocument5UpdatedAt] = useState(0)
-
-	const [docuSignDocument1IsLoading, setDocuSignDocument1IsLoading] = useState(false)
-	const [docuSignDocument2IsLoading, setDocuSignDocument2IsLoading] = useState(false)
-	const [docuSignDocument3IsLoading, setDocuSignDocument3IsLoading] = useState(false)
-	const [docuSignDocument4IsLoading, setDocuSignDocument4IsLoading] = useState(false)
-	const [docuSignDocument5IsLoading, setDocuSignDocument5IsLoading] = useState(false)
+	const [document1IsLoading, setDocument1IsLoading] = useState(false)
+	const [document2IsLoading, setDocument2IsLoading] = useState(false)
+	const [document3IsLoading, setDocument3IsLoading] = useState(false)
+	const [document4IsLoading, setDocument4IsLoading] = useState(false)
+	const [document5IsLoading, setDocument5IsLoading] = useState(false)
 
 	const [hasAutomation, setHasAutomation] = useState(true)
 	const [hasAutomationIsLoading, setHasAutomationIsLoading] = useState(true)
 
 	useEffect(() => {
 		GETAgreements()
+		GETSignedAgreements()
 	}, [])
 
 	async function GETAgreements() {
-		setDocuSignDocument1IsLoading(true)
-		setDocuSignDocument2IsLoading(true)
-		setDocuSignDocument3IsLoading(true)
-		setDocuSignDocument4IsLoading(true)
-		setDocuSignDocument5IsLoading(true)
+		setDocument1IsLoading(true)
+		setDocument2IsLoading(true)
+		setDocument3IsLoading(true)
+		setDocument4IsLoading(true)
+		setDocument5IsLoading(true)
 		setHasAutomationIsLoading(true)
 
 		await fetch(`https://blockria.com/api/agreements?advisorId=${advisor.idToken.payload.sub}`)
@@ -58,36 +36,26 @@ const Agreements = ({ advisor }) => {
 			.then(newAgreements => {
 				console.log(newAgreements)
 
-				if (newAgreements.Item) {
-					if (newAgreements.Item.docuSignHasDocument1) setDocuSignHasDocument1(true)
-					if (newAgreements.Item.docuSignHasDocument2) setDocuSignHasDocument2(true)
-					if (newAgreements.Item.docuSignHasDocument3) setDocuSignHasDocument3(true)
-					if (newAgreements.Item.docuSignHasDocument4) setDocuSignHasDocument4(true)
-					if (newAgreements.Item.docuSignHasDocument5) setDocuSignHasDocument5(true)
-
-					if (newAgreements.Item.docuSignHasDocument1UpdatedAt)
-						setDocuSignHasDocument1UpdatedAt(Number(newAgreements.Item.docuSignHasDocument1UpdatedAt.N))
-					if (newAgreements.Item.docuSignHasDocument2UpdatedAt)
-						setDocuSignHasDocument2UpdatedAt(Number(newAgreements.Item.docuSignHasDocument2UpdatedAt.N))
-					if (newAgreements.Item.docuSignHasDocument3UpdatedAt)
-						setDocuSignHasDocument3UpdatedAt(Number(newAgreements.Item.docuSignHasDocument3UpdatedAt.N))
-					if (newAgreements.Item.docuSignHasDocument4UpdatedAt)
-						setDocuSignHasDocument4UpdatedAt(Number(newAgreements.Item.docuSignHasDocument4UpdatedAt.N))
-					if (newAgreements.Item.docuSignHasDocument5UpdatedAt)
-						setDocuSignHasDocument5UpdatedAt(Number(newAgreements.Item.docuSignHasDocument5UpdatedAt.N))
-
-					if (newAgreements.Item.hasAutomation) setHasAutomation(newAgreements.Item.hasAutomation.BOOL)
+				if (newAgreements.Item && newAgreements.Item.hasAutomation) {
+					setHasAutomation(newAgreements.Item.hasAutomation.BOOL)
 				}
 			})
 			.catch(alert)
 
-		setDocuSignDocument1IsLoading(false)
-		setDocuSignDocument2IsLoading(false)
-		setDocuSignDocument3IsLoading(false)
-		setDocuSignDocument4IsLoading(false)
-		setDocuSignDocument5IsLoading(false)
+		await fetch(`https://blockria.com/api/agreements2?advisorId=${advisor.idToken.payload.sub}`)
+			.then(response => response.json())
+			.then(setAgreements)
+			.catch(alert)
+
+		setDocument1IsLoading(false)
+		setDocument2IsLoading(false)
+		setDocument3IsLoading(false)
+		setDocument4IsLoading(false)
+		setDocument5IsLoading(false)
 		setHasAutomationIsLoading(false)
 	}
+
+	async function GETSignedAgreements() {}
 
 	async function handleAutomation(newHasAutomation) {
 		setHasAutomationIsLoading(true)
@@ -105,54 +73,50 @@ const Agreements = ({ advisor }) => {
 	}
 
 	async function handleUploadPDF(event, documentOrder) {
-		if (documentOrder === 1) setDocuSignDocument1IsLoading(true)
-		else if (documentOrder === 2) setDocuSignDocument2IsLoading(true)
-		else if (documentOrder === 3) setDocuSignDocument3IsLoading(true)
-		else if (documentOrder === 4) setDocuSignDocument4IsLoading(true)
-		else if (documentOrder === 5) setDocuSignDocument5IsLoading(true)
+		if (documentOrder === 1) setDocument1IsLoading(true)
+		else if (documentOrder === 2) setDocument2IsLoading(true)
+		else if (documentOrder === 3) setDocument3IsLoading(true)
+		else if (documentOrder === 4) setDocument4IsLoading(true)
+		else if (documentOrder === 5) setDocument5IsLoading(true)
 
-		const body = JSON.stringify({
-			advisorId: advisor.idToken.payload.sub,
-			advisorName: `${advisor.idToken.payload.given_name} ${advisor.idToken.payload.family_name}`,
-			document: await toBase64(event.target.files[0]),
-			documentOrder,
-			firmName: advisor.idToken.payload['custom:firm_name']
+		const s3SignedURL = await fetch('https://blockria.com/api/agreements2', {
+			method: 'POST',
+			body: JSON.stringify({ advisorId: advisor.idToken.payload.sub, documentOrder })
 		})
+			.then(response => response.text())
+			.catch(alert)
 
-		await fetch('https://blockria.com/api/agreements', { method: 'POST', body })
+		await fetch(s3SignedURL, {
+			headers: { 'Content-Type': 'application/pdf' },
+			method: 'PUT',
+			body: event.target.files[0]
+		})
 			.then(() => GETAgreements())
 			.catch(alert)
 
-		if (documentOrder === 1) setDocuSignDocument1IsLoading(false)
-		else if (documentOrder === 2) setDocuSignDocument2IsLoading(false)
-		else if (documentOrder === 3) setDocuSignDocument3IsLoading(false)
-		else if (documentOrder === 4) setDocuSignDocument4IsLoading(false)
-		else if (documentOrder === 5) setDocuSignDocument5IsLoading(false)
+		if (documentOrder === 1) setDocument1IsLoading(false)
+		else if (documentOrder === 2) setDocument2IsLoading(false)
+		else if (documentOrder === 3) setDocument3IsLoading(false)
+		else if (documentOrder === 4) setDocument4IsLoading(false)
+		else if (documentOrder === 5) setDocument5IsLoading(false)
+	}
+
+	function renderAutomation() {
+		if (hasAutomationIsLoading) return <div className='Loading'>Loading...</div>
+
+		return (
+			<>
+				<span className='Bold'>{hasAutomation ? 'Enabled ' : 'Disabled '}</span>(
+				<span className='Blue ChangeAutomation' onClick={() => handleAutomation(!hasAutomation)}>
+					{hasAutomation ? 'disable' : 'enable'}
+				</span>
+				)
+			</>
+		)
 	}
 
 	function renderUploadPDF(documentOrder) {
-		let hasDocument = false
-		switch (documentOrder) {
-			case 1:
-				hasDocument = docuSignHasDocument1
-				break
-			case 2:
-				hasDocument = docuSignHasDocument2
-				break
-			case 3:
-				hasDocument = docuSignHasDocument3
-				break
-			case 4:
-				hasDocument = docuSignHasDocument4
-				break
-			case 5:
-				hasDocument = docuSignHasDocument5
-				break
-			default:
-				break
-		}
-
-		return hasDocument ? (
+		return documentOrder in agreements ? (
 			<td>
 				<div className='Blue Upload' onClick={() => document.getElementById(`uploadPDF${documentOrder}`).click()}>
 					Replace PDF
@@ -181,17 +145,15 @@ const Agreements = ({ advisor }) => {
 		)
 	}
 
-	function renderAutomation() {
-		if (hasAutomationIsLoading) return <div className='Loading'>Loading...</div>
-
+	function renderViewPDF(documentOrder) {
 		return (
-			<>
-				<span className='Bold'>{hasAutomation ? 'Enabled ' : 'Disabled '}</span>(
-				<span className='Blue ChangeAutomation' onClick={() => handleAutomation(!hasAutomation)}>
-					{hasAutomation ? 'disable' : 'enable'}
-				</span>
-				)
-			</>
+			<td>
+				{documentOrder in agreements ? (
+					<a href={agreements[documentOrder].url} target='_blank' rel='noopener noreferrer'>
+						View
+					</a>
+				) : null}
+			</td>
 		)
 	}
 
@@ -228,40 +190,40 @@ const Agreements = ({ advisor }) => {
 					<tr>
 						<th className='Break'>FORM</th>
 						<th>UPDATED</th>
-						{/* <th>VIEW</th> */}
+						<th>VIEW</th>
 						<th>UPLOAD</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td className='Bold'>Investment Advisory Agreement (Client Agreement)</td>
-						<td>{docuSignHasDocument1UpdatedAt ? renderDate(docuSignHasDocument1UpdatedAt) : null}</td>
-						{/* <td></td> */}
-						{docuSignDocument1IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(1)}
+						<td>{1 in agreements ? agreements[1].updatedAt : null}</td>
+						{renderViewPDF(1)}
+						{document1IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(1)}
 					</tr>
 					<tr>
 						<td className='Bold'>Privacy Policy</td>
-						<td>{docuSignHasDocument2UpdatedAt ? renderDate(docuSignHasDocument2UpdatedAt) : null}</td>
-						{/* <td></td> */}
-						{docuSignDocument2IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(2)}
+						<td>{2 in agreements ? agreements[2].updatedAt : null}</td>
+						{renderViewPDF(2)}
+						{document2IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(2)}
 					</tr>
 					<tr>
 						<td className='Bold'>Form CRS</td>
-						<td>{docuSignHasDocument3UpdatedAt ? renderDate(docuSignHasDocument3UpdatedAt) : null}</td>
-						{/* <td></td> */}
-						{docuSignDocument3IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(3)}
+						<td>{3 in agreements ? agreements[3].updatedAt : null}</td>
+						{renderViewPDF(3)}
+						{document3IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(3)}
 					</tr>
 					<tr>
 						<td className='Bold'>Form ADV Part 2A</td>
-						<td>{docuSignHasDocument4UpdatedAt ? renderDate(docuSignHasDocument4UpdatedAt) : null}</td>
-						{/* <td></td> */}
-						{docuSignDocument4IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(4)}
+						<td>{4 in agreements ? agreements[4].updatedAt : null}</td>
+						{renderViewPDF(4)}
+						{document4IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(4)}
 					</tr>
 					<tr>
 						<td className='Bold'>Form ADV Part 2B</td>
-						<td>{docuSignHasDocument5UpdatedAt ? renderDate(docuSignHasDocument5UpdatedAt) : null}</td>
-						{/* <td></td> */}
-						{docuSignDocument5IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(5)}
+						<td>{5 in agreements ? agreements[5].updatedAt : null}</td>
+						{renderViewPDF(5)}
+						{document5IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(5)}
 					</tr>
 				</tbody>
 			</table>

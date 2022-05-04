@@ -109,37 +109,7 @@ const Edit = ({ portfolios, setPortfolios }) => {
 
 		console.log(url)
 		fetch(url)
-			.then(response => {
-				console.log(response)
-
-				console.log(portfolios)
-				let newPortfolios = JSON.parse(JSON.stringify(portfolios))
-
-				if (portfolioId) {
-					let newPortfoliosObject = {}
-					newPortfolios.forEach(newPortfolio => (newPortfoliosObject[newPortfolio.portfolioId] = newPortfolio))
-					console.log({ newPortfoliosObject })
-
-					newPortfoliosObject[portfolioId] = {
-						portfolioId: { S: portfolioId },
-						portfolioName: { S: newPortfolioName },
-						allocations: { S: newAllocations }
-					}
-
-					newPortfolios = Object.values(newPortfoliosObject)
-				} else {
-					newPortfolios.push({
-						portfolioId: { S: newPortfolioId },
-						portfolioName: { S: newPortfolioName },
-						allocations: { S: newAllocations }
-					})
-				}
-				console.log(newPortfolios)
-
-				setPortfolios(newPortfolios)
-				setIsLoading(false)
-				navigate('/advisor/portfolios')
-			})
+			.then(() => navigate('/advisor/portfolios'))
 			.catch(error => {
 				setIsLoading(false)
 				alert(error)
