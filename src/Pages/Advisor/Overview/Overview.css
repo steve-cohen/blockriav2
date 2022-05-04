@@ -1,11 +1,28 @@
-.Overview {
-	height: 400px;
+.Overview .AreaChart {
+	height: 250px;
 	width: 100%;
 }
 
-.Overview text {
-	/* all: inherit; */
-	color: inherit;
+.Overview .AreaChart tspan,
+.Overview .AreaChart .recharts-tooltip-label,
+.Overview .AreaChart .recharts-tooltip-item-list {
+	color: rgb(26, 27, 29);
 	font-family: inherit;
-	font-size: 12px;
+	font-size: 11px;
+	font-weight: 500;
+}
+
+.Overview .TotalBalance {
+	color: rgb(26, 27, 29);
+	font-size: 18px;
+	font-weight: 500;
+	padding-left: 8px;
+}
+
+.Overview .TotalBalanceHistory {
+	margin-top: 60px;
+}
+
+.Overview .TotalBalanceHistory tbody tr:hover {
+	background: rgb(248, 249, 251);
 }

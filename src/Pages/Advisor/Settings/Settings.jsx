@@ -61,7 +61,7 @@ const Settings = ({ advisor }) => {
 
 	return (
 		<div className='Settings'>
-			<table>
+			{/* <table>
 				<caption>
 					<div className='Flex'>
 						<div className='Title'>Billing Details</div>
@@ -91,7 +91,7 @@ const Settings = ({ advisor }) => {
 						</tr>
 					) : null}
 				</tbody>
-			</table>
+			</table> */}
 			<table>
 				<caption>
 					<div className='Flex'>
