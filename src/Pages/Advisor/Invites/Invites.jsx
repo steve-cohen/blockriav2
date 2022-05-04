@@ -146,7 +146,6 @@ const Invites = ({ advisor }) => {
 
 	async function resendEmail(e, { clientEmailAddress, clientEmailMessage, clientEmailSubject }, index) {
 		e.preventDefault()
-		setIsLoading(true)
 
 		// [0.0]
 		let newIsResent = [...isResent]
@@ -181,9 +180,6 @@ const Invites = ({ advisor }) => {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(inviteOptions)
 		})
-
-		setIsLoading(false)
-		setIsSent(true)
 	}
 
 	return (

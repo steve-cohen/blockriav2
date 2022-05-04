@@ -49,31 +49,54 @@ const Sign = () => {
 		}
 	}
 
+	function renderAgreements() {
+		if (isLoading) return <div className='Loading'>Loading...</div>
+
+		if (Object.keys(agreements).length) {
+			return (
+				<>
+					<div className='Title'>
+						Client Agreements for {searchParams.get('advisorName')} at {searchParams.get('firmName')}
+					</div>
+					<div className='SubTitle'>By clicking the button below, I agree to:</div>
+					{Object.keys(agreements).map(renderAgreementLink)}
+					<div
+						className='Agree'
+						onClick={() =>
+							window.location.replace(
+								`${coinbaseURL}&state=["${searchParams.get('advisorId')}","${searchParams.get('email')}"]`
+							)
+						}
+					>
+						Agree
+					</div>
+				</>
+			)
+		} else {
+			return (
+				<>
+					<div className='Title'>
+						{searchParams.get('advisorName')} at {searchParams.get('firmName')} wants to connect to your Coinbase
+						account
+					</div>
+					<div
+						className='Agree'
+						onClick={() =>
+							window.location.replace(
+								`${coinbaseURL}&state=["${searchParams.get('advisorId')}","${searchParams.get('email')}"]`
+							)
+						}
+					>
+						Agree
+					</div>
+				</>
+			)
+		}
+	}
+
 	return (
 		<div className='Sign'>
-			<div className='Agreements'>
-				{isLoading ? (
-					<div className='Loading'>Loading...</div>
-				) : (
-					<>
-						<div className='Title'>
-							Client Agreements for {searchParams.get('advisorName')} at {searchParams.get('firmName')}
-						</div>
-						<div className='SubTitle'>By clicking the button below, I agree to:</div>
-						{Object.keys(agreements).map(renderAgreementLink)}
-						<div
-							className='Agree'
-							onClick={() =>
-								window.location.replace(
-									`${coinbaseURL}&state=["${searchParams.get('advisorId')}","${searchParams.get('email')}"]`
-								)
-							}
-						>
-							Agree
-						</div>
-					</>
-				)}
-			</div>
+			<div className='Agreements'>{renderAgreements()}</div>
 		</div>
 	)
 }

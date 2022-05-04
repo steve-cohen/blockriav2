@@ -19,10 +19,20 @@
 	padding-left: 8px;
 }
 
-.Overview .TotalBalanceHistory {
-	margin-top: 60px;
+.Overview .PendingInvites {
+	margin: 60px 0;
 }
 
-.Overview .TotalBalanceHistory tbody tr:hover {
+.Overview .PendingInvites tbody tr td {
+	text-transform: none !important;
+}
+
+.Overview .PendingInvites .Blue:hover,
+.Overview .PendingInvites .Red:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.Overview tbody tr:hover {
 	background: rgb(248, 249, 251);
 }
