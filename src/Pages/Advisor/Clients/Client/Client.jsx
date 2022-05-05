@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import ClientPortfolio from './ClientPortfolio'
+import ClientDepositsWithdrawals from './ClientDepositsWithdrawals'
 import coinbaseTokenNames from '../../coinbaseTokenNames.json'
 import './Client.css'
 
@@ -159,20 +160,6 @@ const Client = ({ advisor }) => {
 						<div className='Title'>
 							{title} for {searchParams.get('clientName')}
 						</div>
-						<div>
-							<Link
-								className='Button'
-								to={`withdrawal?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get('clientId')}`}
-							>
-								Initiate Withdrawal(s)
-							</Link>
-							<Link
-								className='Button'
-								to={`deposit?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get('clientId')}`}
-							>
-								Initiate Deposit(s)
-							</Link>
-						</div>
 					</div>
 				</caption>
 				<thead>
@@ -186,7 +173,7 @@ const Client = ({ advisor }) => {
 						<th>ALLOW DEPOSITS</th>
 						<th>ALLOW WITHDRAWALS</th>
 						<th>TYPE</th>
-						<th>UPDATED</th>
+						<th>LAST TRANSACTION</th>
 						<th>CREATED</th>
 					</tr>
 				</thead>
@@ -297,7 +284,22 @@ const Client = ({ advisor }) => {
 		)
 	}
 
-	function renderTransaction({ buy, details, fiat_deposit, fiat_withdrawal, id, sell, status, type, updated_at }) {
+	function renderTransaction({
+		amount,
+		buy,
+		change,
+		details,
+		fiat_deposit,
+		fiat_withdrawal,
+		id,
+		off_chain_status,
+		native_amount,
+		network,
+		sell,
+		status,
+		type,
+		updated_at
+	}) {
 		if (type === 'buy' || type === 'sell') {
 			const change = type === 'buy' ? '-' : '+'
 			const event = type === 'buy' ? buy : sell
@@ -364,14 +366,96 @@ const Client = ({ advisor }) => {
 					<td className={`${status === 'completed' ? 'Green' : 'Red'}`}>{status}</td>
 				</tr>
 			)
+		} else if (type === 'send') {
+			return (
+				<tr key={`Transaction ${id}`}>
+					<td>{updated_at.slice(0, 10)}</td>
+					<td>{updated_at.slice(11, 19)}</td>
+					<td className='Bold'>{type in displayTypes ? displayTypes[type] : type}</td>
+					<td className='Bold'>
+						{amount.currency !== 'USD' ? (
+							<a
+								href={`https://coinbase.com/price/${coinbaseTokenNames[amount.currency]
+									.replace(/ /g, '-')
+									.toLowerCase()}`}
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								{amount.currency}
+							</a>
+						) : (
+							amount.currency
+						)}
+					</td>
+					<td className={`AlignRight Bold ${native_amount.amount > 0 ? 'Green' : 'Red'}`}>
+						{change}
+						{formatUSD(native_amount.amount)}
+					</td>
+					<td className='AlignRight'>
+						{change}
+						{formatUSD(native_amount.amount)}
+					</td>
+					<td className='AlignRight'>($0.00)</td>
+					<td>{formatUSD(native_amount.amount / amount.amount)}</td>
+					<td>{details.title}</td>
+					<td style={{ textTransform: 'none' }}>{details.subtitle}</td>
+					<td />
+					<td />
+					<td />
+					{network.status === 'confirmed' ? <td className='Green'>Confirmed</td> : null}
+					{network.status === 'off_blockchain' ? (
+						<td className={off_chain_status === 'completed' ? 'Green' : 'Red'}>{off_chain_status}</td>
+					) : null}
+				</tr>
+			)
+		} else if (type === 'trade') {
+			return (
+				<tr key={`Transaction ${id}`}>
+					<td>{updated_at.slice(0, 10)}</td>
+					<td>{updated_at.slice(11, 19)}</td>
+					<td className='Bold'>{type in displayTypes ? displayTypes[type] : type}</td>
+					<td className='Bold'>
+						{amount.currency !== 'USD' ? (
+							<a
+								href={`https://coinbase.com/price/${coinbaseTokenNames[amount.currency]
+									.replace(/ /g, '-')
+									.toLowerCase()}`}
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								{amount.currency}
+							</a>
+						) : (
+							amount.currency
+						)}
+					</td>
+					<td className={`AlignRight Bold ${native_amount.amount > 0 ? 'Green' : 'Red'}`}>
+						{change}
+						{formatUSD(native_amount.amount)}
+					</td>
+					<td className='AlignRight'>
+						{change}
+						{formatUSD(native_amount.amount)}
+					</td>
+					<td className='AlignRight'>($0.00)</td>
+					<td>{formatUSD(native_amount.amount / amount.amount)}</td>
+					<td>{details.title}</td>
+					<td>{details.subtitle}</td>
+					<td />
+					<td />
+					<td />
+					<td className={`${status === 'completed' ? 'Green' : 'Red'}`}>{status}</td>
+				</tr>
+			)
 		}
 	}
 
 	return (
 		<div className='Client'>
-			<ClientPortfolio advisor={advisor} portfolioId={portfolioId} rebalanceFrequency={rebalanceFrequency} />
 			{renderHoldings(true)}
 			{totalBalanceNonTradeable !== 0 ? renderHoldings(false) : null}
+			<ClientPortfolio advisor={advisor} portfolioId={portfolioId} rebalanceFrequency={rebalanceFrequency} />
+			<ClientDepositsWithdrawals advisor={advisor} />
 			{renderTransactions(taxEvents.slice(0, 10), 'taxEvents')}
 			{renderTransactions(transactions, 'transactions')}
 		</div>

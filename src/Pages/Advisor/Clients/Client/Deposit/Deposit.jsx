@@ -19,20 +19,26 @@ const Deposit = ({ advisor, client }) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [showDepositMethods, setShowDepositMethods] = useState(false)
 
-	useEffect(() => {
-		if (client && client.paymentMethods && client.paymentMethods.length) {
-			// Deposit Methods
-			const newDepositMethods = client.paymentMethods.filter(({ allow_deposit }) => allow_deposit)
-			setDepositMethods(newDepositMethods)
-			setDepositMethod(newDepositMethods[0])
-
-			// AccountId
-			const newAccountId = client.paymentMethods.filter(({ fiat_account }) => fiat_account && fiat_account.id)
-			if (newAccountId && newAccountId.length) setAccountId(newAccountId[0].fiat_account.id)
-		} else {
-			setDepositMethod({ id: 0, limits: { deposit: [{ description: '' }] }, name: 'No Deposit Methods Found' })
-		}
+	useEffect(async () => {
+		let url = `https://blockria.com/coinbase/paymentmethods`
+		await fetch(`${url}?advisorId=${advisor.idToken.payload.sub}&clientId=${searchParams.get('clientId')}`)
+			.then(response => response.json())
+			.then(formatPaymentMethods)
+			.catch(alert)
 	}, [])
+
+	function formatPaymentMethods(paymentMethods) {
+		if (paymentMethods.data && paymentMethods.data.length >= 2) {
+			// FROM Payment Method
+			let newDepositMethods = paymentMethods.data.filter(({ allow_deposit }) => allow_deposit)
+			setDepositMethod(newDepositMethods[0])
+			setDepositMethods(newDepositMethods)
+
+			// TO Coinbase Fiat Account
+			const newAccountId = paymentMethods.data.filter(({ fiat_account }) => fiat_account && fiat_account.id)
+			if (newAccountId && newAccountId.length) setAccountId(newAccountId[0].fiat_account.id)
+		}
+	}
 
 	function handleSubmit(e) {
 		e.preventDefault()
@@ -115,6 +121,7 @@ const Deposit = ({ advisor, client }) => {
 							onChange={e => setAmount(e.target.value)}
 							placeholder='AMOUNT'
 							required
+							step={0.01}
 							type='number'
 							value={amount}
 						/>
@@ -140,9 +147,11 @@ const Deposit = ({ advisor, client }) => {
 							value={Number(amount).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
 						/>
 						<button className='InitiateDepositConfirm'>{isLoading ? 'Loading...' : 'Confirm Deposit'}</button>
-						<div className='Cancel' onClick={() => setConfirmDeposit(false)}>
-							Cancel
-						</div>
+						{isLoading ? null : (
+							<div className='Cancel' onClick={() => setConfirmDeposit(false)}>
+								Cancel
+							</div>
+						)}
 					</form>
 				</>
 			)}

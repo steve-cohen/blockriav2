@@ -219,6 +219,15 @@ const Overview = ({ advisor }) => {
 
 	return (
 		<div className='Overview'>
+			{/* <table style={{ marginBottom: '60px' }}>
+				<caption>
+					<div className='Flex'>
+						<Link className='Button' to={`/advisor/invites`}>
+							Invite Client
+						</Link>
+					</div>
+				</caption>
+			</table> */}
 			<table>
 				<caption>
 					<div className='Flex'>
@@ -241,7 +250,7 @@ const Overview = ({ advisor }) => {
 						</defs>
 						<XAxis dataKey='date' />
 						<YAxis dataKey='TotalBalance' orientation='right' />
-						<Tooltip className='ToolTip' />
+						<Tooltip className='ToolTip' isAnimationActive={false} />
 						<Text />
 						<Area dataKey='TotalBalance' isAnimationActive={false} stroke='rgb(18, 25, 44)' fill='url(#Area)' />
 					</AreaChart>
