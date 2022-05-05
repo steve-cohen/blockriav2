@@ -19,20 +19,28 @@ const Withdrawal = ({ advisor, client }) => {
 	const [showWithdrawalMethods, setShowWithdrawalMethods] = useState(false)
 	const [withdrawalMethods, setWithdrawalMethods] = useState([])
 
-	useEffect(() => {
-		if (client && client.paymentMethods && client.paymentMethods.length) {
-			// Deposit Methods
-			const newWithdrawalMethods = client.paymentMethods.filter(({ allow_withdraw }) => allow_withdraw)
-			setWithdrawalMethods(newWithdrawalMethods)
-			setWithdrawalMethod(newWithdrawalMethods[0])
+	useEffect(async () => {
+		let url = `https://blockria.com/coinbase/paymentmethods`
+		await fetch(`${url}?advisorId=${advisor.idToken.payload.sub}&clientId=${searchParams.get('clientId')}`)
+			.then(response => response.json())
+			.then(formatPaymentMethods)
+			.catch(alert)
+	}, [])
 
-			// AccountId
-			const newAccountId = client.paymentMethods.filter(({ fiat_account }) => fiat_account && fiat_account.id)
+	function formatPaymentMethods(paymentMethods) {
+		if (paymentMethods.data && paymentMethods.data.length >= 2) {
+			// FROM Coinbase Fiat Account
+			const newWithdrawalMethods = paymentMethods.data.filter(({ allow_withdraw }) => allow_withdraw)
+			setWithdrawalMethod(newWithdrawalMethods[0])
+			setWithdrawalMethods(newWithdrawalMethods)
+
+			// TO Payment Method
+			const newAccountId = paymentMethods.data.filter(({ fiat_account }) => fiat_account && fiat_account.id)
 			if (newAccountId && newAccountId.length) setAccountId(newAccountId[0].fiat_account.id)
 		} else {
-			setWithdrawalMethod({ id: 0, limits: { deposit: [{ description: '' }] }, name: 'No Deposit Methods Found' })
+			setWithdrawalMethod({ id: 0, limits: { deposit: [{ description: '' }] }, name: 'No Withdrawal Methods Found' })
 		}
-	}, [])
+	}
 
 	function handleSubmit(e) {
 		e.preventDefault()
@@ -61,7 +69,11 @@ const Withdrawal = ({ advisor, client }) => {
 					setIsLoading(false)
 					alert(data.errors[0].message)
 				} else {
-					navigate(`/advisor/clients/client?clientId=${searchParams.get('clientId')}`)
+					navigate(
+						`/advisor/clients/client?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get(
+							'clientId'
+						)}`
+					)
 				}
 			})
 			.catch(error => {
@@ -115,7 +127,9 @@ const Withdrawal = ({ advisor, client }) => {
 							className='Amount'
 							onChange={e => setAmount(e.target.value)}
 							placeholder='AMOUNT'
+							min={1}
 							required
+							step={0.01}
 							type='number'
 							value={amount}
 						/>
@@ -139,9 +153,11 @@ const Withdrawal = ({ advisor, client }) => {
 							value={Number(amount).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
 						/>
 						<button className='InitiateWithdrawalConfirm'>{isLoading ? 'Loading...' : 'Confirm Withdrawal'}</button>
-						<div className='Cancel' onClick={() => setConfirmWithdrawal(false)}>
-							Cancel
-						</div>
+						{isLoading ? null : (
+							<div className='Cancel' onClick={() => setConfirmWithdrawal(false)}>
+								Cancel
+							</div>
+						)}
 					</form>
 				</>
 			)}

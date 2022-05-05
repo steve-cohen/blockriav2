@@ -16,13 +16,15 @@ const ClientDepositsWithdrawals = () => {
 							className='Button'
 							to={`deposit?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get('clientId')}`}
 						>
-							Initiate Deposit(s)
+							Initiate Deposit
+							{/* Initiate Deposit(s) */}
 						</Link>
 						<Link
 							className='Button'
 							to={`withdrawal?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get('clientId')}`}
 						>
-							Initiate Withdrawal(s)
+							Initiate Withdrawal
+							{/* Initiate Withdrawal(s) */}
 						</Link>
 					</div>
 				</div>

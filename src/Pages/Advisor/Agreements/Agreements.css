@@ -10,32 +10,3 @@
 .Agreements table .ChangeAutomation:hover {
 	text-decoration: underline;
 }
-
-.Agreements table .Loading {
-	background-image: -webkit-linear-gradient(left, rgb(250, 250, 250), rgb(64, 68, 82));
-	background-repeat: repeat;
-	background-position: 0 0;
-	background-size: 100% 200px;
-	font-weight: 500;
-	-webkit-text-fill-color: transparent;
-	-webkit-background-clip: text;
-	-webkit-animation: stripes 11s ease-out infinite;
-	animation: stripes 11s ease-out infinite;
-}
-
-.Agreements table .Upload:hover {
-	cursor: pointer;
-	text-decoration: underline;
-}
-
-@-webkit-keyframes stripes {
-	100% {
-		background-position: 0 -50px;
-	}
-}
-
-@keyframes stripes {
-	100% {
-		background-position: 385px 0;
-	}
-}

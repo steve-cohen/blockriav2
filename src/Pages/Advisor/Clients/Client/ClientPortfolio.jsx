@@ -51,26 +51,29 @@ function getSpotPrice(holding, timePeriod = '') {
 		.catch(error => alert(error))
 }
 
-const ClientPortfolio = ({ advisor, portfolioId, rebalanceFrequency }) => {
-	const [searchParams] = useSearchParams()
-	const [portfolio, setPortfolio] = useState({})
-	const [spotPrices, setSpotPrices] = useState({})
+const ClientPortfolio = ({ advisor, client }) => {
+	const { portfolioId, rebalanceFrequency } = client
 
+	const [searchParams] = useSearchParams()
 	const clientId = searchParams.get('clientId')
 	const clientName = searchParams.get('clientName')
 
-	useEffect(() => {
-		if (!portfolioId) return
+	const [isLoading, setIsLoading] = useState(true)
+	const [portfolio, setPortfolio] = useState({})
+	const [spotPrices, setSpotPrices] = useState({})
 
-		fetch(
+	useEffect(async () => {
+		if (!portfolioId) return
+		setIsLoading(true)
+
+		await fetch(
 			`https://blockria.com/api/coinbase/clients/client/portfolio?advisorId=${advisor.idToken.payload.sub}&portfolioId=${portfolioId}`
 		)
 			.then(response => response.json())
-			.then(newPortfolio => {
-				console.log(newPortfolio)
-				setPortfolio(newPortfolio)
-			})
+			.then(newPortfolio => setPortfolio(newPortfolio))
 			.catch(alert)
+
+		setIsLoading(false)
 	}, [advisor, portfolioId])
 
 	useEffect(async () => {
@@ -150,8 +153,15 @@ const ClientPortfolio = ({ advisor, portfolioId, rebalanceFrequency }) => {
 					<th className='AlignRight'>1Y</th>
 				</tr>
 			</thead>
-			{portfolioId ? (
-				<tbody>
+			<tbody>
+				{isLoading ? (
+					<tr>
+						<td className='Loading' style={{ borderBottom: 'none' }}>
+							Loading...
+						</td>
+					</tr>
+				) : null}
+				{!isLoading && portfolioId ? (
 					<tr>
 						<td>
 							<span className='Bold'>{portfolio.portfolioName} </span>(
@@ -180,9 +190,7 @@ const ClientPortfolio = ({ advisor, portfolioId, rebalanceFrequency }) => {
 						{renderPortfolioPerformance(portfolio, 'YTD')}
 						{renderPortfolioPerformance(portfolio, '1Y')}
 					</tr>
-				</tbody>
-			) : (
-				<tbody>
+				) : (
 					<tr>
 						<td className='Bold Red' style={{ borderBottom: 'none' }}>
 							<Link
@@ -193,8 +201,8 @@ const ClientPortfolio = ({ advisor, portfolioId, rebalanceFrequency }) => {
 							</Link>
 						</td>
 					</tr>
-				</tbody>
-			)}
+				)}
+			</tbody>
 		</table>
 	)
 }

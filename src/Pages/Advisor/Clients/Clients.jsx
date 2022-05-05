@@ -112,19 +112,30 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 		setClients(newClients)
 	}
 
-	function renderClient({ clientId, clientName, createdAt, nativeBalance, portfolioId, updatedAt }) {
+	function renderClient({ clientId, clientName, createdAt, nativeBalance, rebalanceFrequency, portfolioId }) {
 		return (
 			<tr key={clientId} onClick={e => handeClient(e, clientId, clientName)}>
 				<td className='ClientName'>{clientName}</td>
 				<td className='AlignRight Bold'>{formatUSD(nativeBalance)}</td>
-				<td className='Break'>
+				<td>
 					{portfolioId
 						? renderPortfolio(clientId, clientName, portfolioId, portfolios)
 						: renderPortfolioAssign(clientName, clientId)}
 				</td>
+				<td className='Break'>
+					<span>{rebalanceFrequency} Rebalancing </span>(
+					<Link
+						id='Change'
+						to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}`}
+						style={{ textTransform: 'none' }}
+					>
+						change
+					</Link>
+					)
+				</td>
 				<td>Coinbase</td>
-				<td>{new Date(updatedAt).toISOString().slice(0, 19).replace('T', ' ')}</td>
-				<td>{new Date(createdAt).toISOString().slice(0, 19).replace('T', ' ')}</td>
+				{/* <td>{new Date(updatedAt).toISOString().slice(0, 19).replace('T', ' ')}</td> */}
+				<td>{new Date(createdAt).toISOString().slice(0, 10)}</td>
 			</tr>
 		)
 	}
@@ -165,9 +176,10 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 					<th>NAME</th>
 					<th className='AlignRight'>BALANCE</th>
 					<th>PORTFOLIO</th>
+					<th className='Break'>AUTOMATIC PORTFOLIO REBALANCING</th>
 					<th>CUSTODIAN</th>
-					<th>UPDATED</th>
-					<th>CREATED</th>
+					{/* <th>UPDATED</th> */}
+					<th>JOINED</th>
 				</tr>
 			</thead>
 			<tbody>{clients.map(renderClient)}</tbody>

@@ -37,6 +37,12 @@ const Deposit = ({ advisor, client }) => {
 			// TO Coinbase Fiat Account
 			const newAccountId = paymentMethods.data.filter(({ fiat_account }) => fiat_account && fiat_account.id)
 			if (newAccountId && newAccountId.length) setAccountId(newAccountId[0].fiat_account.id)
+		} else {
+			setDepositMethod({
+				id: 0,
+				limits: { deposit: [{ description: '' }] },
+				name: 'No Deposit Methods Found'
+			})
 		}
 	}
 
@@ -67,7 +73,11 @@ const Deposit = ({ advisor, client }) => {
 					setIsLoading(false)
 					alert(data.errors[0].message)
 				} else {
-					navigate(`/advisor/clients/client?clientId=${searchParams.get('clientId')}`)
+					navigate(
+						`/advisor/clients/client?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get(
+							'clientId'
+						)}`
+					)
 				}
 			})
 			.catch(error => {

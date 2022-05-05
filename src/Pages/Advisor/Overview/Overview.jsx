@@ -157,7 +157,6 @@ const Overview = ({ advisor }) => {
 			<tr key={`Performance Day ${performanceDay.date}`}>
 				<td>{performanceDay.date}</td>
 				<td className='AlignRight Bold'>{formatUSD(performanceDay.TotalBalance)}</td>
-				<td />
 				{tableHeaders.map((token, index) => {
 					if (token in performanceDay) {
 						return (
@@ -169,6 +168,7 @@ const Overview = ({ advisor }) => {
 						return <td key={`Performance Token ${index}`}>$0.00</td>
 					}
 				})}
+				<td />
 			</tr>
 		)
 	}
@@ -233,7 +233,7 @@ const Overview = ({ advisor }) => {
 					<div className='Flex'>
 						<div className='Title'>
 							{formatUSD(totalBalance)}
-							{' Total Balance Beginning '}
+							{' Total Balance - Beginning '}
 							{totalBalanceDate}
 						</div>
 					</div>
@@ -290,12 +290,12 @@ const Overview = ({ advisor }) => {
 					<tr>
 						<th>DATE</th>
 						<th className='AlignRight'>TOTAL BALANCE</th>
-						<th className='Break' />
 						{tableHeaders.map(token => (
 							<th className='AlignRight' key={`Table Header Token ${token}`}>
 								TOTAL {token}
 							</th>
 						))}
+						<th className='Break' />
 					</tr>
 				</thead>
 				<tbody>{[...performance].reverse().map(renderPerformance)}</tbody>
