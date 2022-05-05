@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import coinbaseTokenNames from '../../coinbaseTokenNames.json'
-import './ClientTransactions.css'
 
 const displayTypes = {
 	buy: 'Buy',
@@ -208,7 +207,7 @@ const ClientTransactions = ({ transactions }) => {
 			<table>
 				<caption>
 					<div className='Flex'>
-						<div className='Title'>Tax Events for {searchParams.get('clientName')}</div>
+						<div className='Title'>Tax Events</div>
 						<div></div>
 					</div>
 				</caption>
@@ -251,7 +250,7 @@ const ClientTransactions = ({ transactions }) => {
 			<table style={{ marginBottom: 0 }}>
 				<caption>
 					<div className='Flex'>
-						<div className='Title'>Transaction History for {searchParams.get('clientName')}</div>
+						<div className='Title'>Transaction History</div>
 						<div></div>
 					</div>
 				</caption>

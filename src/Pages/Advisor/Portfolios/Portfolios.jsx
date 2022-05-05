@@ -38,7 +38,7 @@ function getSpotPrice(holding, timePeriod = '') {
 				break
 			case 'YTD':
 				date.setDate(1)
-				date.setMonth(1)
+				date.setMonth(0)
 				break
 			case '1Y':
 				date.setFullYear(date.getFullYear() - 1)

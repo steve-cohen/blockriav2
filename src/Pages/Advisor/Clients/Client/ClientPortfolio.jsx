@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import './ClientPortfolio.css'
 
 function formatPercent(number) {
 	return (number / 100).toLocaleString('en-US', {
@@ -30,7 +29,7 @@ function getSpotPrice(holding, timePeriod = '') {
 				break
 			case 'YTD':
 				date.setDate(1)
-				date.setMonth(1)
+				date.setMonth(0)
 				break
 			case '1Y':
 				date.setFullYear(date.getFullYear() - 1)
@@ -58,7 +57,7 @@ const ClientPortfolio = ({ advisor, client }) => {
 	const clientId = searchParams.get('clientId')
 	const clientName = searchParams.get('clientName')
 
-	const [isLoading, setIsLoading] = useState(true)
+	const [isLoading, setIsLoading] = useState(false)
 	const [portfolio, setPortfolio] = useState({})
 	const [spotPrices, setSpotPrices] = useState({})
 
@@ -70,7 +69,10 @@ const ClientPortfolio = ({ advisor, client }) => {
 			`https://blockria.com/api/coinbase/clients/client/portfolio?advisorId=${advisor.idToken.payload.sub}&portfolioId=${portfolioId}`
 		)
 			.then(response => response.json())
-			.then(newPortfolio => setPortfolio(newPortfolio))
+			.then(newPortfolio => {
+				setIsLoading(false)
+				setPortfolio(newPortfolio)
+			})
 			.catch(alert)
 
 		setIsLoading(false)

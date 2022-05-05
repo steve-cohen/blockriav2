@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import coinbaseTokenNames from '../../coinbaseTokenNames.json'
 
 function formatPercent(number) {
@@ -23,14 +22,16 @@ function getSpotPrice(holding) {
 		.catch(console.log)
 }
 
-const ClientHoldings = ({ client }) => {
-	const [searchParams] = useSearchParams()
-
+const ClientHoldings = ({
+	client,
+	totalBalance,
+	totalBalanceNonTradeable,
+	setTotalBalance,
+	setTotalBalanceNonTradeable
+}) => {
 	const [holdings, setHoldings] = useState([])
 	const [holdingsNonTradeable, setHoldingsNonTradeable] = useState([])
 	const [spotPrices, setSpotPrices] = useState({})
-	const [totalBalance, setTotalBalance] = useState(0)
-	const [totalBalanceNonTradeable, setTotalBalanceNonTradeable] = useState(0)
 	const [totalPercent, setTotalPercent] = useState(1)
 	const [totalPercentNonTradeable, setTotalPercentNonTradeable] = useState(1)
 
@@ -160,7 +161,7 @@ const ClientHoldings = ({ client }) => {
 			<table>
 				<caption>
 					<div className='Flex'>
-						<div className='Title'>Current Holdings for {searchParams.get('clientName')}</div>
+						<div className='Title'>Current Holdings</div>
 					</div>
 				</caption>
 				<thead>
@@ -191,7 +192,7 @@ const ClientHoldings = ({ client }) => {
 				<table>
 					<caption>
 						<div className='Flex'>
-							<div className='Title'>Current Non-Tradeable Holdings for {searchParams.get('clientName')}</div>
+							<div className='Title'>Current Non-Tradeable Holdings</div>
 						</div>
 					</caption>
 					<thead>

@@ -1,5 +1,4 @@
 .Clients tbody tr:hover {
-	background: rgb(248, 249, 251);
 	cursor: pointer;
 }
 

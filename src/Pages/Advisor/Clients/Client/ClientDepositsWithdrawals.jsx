@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import './ClientDepositsWithdrawals.css'
 
 const ClientDepositsWithdrawals = () => {
 	const [searchParams] = useSearchParams()

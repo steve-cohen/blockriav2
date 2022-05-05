@@ -80,6 +80,10 @@ table caption .Flex .Title {
 	padding-left: 8px;
 }
 
+table tbody tr:hover {
+	background: rgb(248, 249, 251);
+}
+
 table tbody tr td,
 table tfoot tr td,
 table thead tr th {
