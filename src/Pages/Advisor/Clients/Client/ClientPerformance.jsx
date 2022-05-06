@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 const timePeriods = ['YTD', '1D', '1W', '1M', '3M', '1Y', 'ALL']
-// const timePeriods = ['ALL', '1Y', 'YTD', '3M', '1M', '1W', '1D']
-// const timePeriods = ['YTD', '1D', '1W', '1M', '3M', '1Y', 'ALL']
 
 function formatUSD(number) {
 	return number.toLocaleString('en-US', {
@@ -23,10 +21,7 @@ function formatPercent(number) {
 function GETSpotPrice(holding, startDate) {
 	return fetch(`https://blockria.com/v2/prices/${holding}-USD/spot?date=${startDate}`)
 		.then(response => response.json())
-		.then(response => {
-			console.log(Number(response.data.amount))
-			return Number(response.data.amount)
-		})
+		.then(response => Number(response.data.amount))
 		.catch(alert)
 }
 

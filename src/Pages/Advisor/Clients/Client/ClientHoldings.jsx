@@ -16,10 +16,45 @@ function formatUSD(number) {
 	})
 }
 
-function getSpotPrice(holding) {
-	return fetch(`https://blockria.com/v2/prices/${holding}-USD/spot`)
+function getSpotPrice(holding, timePeriod = '') {
+	let url = `https://blockria.com/v2/prices/${holding}-USD/spot`
+
+	if (timePeriod) {
+		let date = new Date()
+		switch (timePeriod) {
+			case '1D':
+				date.setDate(date.getDate() - 1)
+				break
+			case '1W':
+				date.setDate(date.getDate() - 7)
+				break
+			case '1M':
+				date.setMonth(date.getMonth() - 1)
+				break
+			case '3M':
+				date.setMonth(date.getMonth() - 3)
+				break
+			case 'YTD':
+				date.setDate(1)
+				date.setMonth(0)
+				break
+			case '1Y':
+				date.setFullYear(date.getFullYear() - 1)
+				break
+			default:
+				break
+		}
+		url += `?date=${date.toISOString().slice(0, 10)}`
+	}
+
+	return fetch(url)
 		.then(response => response.json())
-		.catch(console.log)
+		.then(response => {
+			const key = timePeriod ? `${response.data.base}-${timePeriod}` : response.data.base
+			const value = Number(response.data.amount)
+			return { [key]: value }
+		})
+		.catch(error => alert(error))
 }
 
 const ClientHoldings = ({
@@ -50,11 +85,19 @@ const ClientHoldings = ({
 		})
 
 		// [1.2] GET Spot Prices
-		const spotPricesResponse = await Promise.all(Object.keys(currencies).map(getSpotPrice))
+		const spotPricesResponse = await Promise.all([
+			...Object.keys(currencies).map(holding => getSpotPrice(holding)),
+			...Object.keys(currencies).map(c => getSpotPrice(c, '1D')),
+			...Object.keys(currencies).map(c => getSpotPrice(c, '1W')),
+			...Object.keys(currencies).map(c => getSpotPrice(c, '1M')),
+			...Object.keys(currencies).map(c => getSpotPrice(c, '3M')),
+			...Object.keys(currencies).map(c => getSpotPrice(c, 'YTD')),
+			...Object.keys(currencies).map(c => getSpotPrice(c, '1Y'))
+		])
 
 		// [1.3] Format Spot Prices
-		let newSpotPrices = { USD: 1 }
-		spotPricesResponse.forEach(({ data }) => (newSpotPrices[data.base] = Number(data.amount)))
+		let newSpotPrices = { USD: 1, 'USD-1D': 1, 'USD-1W': 1, 'USD-1M': 1, 'USD-3M': 1, 'USD-YTD': 1, 'USD-1Y': 1 }
+		spotPricesResponse.forEach(newSpotPrice => (newSpotPrices = { ...newSpotPrice, ...newSpotPrices }))
 		console.log({ newSpotPrices })
 
 		// [2.0] Separate Tradeable and NonTradeable Accounts
@@ -64,7 +107,6 @@ const ClientHoldings = ({
 			if (holding.type !== 'vault' && holding.balance.currency !== 'ETH2') newHoldings.push(holding)
 			else newHoldingsNonTradeable.push(holding)
 		})
-		console.log(newHoldings)
 
 		// [3.0] Calculate Tradeable Total Balance and NonTradeable Total Balance
 		let newTotalBalance = 0
@@ -79,7 +121,6 @@ const ClientHoldings = ({
 			newTotalBalanceNonTradeable += newBalance
 			newHoldingsNonTradeable[index].nativeBalance = newBalance
 		})
-		console.log(newTotalBalance)
 
 		// [4.0] Calculate Tradeable Total Percent and NonTradeable Total Percent
 		let newTotalPercent = 0
@@ -96,7 +137,6 @@ const ClientHoldings = ({
 			newTotalPercentNonTradeable += percent
 			newHoldingsNonTradeable[index].nativePercent = percent
 		})
-		console.log(newTotalPercent)
 
 		// [5.0] Sort Accounts by Native Percent
 		newHoldings = newHoldings.sort((a, b) => b.nativePercent - a.nativePercent)
@@ -112,23 +152,11 @@ const ClientHoldings = ({
 		setTotalPercentNonTradeable(newTotalPercentNonTradeable)
 	}
 
-	function renderHolding({
-		allow_deposits,
-		allow_withdrawals,
-		balance,
-		created_at,
-		currency,
-		id,
-		nativeBalance,
-		nativePercent,
-		type,
-		updated_at
-	}) {
+	function renderHolding({ balance, currency, id, nativeBalance, nativePercent }) {
 		return (
 			<tr key={`Holding ${id}`}>
 				<td className='Bold AlignRight'>{formatPercent(nativePercent)}</td>
 				<td className='AlignRight'>{formatUSD(nativeBalance)}</td>
-
 				<td className='Bold'>
 					{balance.currency !== 'USD' ? (
 						<a
@@ -146,14 +174,24 @@ const ClientHoldings = ({
 				</td>
 				<td>{currency.name}</td>
 				<td>{balance.amount}</td>
-				<td className='Break'>{formatUSD(spotPrices[balance.currency] || 0)}</td>
-				<td>{allow_deposits ? 'Yes' : 'No'}</td>
-				<td>{allow_withdrawals ? 'Yes' : 'No'}</td>
-				<td style={{ textTransform: 'capitalize' }}>{type}</td>
-				<td>{updated_at.slice(0, 10)}</td>
-				<td>{created_at.slice(0, 10)}</td>
+				<td className='AlignRight'>{formatUSD(spotPrices[balance.currency] || 0)}</td>
+				{renderHoldingPercentDifference(balance.currency, '1D')}
+				{renderHoldingPercentDifference(balance.currency, '1W')}
+				{renderHoldingPercentDifference(balance.currency, '1M')}
+				{renderHoldingPercentDifference(balance.currency, '3M')}
+				{renderHoldingPercentDifference(balance.currency, 'YTD')}
+				{renderHoldingPercentDifference(balance.currency, '1Y')}
 			</tr>
 		)
+	}
+
+	function renderHoldingPercentDifference(holding, timePeriod) {
+		if (holding === 'USD') return <td />
+
+		const diff = (spotPrices[holding] - spotPrices[`${holding}-${timePeriod}`]) / spotPrices[`${holding}-${timePeriod}`]
+
+		if (diff < 0) return <td className='AlignRight Red'>{formatPercent(diff)}</td>
+		else return <td className='AlignRight Green'>+{formatPercent(diff)}</td>
 	}
 
 	return (
@@ -172,11 +210,12 @@ const ClientHoldings = ({
 						<th>NAME</th>
 						<th>AMOUNT</th>
 						<th>SPOT PRICE</th>
-						<th>ALLOW DEPOSITS</th>
-						<th>ALLOW WITHDRAWALS</th>
-						<th>TYPE</th>
-						<th>LAST TRANSACTION</th>
-						<th>CREATED</th>
+						<th className='AlignRight Break'>1D</th>
+						<th className='AlignRight'>1W</th>
+						<th className='AlignRight'>1M</th>
+						<th className='AlignRight'>3M</th>
+						<th className='AlignRight'>YTD</th>
+						<th className='AlignRight'>1Y</th>
 					</tr>
 				</thead>
 				<tbody>{holdings.map(renderHolding)}</tbody>
@@ -203,11 +242,12 @@ const ClientHoldings = ({
 							<th>NAME</th>
 							<th>AMOUNT</th>
 							<th>SPOT PRICE</th>
-							<th>ALLOW DEPOSITS</th>
-							<th>ALLOW WITHDRAWALS</th>
-							<th>TYPE</th>
-							<th>LAST TRANSACTION</th>
-							<th>CREATED</th>
+							<th className='AlignRight Break'>1D</th>
+							<th className='AlignRight'>1W</th>
+							<th className='AlignRight'>1M</th>
+							<th className='AlignRight'>3M</th>
+							<th className='AlignRight'>YTD</th>
+							<th className='AlignRight'>1Y</th>
 						</tr>
 					</thead>
 					<tbody>{holdingsNonTradeable.map(renderHolding)}</tbody>

@@ -31,7 +31,6 @@ const Invites = ({ advisor }) => {
 	const [email, setEmail] = useState('')
 	const [isLoading, setIsLoading] = useState(false)
 	const [isResent, setIsResent] = useState([])
-	const [isSent, setIsSent] = useState(false)
 	const [message, setMessage] = useState(defaultMessage(advisor))
 	const [pendingInvites, setPendingInvites] = useState([])
 	const [subject, setSubject] = useState(defaultSubject(advisor))
@@ -75,12 +74,6 @@ const Invites = ({ advisor }) => {
 		await getPendingInvites()
 	}
 
-	function handleSendAnotherInvite() {
-		setEmail('')
-		setIsLoading(false)
-		setIsSent(false)
-	}
-
 	async function handleSubmit(e) {
 		e.preventDefault()
 		setIsLoading(true)
@@ -114,10 +107,12 @@ const Invites = ({ advisor }) => {
 			body: JSON.stringify(inviteOptions)
 		})
 
-		setIsLoading(false)
-		setIsSent(true)
-
 		await getPendingInvites()
+
+		setEmail('')
+		setIsLoading(false)
+		setMessage(defaultMessage(advisor))
+		setSubject(defaultSubject(advisor))
 	}
 
 	function renderPendingInvite(pendingInvite, index) {
@@ -202,16 +197,11 @@ const Invites = ({ advisor }) => {
 					<textarea name='message' onChange={e => setMessage(e.target.value)} required value={message} />
 					<input
 						className='SendEmail'
-						disabled={isLoading || isSent ? true : false}
-						style={isLoading || isSent ? { cursor: 'default', textDecoration: 'none' } : {}}
+						disabled={isLoading ? true : false}
+						style={isLoading ? { cursor: 'default', textDecoration: 'none' } : {}}
 						type='submit'
-						value={isSent ? 'Sent!' : isLoading ? 'Loading...' : 'Send Email Invite'}
+						value={isLoading ? 'Loading...' : 'Send Email Invite'}
 					/>
-					{isSent && (
-						<button className='SendAnotherEmail' onClick={() => handleSendAnotherInvite()}>
-							Send Another Invite
-						</button>
-					)}
 				</form>
 			</div>
 			<table>

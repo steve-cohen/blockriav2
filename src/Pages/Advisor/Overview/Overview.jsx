@@ -82,7 +82,12 @@ const Overview = ({ advisor }) => {
 				)
 
 				console.log(newPerformance)
-				console.log(Object.keys(newTableHeaders).sort())
+
+				// Add an Initial $0.00 Data Point for the Graph
+				let startingPerformance = new Date(newPerformance[0].date)
+				startingPerformance = startingPerformance.setDate(startingPerformance.getDate() - 1)
+				startingPerformance = new Date(startingPerformance).toISOString().slice(0, 10)
+				newPerformance.unshift({ date: startingPerformance, TotalBalance: 0 })
 
 				// Set Data
 				setPerformance(newPerformance)
@@ -252,7 +257,13 @@ const Overview = ({ advisor }) => {
 						<YAxis dataKey='TotalBalance' orientation='right' />
 						<Tooltip className='ToolTip' isAnimationActive={false} />
 						<Text />
-						<Area dataKey='TotalBalance' isAnimationActive={false} stroke='rgb(18, 25, 44)' fill='url(#Area)' />
+						<Area
+							dataKey='TotalBalance'
+							fill='url(#Area)'
+							isAnimationActive={false}
+							stroke='rgb(18, 25, 44)'
+							type='linear'
+						/>
 					</AreaChart>
 				</ResponsiveContainer>
 			</div>
