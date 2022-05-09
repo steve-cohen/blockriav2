@@ -41,17 +41,19 @@ const Billing = ({ advisor }) => {
 		billingType,
 		billingUpdatedAt
 	}) {
-		const renderBillingAmount =
-			billingType === 'Assets Under Management' ? `${billingAmount} bps` : formatUSD(billingAmount)
+		let renderBillingAmount = `${billingAmount} bps`
+		if (billingType === 'Fixed') renderBillingAmount = formatUSD(billingAmount)
 
 		return (
 			<tr key={`Billing Plan ${billingId}`}>
 				<td className='Bold'>{billingName}</td>
 				<td>{billingType}</td>
 				<td className='AlignRight' style={{ textTransform: 'none' }}>
-					{renderBillingAmount}
+					{renderBillingAmount} / mo
 				</td>
-				<td className='AlignRight'>{billingPlatformFee} bps</td>
+				<td className='AlignRight' style={{ textTransform: 'none' }}>
+					{billingPlatformFee} bps / mo
+				</td>
 				<td className='AlignRight Bold'>
 					{billingCountTotals[billingId] !== 1
 						? `${billingCountTotals[billingId] || 0} Clients`

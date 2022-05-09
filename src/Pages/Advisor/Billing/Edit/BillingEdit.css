@@ -51,7 +51,7 @@
 	text-decoration: underline;
 }
 
-.BillingEdit form .CreatePlan {
+.BillingEdit form .Continue {
 	background: rgb(18, 25, 44);
 	border: none;
 	border-radius: 2px;
@@ -65,7 +65,7 @@
 	width: fit-content;
 }
 
-.BillingEdit form .CreatePlan:hover {
+.BillingEdit form .Continue:hover {
 	text-decoration: underline;
 }
 
@@ -74,4 +74,11 @@
 	font-size: 22px;
 	font-weight: 500;
 	margin: 0 0 24px 0;
+}
+
+.BillingEditConfirm form input,
+.BillingEditConfirm form select {
+	border: none;
+	border-bottom: 1px solid rgb(213, 214, 216);
+	padding-left: 2px;
 }
