@@ -27,7 +27,6 @@ const Billing = ({ advisor }) => {
 					if (billingId in newBillingCountTotals) newBillingCountTotals[billingId] += 1
 					else newBillingCountTotals[billingId] = 1
 				})
-				console.log(newBillingCountTotals)
 				setBillingCountTotals(newBillingCountTotals)
 			})
 			.catch(alert)
@@ -82,8 +81,8 @@ const Billing = ({ advisor }) => {
 					<tr style={{ whiteSpace: 'nowrap' }}>
 						<th>NAME</th>
 						<th>TYPE</th>
-						<th>FIRM FEE</th>
-						<th>PLATFORM FEE</th>
+						<th className='AlignRight'>FIRM FEE</th>
+						<th className='AlignRight'>PLATFORM FEE</th>
 						<th className='AlignRight Break'>ASSIGNED TO</th>
 						<th>EDIT</th>
 						<th>LAST EDIT</th>

@@ -69,6 +69,25 @@
 	text-decoration: underline;
 }
 
+.BillingEdit form .Delete {
+	background: #5d0c0c;
+	border: none;
+	border-radius: 2px;
+	color: rgb(248, 249, 251);
+	cursor: pointer;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 20px;
+	margin-top: 36px;
+	padding: 6px 11px;
+	width: fit-content;
+}
+
+.BillingEdit form .Delete:hover {
+	text-decoration: underline;
+}
+
 .BillingEdit form .Title {
 	color: rgb(26, 27, 29);
 	font-size: 22px;
@@ -80,5 +99,6 @@
 .BillingEditConfirm form select {
 	border: none;
 	border-bottom: 1px solid rgb(213, 214, 216);
+	border-radius: 0;
 	padding-left: 2px;
 }
