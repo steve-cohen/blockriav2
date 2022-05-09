@@ -1,4 +1,4 @@
-.Invites form {
+.BillingEdit form {
 	color: rgb(64, 68, 82);
 	display: block;
 	font-family: -apple-system, 'system-ui', Roboto, 'Helvetica Neue', sans-serif !important;
@@ -9,13 +9,13 @@
 	width: 400px;
 }
 
-.Invites form div {
+.BillingEdit form div {
 	font-weight: 500;
 	margin: 24px 0 6px 2px;
 }
 
-.Invites form input,
-.Invites form textarea {
+.BillingEdit form input,
+.BillingEdit form textarea {
 	all: initial;
 	all: inherit;
 	border: 1px solid rgb(213, 214, 216);
@@ -25,12 +25,33 @@
 	width: 100%;
 }
 
-.Invites form textarea {
+.BillingEdit form select {
+	all: inherit;
+	border: 1px solid rgb(213, 214, 216);
+	border-radius: 2px;
+	line-height: 20px;
+	padding: 5px 10px;
+	width: 100%;
+}
+
+.BillingEdit form textarea {
 	max-height: 400px;
 	min-height: 260px;
 }
 
-.Invites form .SendEmail {
+.BillingEdit form .Cancel {
+	cursor: pointer;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 400;
+	padding: 8px 16px;
+}
+
+.BillingEdit form .Cancel:hover {
+	text-decoration: underline;
+}
+
+.BillingEdit form .CreatePlan {
 	background: rgb(18, 25, 44);
 	border: none;
 	border-radius: 2px;
@@ -39,39 +60,16 @@
 	display: inline-block;
 	font-size: 14px;
 	font-weight: 500;
-	margin-top: 24px;
+	margin-top: 36px;
 	padding: 6px 11px;
 	width: fit-content;
 }
 
-.Invites form .SendEmail:hover {
+.BillingEdit form .CreatePlan:hover {
 	text-decoration: underline;
 }
 
-.Invites table {
-	float: right;
-	margin-left: 120px;
-	width: 50%;
-}
-
-.Invites table caption .Flex .Title {
-	color: rgb(26, 27, 29);
-	font-size: 22px;
-	font-weight: 500;
-	margin-bottom: 2px;
-}
-
-.Invites table tbody tr td {
-	text-transform: none;
-}
-
-.Invites .Blue:hover,
-.Invites .Red:hover {
-	cursor: pointer;
-	text-decoration: underline;
-}
-
-.Invites .Title {
+.BillingEdit form .Title {
 	color: rgb(26, 27, 29);
 	font-size: 22px;
 	font-weight: 500;

@@ -3,6 +3,7 @@ import { Link, Navigate, Route, Routes } from 'react-router-dom'
 
 import Agreements from './Agreements/Agreements'
 import Billing from './Billing/Billing'
+import BillingEdit from './Billing/Edit/BillingEdit'
 import Client from './Clients/Client/Client'
 import Clients from './Clients/Clients'
 import ClientOnboarding from './ClientOnboarding/ClientOnboarding'
@@ -54,6 +55,7 @@ const Advisor = () => {
 								<Route path='' element={<Overview advisor={advisor} />} />
 								<Route path='agreements' element={<Agreements advisor={advisor} />} />
 								<Route path='billing' element={<Billing advisor={advisor} />} />
+								<Route path='billing/edit' element={<BillingEdit advisor={advisor} />} />
 								<Route
 									path='clients'
 									element={<Clients advisor={advisor} portfolios={portfolios} setPortfolios={setPortfolios} />}
