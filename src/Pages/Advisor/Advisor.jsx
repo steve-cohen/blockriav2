@@ -13,6 +13,7 @@ import Invites from './Invites/Invites'
 import Navigation from './Navigation/Navigation'
 import Overview from './Overview/Overview'
 import Portfolios from './Portfolios/Portfolios'
+import SetBilling from './Clients/Client/SetBilling/SetBilling'
 import SetPortfolio from './Clients/Client/SetPortfolio/SetPortfolio'
 import Settings from './Settings/Settings'
 import SignIn from './SignIn/SignIn'
@@ -30,7 +31,6 @@ import TaxEvents from './Clients/Client/TaxEvents/TaxEvents'
 const Advisor = () => {
 	// Advisor Data
 	const [advisor, setAdvisor] = useState(JSON.parse(localStorage.getItem('advisor')) || demoAdvisorEmpty)
-	const [client, setClient] = useState(demoClientEmpty)
 	const [portfolios, setPortfolios] = useState([])
 
 	return (
@@ -61,11 +61,12 @@ const Advisor = () => {
 									element={<Clients advisor={advisor} portfolios={portfolios} setPortfolios={setPortfolios} />}
 								/>
 								<Route path='clients/client' element={<Client advisor={advisor} />} />
-								<Route path='clients/client/deposit' element={<Deposit advisor={advisor} client={client} />} />
+								<Route path='clients/client/deposit' element={<Deposit advisor={advisor} />} />
+								<Route path='clients/client/setbilling' element={<SetBilling advisor={advisor} />} />
 								<Route path='clients/client/setportfolio' element={<SetPortfolio advisor={advisor} />} />
 								<Route path='clients/client/taxevents' element={<TaxEvents />} />
 								<Route path='clients/client/transactions' element={<Transactions />} />
-								<Route path='clients/client/withdrawal' element={<Withdrawal advisor={advisor} client={client} />} />
+								<Route path='clients/client/withdrawal' element={<Withdrawal advisor={advisor} />} />
 								<Route path='invites' element={<Invites advisor={advisor} />} />
 								<Route
 									path='portfolios'

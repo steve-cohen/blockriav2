@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import ClientHoldings from './ClientHoldings'
+import ClientBilling from './ClientBilling'
 import ClientDepositsWithdrawals from './ClientDepositsWithdrawals'
+import ClientHoldings from './ClientHoldings'
 import ClientPerformance from './ClientPerformance'
 import ClientPortfolio from './ClientPortfolio'
 import ClientTransactions from './ClientTransactions'
@@ -47,6 +48,7 @@ const Client = ({ advisor }) => {
 				setTotalBalanceNonTradeable={setTotalBalanceNonTradeable}
 			/>
 			<ClientPortfolio advisor={advisor} client={client} />
+			<ClientBilling advisor={advisor} client={client} />
 			<ClientDepositsWithdrawals advisor={advisor} />
 			<ClientTransactions transactions={transactions} />
 		</div>

@@ -166,24 +166,10 @@ const ClientPortfolio = ({ advisor, client }) => {
 				{!isLoading && portfolioId ? (
 					<tr>
 						<td>
-							<span className='Bold'>{portfolio.portfolioName} </span>(
-							<Link
-								to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}`}
-								style={{ textTransform: 'none' }}
-							>
-								change
-							</Link>
-							)
+							<span className='Bold'>{portfolio.portfolioName}</span>
 						</td>
 						<td className='Break'>
-							<span className='Bold'>{rebalanceFrequency} Rebalancing </span>(
-							<Link
-								to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}`}
-								style={{ textTransform: 'none' }}
-							>
-								change
-							</Link>
-							)
+							<span className='Bold'>{rebalanceFrequency} Rebalancing</span>
 						</td>
 						{renderPortfolioPerformance(portfolio, '1D')}
 						{renderPortfolioPerformance(portfolio, '1W')}

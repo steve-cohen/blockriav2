@@ -95,26 +95,26 @@ const BillingEdit = ({ advisor }) => {
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ advisorId: advisor.idToken.payload.sub, billingId: searchParams.get('billingId') })
 			}
-			console.log(deleteOptions)
+
 			await fetch('https://blockria.com/api/billing/edit', deleteOptions)
 				.then(() => navigate('/advisor/billing'))
 				.catch(alert)
 		} else {
 			const billingOptions = {
-				advisorId: advisor.idToken.payload.sub,
-				billingAmount,
-				billingId: searchParams.get('billingId') || Date.now(),
-				billingName,
-				billingPlatformFee,
-				billingType,
-				billingUpdatedAt: Date.now()
-			}
-
-			await fetch('https://blockria.com/api/billing/edit', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(billingOptions)
-			})
+				body: JSON.stringify({
+					advisorId: advisor.idToken.payload.sub,
+					billingAmount,
+					billingId: searchParams.get('billingId') || Date.now(),
+					billingName,
+					billingPlatformFee,
+					billingType,
+					billingUpdatedAt: Date.now()
+				})
+			}
+
+			await fetch('https://blockria.com/api/billing/edit', billingOptions)
 				.then(() => navigate('/advisor/billing'))
 				.catch(alert)
 		}
