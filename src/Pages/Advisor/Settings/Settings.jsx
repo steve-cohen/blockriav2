@@ -29,7 +29,7 @@ const Settings = ({ advisor }) => {
 	function getSubscription() {
 		return fetch(`https://blockria.com/api/stripe/subscription?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
-			.catch(console.log)
+			.catch(alert)
 	}
 
 	function renderBillingPortal() {

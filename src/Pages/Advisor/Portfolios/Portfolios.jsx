@@ -23,6 +23,11 @@ function getSpotPrice(holding, timePeriod = '') {
 
 	if (timePeriod) {
 		let date = new Date()
+		date.setHours(0)
+		date.setMinutes(0)
+		date.setSeconds(0)
+		date.setMilliseconds(0)
+
 		switch (timePeriod) {
 			case '1D':
 				date.setDate(date.getDate() - 1)
@@ -60,9 +65,10 @@ function getSpotPrice(holding, timePeriod = '') {
 }
 
 const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
-	const [showPortfolios, setShowPortfolios] = useState([])
+	const [isLoading, setIsLoading] = useState(true)
 	const [performances, setPerformances] = useState({})
 	const [portfolioCountTotals, setPortfolioCountTotals] = useState({})
+	const [showPortfolios, setShowPortfolios] = useState([])
 	const [spotPrices, setSpotPrices] = useState({})
 
 	useEffect(async () => {
@@ -124,11 +130,12 @@ const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
 		console.log({ newPerformances })
 
 		// [3.0] Set State
-		setShowPortfolios(newPortfolios.map(() => false))
+		setIsLoading(false)
 		setPerformances(newPerformances)
-		setSpotPrices(newSpotPrices)
 		setPortfolioCountTotals(newPortfolioCountTotals)
 		setPortfolios(newPortfolios)
+		setShowPortfolios(newPortfolios.map(() => false))
+		setSpotPrices(newSpotPrices)
 	}, [])
 
 	function handleShowPortfolio(index) {
@@ -261,14 +268,26 @@ const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
 					<th>EDIT</th>
 				</tr>
 			</thead>
-			<tbody>{portfolios.map(renderPortfolios)}</tbody>
-			<tfoot>
-				<tr>
-					<td colSpan={3}>
-						<Link to='/advisor/portfolios/edit'>+ Create Portfolio</Link>
-					</td>
-				</tr>
-			</tfoot>
+			{isLoading ? (
+				<tbody>
+					<tr>
+						<td style={{ border: 'none' }}>
+							<div className='Loading'>Loading...</div>
+						</td>
+					</tr>
+				</tbody>
+			) : (
+				<>
+					<tbody>{portfolios.map(renderPortfolios)}</tbody>
+					<tfoot>
+						<tr>
+							<td colSpan={3}>
+								<Link to='/advisor/portfolios/edit'>+ Create Portfolio</Link>
+							</td>
+						</tr>
+					</tfoot>
+				</>
+			)}
 		</table>
 	)
 }

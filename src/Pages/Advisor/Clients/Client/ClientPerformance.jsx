@@ -39,6 +39,11 @@ const ClientPerformance = ({ totalBalance, totalBalanceNonTradeable, transaction
 	async function calculatePerformance(timePeriod) {
 		// [1.0] Calculate Time Period
 		let startDate = new Date()
+		startDate.setHours(0)
+		startDate.setMinutes(0)
+		startDate.setSeconds(0)
+		startDate.setMilliseconds(0)
+
 		switch (timePeriod) {
 			case '1D':
 				startDate.setDate(startDate.getDate() - 1)
@@ -138,8 +143,7 @@ const ClientPerformance = ({ totalBalance, totalBalanceNonTradeable, transaction
 		const endBalance = totalBalance + totalBalanceNonTradeable
 		const performanceDollars = endBalance - netContributions - startingBalance
 		const performancePercent =
-			(endBalance - (startingBalance + netContributions)) / (startingBalance + netContributions)
-		// const performancePercent = (endBalance - startingBalance) / startingBalance
+			(100 * (endBalance - (startingBalance + netContributions))) / (startingBalance + netContributions)
 
 		return (
 			<tr
@@ -190,7 +194,6 @@ const ClientPerformance = ({ totalBalance, totalBalanceNonTradeable, transaction
 					<th className='AlignRight'>WITHDRAWALS</th>
 					<th className='AlignRight'>NET CONTRIBUTIONS</th>
 					<th className='AlignRight'>ENDING BALANCE</th>
-					{/* <th className='AlignRight'>EARNINGS</th> */}
 					<th className='AlignRight'>PERFORMANCE ($)</th>
 					<th className='AlignRight'>PERFORMANCE (%)</th>
 				</tr>

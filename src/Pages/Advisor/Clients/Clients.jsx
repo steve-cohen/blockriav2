@@ -53,21 +53,27 @@ function renderPortfolioAssign(clientName, clientId) {
 const Clients = ({ advisor, portfolios, setPortfolios }) => {
 	const navigate = useNavigate()
 	const [clients, setClients] = useState([])
+	const [isLoading, setIsLoading] = useState(true)
 
-	useEffect(() => {
-		setClients([])
+	useEffect(async () => {
 		setPortfolios([])
+		await Promise.all([GETClients(), GETPortfolios()])
+		await setIsLoading(false)
+	}, [])
 
-		fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisor.idToken.payload.sub}`)
+	function GETClients() {
+		return fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.then(handleNewClients)
 			.catch(error => alert(error))
+	}
 
-		fetch(`https://blockria.com/api/portfolios?advisorId=${advisor.idToken.payload.sub}`)
+	function GETPortfolios() {
+		return fetch(`https://blockria.com/api/portfolios?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.then(setPortfolios)
 			.catch(error => alert(error))
-	}, [])
+	}
 
 	function handeClient(e, clientId, clientName) {
 		e.preventDefault()
@@ -182,8 +188,20 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 					<th>JOINED</th>
 				</tr>
 			</thead>
-			<tbody>{clients.map(renderClient)}</tbody>
-			{renderTotals()}
+			{isLoading ? (
+				<tbody>
+					<tr>
+						<td style={{ border: 'none' }}>
+							<div className='Loading'>Loading...</div>
+						</td>
+					</tr>
+				</tbody>
+			) : (
+				<>
+					<tbody>{clients.map(renderClient)}</tbody>
+					{renderTotals()}
+				</>
+			)}
 		</table>
 	)
 }

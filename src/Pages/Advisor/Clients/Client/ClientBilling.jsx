@@ -18,7 +18,6 @@ const ClientBilling = ({ advisor, client }) => {
 	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(async () => {
-		console.log(client.billingId)
 		if (client.billingId) {
 			await fetch(
 				`https://blockria.com/api/coinbase/clients/client/billing?advisorId=${advisorId}&billingId=${client.billingId}`

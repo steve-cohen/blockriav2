@@ -14,6 +14,11 @@ function getSpotPrice(holding, timePeriod = '') {
 
 	if (timePeriod) {
 		let date = new Date()
+		date.setHours(0)
+		date.setMinutes(0)
+		date.setSeconds(0)
+		date.setMilliseconds(0)
+
 		switch (timePeriod) {
 			case '1D':
 				date.setDate(date.getDate() - 1)
