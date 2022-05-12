@@ -55,7 +55,7 @@ table caption .Flex {
 	margin-bottom: 9px;
 }
 
-table caption .Flex .Button {
+.Button {
 	background: rgb(18, 25, 44);
 	border: none;
 	border-radius: 2px;
@@ -168,4 +168,109 @@ table .Red {
 	100% {
 		background-position: 385px 0;
 	}
+}
+
+.NewForm form {
+	color: rgb(64, 68, 82);
+	display: block;
+	font-family: -apple-system, 'system-ui', Roboto, 'Helvetica Neue', sans-serif !important;
+	font-feature-settings: 'pnum';
+	font-variant-numeric: proportional-nums;
+	font-size: 14px;
+	font-weight: 400;
+	width: 400px;
+}
+
+.NewForm form div {
+	font-weight: 500;
+	margin: 24px 0 6px 2px;
+}
+
+.NewForm form input,
+.NewForm form textarea {
+	all: initial;
+	all: inherit;
+	border: 1px solid rgb(213, 214, 216);
+	border-radius: 2px;
+	line-height: 20px;
+	padding: 5px 10px;
+	width: 100%;
+}
+
+.NewForm form select {
+	all: inherit;
+	border: 1px solid rgb(213, 214, 216);
+	border-radius: 2px;
+	line-height: 20px;
+	padding: 5px 10px;
+	width: 100%;
+}
+
+.NewForm form textarea {
+	max-height: 400px;
+	min-height: 260px;
+}
+
+.NewForm form .Cancel {
+	cursor: pointer;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 400;
+	padding: 8px 16px;
+}
+
+.NewForm form .Cancel:hover {
+	text-decoration: underline;
+}
+
+.NewForm form .Continue {
+	background: rgb(18, 25, 44);
+	border: none;
+	border-radius: 2px;
+	color: rgb(248, 249, 251);
+	cursor: pointer;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 500;
+	margin-top: 36px;
+	padding: 6px 11px;
+	width: fit-content;
+}
+
+.NewForm form .Continue:hover {
+	text-decoration: underline;
+}
+
+.NewForm form .Delete {
+	background: #5d0c0c;
+	border: none;
+	border-radius: 2px;
+	color: rgb(248, 249, 251);
+	cursor: pointer;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 20px;
+	margin-top: 36px;
+	padding: 6px 11px;
+	width: fit-content;
+}
+
+.NewForm form .Delete:hover {
+	text-decoration: underline;
+}
+
+.NewForm form .Title {
+	color: rgb(26, 27, 29);
+	font-size: 22px;
+	font-weight: 500;
+	margin: 0 0 24px 0;
+}
+
+.NewFormConfirm form input,
+.NewFormConfirm form select {
+	border: none;
+	border-bottom: 1px solid rgb(213, 214, 216);
+	border-radius: 0;
+	padding-left: 2px;
 }

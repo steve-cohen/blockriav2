@@ -1,0 +1,158 @@
+.Home {
+	overflow: hidden auto;
+	width: 100%;
+}
+
+.Home .Hero {
+	background: rgb(255, 255, 255);
+	display: flex;
+	flex-wrap: wrap;
+	height: 75vh;
+	justify-content: center;
+	padding-top: calc(25vh - 60px);
+}
+
+.Home .Hero .Description {
+	font-size: 15px;
+	margin: 0 36px;
+	width: 360px;
+}
+
+.Home .Hero .Description .SubTitle {
+	margin: 6px 0;
+	opacity: 0.7;
+}
+
+.Home .Hero .Description .Title {
+	font-family: 'Playfair Display', serif;
+	font-size: 42px;
+	margin-bottom: 24px;
+}
+
+.Home .Hero .Features {
+	width: 360px;
+}
+
+.Home .Hero .Features div {
+	border-bottom: 1px solid rgb(173, 174, 176);
+	color: inherit;
+	cursor: default;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 500;
+	letter-spacing: 0.5px;
+	line-height: 36px;
+	padding: 16px 8px 0 8px;
+	opacity: 0.8;
+	transition: 0.4s;
+	width: 100%;
+}
+
+.Home .Hero .Features div:hover {
+	border-bottom: 1px solid black;
+	color: rgb(0, 0, 0);
+	opacity: 1;
+}
+
+.Home .Hero .Features .ToSignIn {
+	color: inherit;
+	font-size: 14px;
+	opacity: 0.8;
+	padding: 8px 16px;
+	transition: 0.4s;
+}
+
+.Home .Hero .Features .ToSignIn:hover {
+	color: rgb(0, 0, 0);
+}
+
+.Home .Hero .Features .ToSignUp {
+	background: rgb(18, 25, 44);
+	border: 1px solid rgb(18, 25, 44);
+	color: rgb(248, 249, 251);
+	display: inline-block;
+	font-family: inherit;
+	font-size: 14px;
+	letter-spacing: 0.5px;
+	margin-top: 48px;
+	padding: 8px 12px;
+	text-decoration: none;
+	transition: 0.4s;
+	width: fit-content;
+}
+
+.Home .Hero .Features .ToSignUp:hover {
+	background: rgb(255, 255, 255);
+	color: rgb(48, 48, 52);
+	cursor: pointer;
+}
+
+.Home .Menu {
+	align-items: center;
+	background: rgb(18, 25, 44);
+	color: rgb(248, 249, 251);
+	display: flex;
+	height: 60px;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.Home .Menu a {
+	color: rgb(248, 249, 251);
+	text-decoration: none;
+}
+
+.Home .Menu .Logo {
+	border: 2px solid rgb(248, 249, 251);
+	border-radius: 6px;
+	display: inline-block;
+	line-height: 28px;
+	margin: 0 19px 0 14px;
+	text-align: center;
+	text-decoration: none;
+	vertical-align: middle;
+	width: 28px;
+}
+
+.Home .Menu .Name {
+	border-right: 1px solid rgb(248, 249, 251);
+	display: inline-block;
+	font-family: 'Playfair Display', serif;
+	font-size: 21px;
+	margin-right: 22px;
+	padding-right: 48px;
+	vertical-align: middle;
+}
+
+.Home .Menu .ToSignUp {
+	background: rgb(18, 25, 44);
+	border: 1px solid rgb(248, 249, 251);
+	color: rgb(248, 249, 251);
+	display: inline-block;
+	font-family: inherit;
+	font-size: 14px;
+	letter-spacing: 0.5px;
+	margin: 0 19px;
+	padding: 8px 12px;
+	text-decoration: none;
+	transition: 0.4s;
+	vertical-align: middle;
+	width: fit-content;
+}
+
+.Home .Menu .ToSignUp:hover {
+	background: rgb(255, 255, 255);
+	color: rgb(48, 48, 52);
+}
+
+.Home .Menu .ToSignIn {
+	display: inline-block;
+	font-size: 14px;
+	letter-spacing: 0.5px;
+	margin: 0 12px;
+	vertical-align: middle;
+}
+
+.Home .Menu .ToSignIn:hover {
+	text-decoration: underline;
+}

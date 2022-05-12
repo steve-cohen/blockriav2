@@ -49,7 +49,7 @@ const SetBilling = ({ advisor }) => {
 		if (exisitingBillingId) {
 			await fetch(`https://blockria.com/api/billing/edit?advisorId=${advisorId}&billingId=${exisitingBillingId}`)
 				.then(response => response.json())
-				.then(setBillingPlan)
+				.then(newBillingPlan => setBillingPlan(JSON.stringify(newBillingPlan)))
 				.catch(alert)
 		}
 	}

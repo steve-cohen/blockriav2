@@ -130,7 +130,7 @@ const BillingEdit = ({ advisor }) => {
 	}
 
 	return (
-		<div className={`BillingEdit ${isConfirming ? 'BillingEditConfirm' : ''}`}>
+		<div className={`NewForm ${isConfirming ? 'NewFormConfirm' : ''}`}>
 			<div style={{ float: 'left', marginBottom: '48px' }}>
 				<form onSubmit={handleSubmit}>
 					<div className='Title'>{searchParams.get('billingId') ? 'Edit' : 'New'} Billing Plan</div>

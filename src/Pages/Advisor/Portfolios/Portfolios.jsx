@@ -78,20 +78,17 @@ const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
 		const newClients = await fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.catch(error => alert(error))
-		console.log({ newClients })
 
 		let newPortfolioCountTotals = {}
 		newClients.forEach(({ portfolioId }) => {
 			if (portfolioId in newPortfolioCountTotals) newPortfolioCountTotals[portfolioId] += 1
 			else newPortfolioCountTotals[portfolioId] = 1
 		})
-		console.log({ newPortfolioCountTotals })
 
 		// [1.0] GET Portfolios
 		const newPortfolios = await fetch(`https://blockria.com/api/portfolios?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.catch(error => alert(error))
-		console.log({ newPortfolios })
 
 		// [2.0] GET Spot Prices
 		// [2.1] Format Currencies
@@ -101,7 +98,6 @@ const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
 				if (holding !== 'USD') currencies[holding] = true
 			})
 		})
-		console.log({ currencies })
 
 		// [2.2] GET Spot Prices
 		const spotPricesResponse = await Promise.all([
@@ -113,12 +109,10 @@ const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
 			...Object.keys(currencies).map(c => getSpotPrice(c, 'YTD')),
 			...Object.keys(currencies).map(c => getSpotPrice(c, '1Y'))
 		])
-		console.log({ spotPricesResponse })
 
 		// [2.3] Format Spot Prices
 		let newSpotPrices = { USD: 1, 'USD-1D': 1, 'USD-1W': 1, 'USD-1M': 1, 'USD-3M': 1, 'USD-YTD': 1, 'USD-1Y': 1 }
 		spotPricesResponse.forEach(newSpotPrice => (newSpotPrices = { ...newSpotPrice, ...newSpotPrices }))
-		console.log({ newSpotPrices })
 
 		// [3.0] Calculate Performance
 		let newPerformances = {}
@@ -127,7 +121,6 @@ const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
 			const performance = (100 * (newSpotPrices[holding] - newSpotPrices[holdingDate])) / newSpotPrices[holdingDate]
 			newPerformances[holdingDate] = performance > 0 ? `+${formatPercent(performance)}` : formatPercent(performance)
 		})
-		console.log({ newPerformances })
 
 		// [3.0] Set State
 		setIsLoading(false)

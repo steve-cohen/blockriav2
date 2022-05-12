@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
 
 import Agreements from './Agreements/Agreements'
@@ -32,6 +32,14 @@ const Advisor = () => {
 	// Advisor Data
 	const [advisor, setAdvisor] = useState(JSON.parse(localStorage.getItem('advisor')) || demoAdvisorEmpty)
 	const [portfolios, setPortfolios] = useState([])
+
+	useEffect(() => {
+		if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+			console.log('Dev')
+		} else {
+			console.log('Prod')
+		}
+	}, [])
 
 	return (
 		<div className='Advisor'>
