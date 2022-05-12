@@ -182,6 +182,8 @@ table .Red {
 	font-variant-numeric: proportional-nums;
 	font-size: 14px;
 	font-weight: 400;
+	max-width: calc(100vw - 60px);
+	padding: 30px;
 	width: 400px;
 }
 
@@ -198,7 +200,7 @@ table .Red {
 	border-radius: 2px;
 	line-height: 20px;
 	padding: 5px 10px;
-	width: 100%;
+	width: calc(100% - 20px - 2px);
 }
 
 .NewForm form select {

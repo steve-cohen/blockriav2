@@ -35,7 +35,7 @@ const Sign = () => {
 	function renderAgreementName(documentOrder) {
 		switch (documentOrder) {
 			case '1':
-				return 'Investment Advisory Agreement (Client Agreement)'
+				return 'Investment Advisory Agreement'
 			case '2':
 				return 'Privacy Policy'
 			case '3':

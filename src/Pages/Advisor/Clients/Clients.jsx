@@ -15,7 +15,7 @@ function getSpotPrice(holding) {
 		.catch(error => alert(error))
 }
 
-function renderPortfolio(clientId, clientName, currentPortfolioId, portfolios) {
+function renderPortfolio(clientId, clientName, currentPortfolioId, portfolios, rebalanceFrequency) {
 	const portfolio = portfolios.filter(({ portfolioId }) => portfolioId === currentPortfolioId)
 
 	if (portfolio.length) {
@@ -24,7 +24,7 @@ function renderPortfolio(clientId, clientName, currentPortfolioId, portfolios) {
 				{portfolio[0].portfolioName} (
 				<Link
 					id='Change'
-					to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${currentPortfolioId}`}
+					to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${currentPortfolioId}&rebalanceFrequency=${rebalanceFrequency}`}
 					style={{ textTransform: 'none' }}
 				>
 					change
@@ -37,12 +37,12 @@ function renderPortfolio(clientId, clientName, currentPortfolioId, portfolios) {
 	return null
 }
 
-function renderPortfolioAssign(clientName, clientId) {
+function renderPortfolioAssign(clientName, clientId, rebalanceFrequency) {
 	return (
 		<Link
 			className='Bold Red'
 			id='Assign'
-			to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=`}
+			to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=&rebalanceFrequency=${rebalanceFrequency}`}
 			style={{ textTransform: 'none' }}
 		>
 			Assign a Portfolio
@@ -118,7 +118,7 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 		setClients(newClients)
 	}
 
-	function renderClient({ clientId, clientName, createdAt, nativeBalance, rebalanceFrequency, portfolioId }) {
+	function renderClient({ clientId, clientName, createdAt, nativeBalance, portfolioId, rebalanceFrequency }) {
 		return (
 			<tr key={clientId} onClick={e => handeClient(e, clientId, clientName)}>
 				<td className='ClientName'>{clientName}</td>
@@ -129,10 +129,10 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 						: renderPortfolioAssign(clientName, clientId)}
 				</td>
 				<td className='Break'>
-					<span>{rebalanceFrequency} Rebalancing </span>(
+					<span>Rebalance {rebalanceFrequency} </span>(
 					<Link
 						id='Change'
-						to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}`}
+						to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}&rebalanceFrequency=${rebalanceFrequency}`}
 						style={{ textTransform: 'none' }}
 					>
 						change

@@ -262,7 +262,7 @@ const Overview = ({ advisor }) => {
 							fill='url(#Area)'
 							isAnimationActive={false}
 							stroke='rgb(18, 25, 44)'
-							type='linear'
+							type='natural'
 						/>
 					</AreaChart>
 				</ResponsiveContainer>

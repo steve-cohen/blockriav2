@@ -142,7 +142,7 @@ const ClientPortfolio = ({ advisor, client }) => {
 					<div className='Title'>Automatic Portfolio Rebalancing</div>
 					<Link
 						className='Button'
-						to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}`}
+						to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}&rebalanceFrequency=${rebalanceFrequency}`}
 					>
 						{portfolioId ? 'Change Portfolio' : 'Assign a Portfolio'}
 					</Link>
@@ -174,7 +174,7 @@ const ClientPortfolio = ({ advisor, client }) => {
 							<span className='Bold'>{portfolio.portfolioName}</span>
 						</td>
 						<td className='Break'>
-							<span className='Bold'>{rebalanceFrequency} Rebalancing</span>
+							<span className='Bold'>Rebalance {rebalanceFrequency}</span>
 						</td>
 						{renderPortfolioPerformance(portfolio, '1D')}
 						{renderPortfolioPerformance(portfolio, '1W')}
@@ -188,7 +188,7 @@ const ClientPortfolio = ({ advisor, client }) => {
 						<td className='Bold Red' style={{ borderBottom: 'none' }}>
 							<Link
 								className='Red'
-								to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}`}
+								to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}&rebalanceFrequency=${rebalanceFrequency}`}
 							>
 								Assign a Portfolio
 							</Link>

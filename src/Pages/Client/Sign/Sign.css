@@ -1,7 +1,7 @@
 .Sign {
 	align-items: center;
 	display: flex;
-	height: 90vh;
+	height: 100vh;
 	justify-content: center;
 	width: 100vw;
 }
@@ -10,6 +10,7 @@
 	border: 1px solid rgb(237, 238, 240);
 	border-radius: 2px;
 	max-width: 450px;
+	margin: 40px 20px;
 	padding: 40px;
 }
 
@@ -22,7 +23,7 @@
 	display: inline-block;
 	font-size: 14px;
 	font-weight: 500;
-	margin-top: 60px;
+	margin-top: 40px;
 	padding: 8px 0;
 	text-align: center;
 	width: 100%;
@@ -45,6 +46,6 @@
 
 .Sign .Agreements .Title {
 	font-size: 22px;
-	margin-bottom: 60px;
+	margin-bottom: 40px;
 	text-align: center;
 }

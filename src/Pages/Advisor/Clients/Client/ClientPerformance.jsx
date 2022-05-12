@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-const timePeriods = ['YTD', '1D', '1W', '1M', '3M', '1Y', 'ALL']
+// const timePeriods = ['YTD', '1D', '1W', '1M', '3M', '1Y', 'ALL']
+const timePeriods = ['1D', '1W', '1M', '3M', 'YTD', '1Y', 'ALL']
 
 function formatUSD(number) {
 	return number.toLocaleString('en-US', {

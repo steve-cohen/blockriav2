@@ -34,86 +34,36 @@ const SignUp = () => {
 		UserPool.signUp(email, password, customAttributes, null, (error, data) => {
 			setIsLoading(false)
 
-			if (error) {
-				alert(error.message)
-			} else {
-				console.log(data)
-				navigate('/advisor/verifyemail', { state: { email: data.user.username } })
-			}
+			if (error) alert(error.message)
+			else navigate('/advisor/verifyemail', { state: { email: data.user.username } })
 		})
 	}
 
 	return (
-		<div className='SignUp'>
-			<div className='Description'>
-				<div className='Title'>Create an Account.</div>
-				<p>
-					<b>Increase Assets </b>
-					<span>Attract held away assets from outside your firm to within your management.</span>
-				</p>
-				<p>
-					<b>Add Simplicity </b>
-					<span>
-						Digital Assets can be complex. We make it simple by providing a seamless experience for you and your
-						clients.
-					</span>
-				</p>
-				<p>
-					<b>Invest Intelligently </b>
-					<span>
-						Choose your model and outsource the day to day portfolio management to us. Automate the entire process and
-						spend more time where your clients need you most.
-					</span>
-				</p>
-			</div>
+		<div className='SignUp NewForm'>
 			<form onSubmit={handleSubmit}>
+				<div className='Title'>Create a Block RIA Account</div>
+				<div>Email</div>
+				<input autoFocus minLength={1} onChange={e => setEmail(e.target.value)} required type='email' value={email} />
+				<div>Password</div>
+				<input minLength={6} onChange={e => setPassword(e.target.value)} required type='password' />
+				<div>First Name</div>
+				<input minLength={1} onChange={e => setFirstName(e.target.value)} required value={firstName} />
+				<div>Last Name</div>
+				<input minLength={1} onChange={e => setLastName(e.target.value)} required value={lastName} />
+				<div>Firm Name</div>
+				<input minLength={1} onChange={e => setFirmName(e.target.value)} required value={firmName} />
+				<div>Phone Number</div>
+				<input onChange={e => setPhoneNumber(e.target.value.slice(0, 10))} type='number' value={phoneNumber} />
 				<input
-					autoFocus
-					minLength={1}
-					onChange={e => setEmail(e.target.value)}
-					placeholder='EMAIL'
-					required
-					type='email'
-					value={email}
+					className='Continue'
+					disabled={isLoading ? true : false}
+					type='submit'
+					value={isLoading ? 'Loading...' : 'Create an Account'}
 				/>
-				<input
-					minLength={6}
-					onChange={e => setPassword(e.target.value)}
-					placeholder='PASSWORD'
-					required
-					type='password'
-				/>
-				<input
-					minLength={1}
-					onChange={e => setFirstName(e.target.value)}
-					placeholder='FIRST NAME'
-					required
-					value={firstName}
-				/>
-				<input
-					minLength={1}
-					onChange={e => setLastName(e.target.value)}
-					placeholder='LAST NAME'
-					required
-					value={lastName}
-				/>
-				<input
-					minLength={1}
-					onChange={e => setFirmName(e.target.value)}
-					placeholder='FIRM NAME'
-					required
-					value={firmName}
-				/>
-				<input
-					onChange={e => setPhoneNumber(e.target.value.slice(0, 10))}
-					placeholder='PHONE NUMBER'
-					type='number'
-					value={phoneNumber}
-				/>
-				<button disabled={isLoading} type='submit'>
-					{isLoading ? 'Loading…' : 'Sign Up'}
-				</button>
-				<Link to='/advisor/signin'>Already have an account? Sign In</Link>
+				<Link className='Cancel' to='/advisor/signin'>
+					Sign In
+				</Link>
 			</form>
 		</div>
 	)

@@ -43,32 +43,24 @@ const SignIn = ({ setAdvisor }) => {
 	}
 
 	return (
-		<div className='SignIn'>
-			<div className='Description'>
-				<div className='Title'>Sign into your Account.</div>
-				{searchParams.get('verified') ? <p>Your email was verified</p> : ''}
-			</div>
+		<div className='SignIn NewForm'>
 			<form onSubmit={handleSubmit}>
+				<div className='Title'>{searchParams.get('verified') ? 'Your email was verified!' : 'Sign Into Block RIA'}</div>
+				<div>Email</div>
+				<input autoFocus minLength={1} onChange={e => setEmail(e.target.value)} required type='email' value={email} />
+				<div>Password</div>
+				<input minLength={6} onChange={e => setPassword(e.target.value)} required type='password' />
 				<input
-					autoFocus
-					minLength={1}
-					onChange={e => setEmail(e.target.value)}
-					placeholder='EMAIL'
-					required
-					type='email'
-					value={email}
+					className='Continue'
+					disabled={isLoading ? true : false}
+					type='submit'
+					value={isLoading ? 'Loading...' : 'Sign In'}
 				/>
-				<input
-					minLength={6}
-					onChange={e => setPassword(e.target.value)}
-					placeholder='PASSWORD'
-					required
-					type='password'
-				/>
-				<button disabled={isLoading} type='submit'>
-					{isLoading ? 'Loading…' : 'Sign In'}
-				</button>
-				{searchParams.get('verified') ? '' : <Link to='/advisor/signup'>Need an account? Sign Up</Link>}
+				{searchParams.get('verified') ? null : (
+					<Link className='Cancel' to='/advisor/signup'>
+						Create an Account
+					</Link>
+				)}
 			</form>
 		</div>
 	)
