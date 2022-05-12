@@ -8,7 +8,7 @@ import Client from './Clients/Client/Client'
 import Clients from './Clients/Clients'
 import ClientOnboarding from './ClientOnboarding/ClientOnboarding'
 import Deposit from './Clients/Client/Deposit/Deposit'
-import Edit from './Portfolios/Edit/Edit'
+import EditPortfolio from './Portfolios/EditPortfolio/EditPorfolio'
 import Invites from './Invites/Invites'
 import Navigation from './Navigation/Navigation'
 import Overview from './Overview/Overview'
@@ -80,10 +80,7 @@ const Advisor = () => {
 									path='portfolios'
 									element={<Portfolios advisor={advisor} portfolios={portfolios} setPortfolios={setPortfolios} />}
 								/>
-								<Route
-									path='portfolios/edit'
-									element={<Edit portfolios={portfolios} setPortfolios={setPortfolios} />}
-								/>
+								<Route path='portfolios/edit' element={<EditPortfolio advisor={advisor} />} />
 								<Route path='settings' element={<Settings advisor={advisor} />} />
 								<Route path='taxes' element={<Taxes advisor={advisor} />} />
 								<Route path='*' element={<Navigate to='' />} />

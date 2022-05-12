@@ -1,0 +1,28 @@
+.EditPortfolio {
+	align-items: flex-start;
+	background: white;
+	display: flex;
+	justify-content: center;
+	left: 0;
+	min-height: 90vh;
+	padding-top: 10vh;
+	position: absolute;
+	top: 0;
+	width: 100vw;
+	z-index: 100;
+}
+
+.EditPortfolio .HoldingFlex {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+}
+
+.EditPortfolio .HoldingFlex .Red:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.EditPortfolio .Percent {
+	margin-top: 8px;
+}

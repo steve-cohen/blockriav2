@@ -1,9 +1,11 @@
-a {
+a,
+.Link {
 	color: rgb(0, 102, 204);
 	text-decoration: none;
 }
 
-a:hover {
+a:hover,
+.Link:hover {
 	cursor: pointer;
 	text-decoration: underline;
 }
@@ -15,6 +17,7 @@ body {
 }
 
 html {
+	overflow: hidden auto;
 	scroll-behavior: smooth;
 }
 
@@ -146,7 +149,7 @@ table .Green {
 	color: darkgreen;
 }
 
-table .Red {
+.Red {
 	color: rgb(220, 29, 18);
 }
 
@@ -209,7 +212,7 @@ table .Red {
 	border-radius: 2px;
 	line-height: 20px;
 	padding: 5px 10px;
-	width: 100%;
+	max-width: calc(100% - 20px - 2px);
 }
 
 .NewForm form textarea {
