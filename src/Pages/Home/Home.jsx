@@ -10,32 +10,47 @@ const Home = () => {
 					<div className='Logo' to='/advisor'>
 						B
 					</div>
-					<span>Block RIA Inc.</span>
+					<span className='CompanyName'>Block RIA</span>
 				</div>
-				<span>
+				{/* <div className='Hrefs'>
+					<a href='#compliance'>Compliance</a>
+					<a href='#features'>Features</a>
+					<a href='#contact'>Contact</a>
+				</div> */}
+				<div>
 					<Link className='ToSignIn' to='/advisor/signin'>
 						Sign In
 					</Link>
 					<Link className='Button' to='/advisor/signup'>
-						Get Started
+						Try the RIA Platform
 					</Link>
-				</span>
+				</div>
 			</nav>
-			<section className='Hero'>
+			<section id='Hero'>
 				<div>
 					<div className='Title'>{`Manage Cryptocurrency\nfor Your Clients`}</div>
-					<div>
+					<div className='Actions'>
 						<Link className='Button' to='/advisor/signup'>
-							Get Started
+							Try the RIA Platform
 						</Link>
 						<Link className='ToSignIn' to='/advisor/signin'>
 							Sign In
 						</Link>
 					</div>
 				</div>
-				<div />
 			</section>
-			<section className='Compliance'>Compliance</section>
+			{/* <section style={{ background: 'rgb(18, 25, 44)', height: 'calc(100vh - 72vh - 12vh - 100px)' }} /> */}
+			{/* <section id='compliance'>
+				<div className='Group'>
+					<div className='Title'>{`Compliance for\nFinancial Advisors / RIAs`}</div>
+				</div>
+				<div className='Group Details'>
+					<div>170+ Cryptocurrencies</div>
+					<div>Handle Form ADV Part 2A, Form ADV Part 2B, Form CRS, Investment Advisory Agreements, and more</div>
+				</div>
+				<div></div>
+			</section> */}
+			{/* <section id='features'></section> */}
 		</div>
 	)
 }

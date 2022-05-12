@@ -4,63 +4,135 @@
 	font-variant-numeric: proportional-nums;
 	font-size: 14px;
 	font-weight: 500;
+	overflow: hidden;
+}
+
+.Home section {
+	flex-wrap: wrap;
+	padding: 0 4vw;
+	width: calc(100% - 8vw);
 }
 
 .Home nav {
+	background: white;
+	left: 0;
+	position: sticky;
+	top: 0;
+	width: 100vw;
 	align-items: center;
-	color: rgb(64, 68, 82);
 	display: flex;
-	margin-top: 1.5vw;
-	height: 40px;
 	justify-content: space-between;
-	padding: 0 3vw;
-	width: calc(100% - 6vw);
+	margin-top: calc(2vw - 10px);
+	padding: 10px 4vw 10px 4vw;
+	width: calc(100% - 8vw);
+}
+
+.Home nav .Hrefs a {
+	color: inherit;
+	padding: 10px;
+}
+
+.Home nav .Hrefs span:hover {
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 .Home nav .Button {
-	margin-left: 20px;
+	margin-left: 16px;
 }
 
-.Home .Logo {
+.Home nav .Logo {
 	border: 2px solid rgb(18, 25, 44);
-	border-radius: 6px;
-	color: rgb(18, 25, 44);
+	background: rgb(18, 25, 44);
+	border-radius: 3px;
+	color: white;
 	display: inline-block;
 	font-size: 18px;
 	font-weight: 500;
-	line-height: 30px;
+	line-height: 28px;
 	margin-right: 12px;
 	text-align: center;
 	text-decoration: none;
-	width: 30px;
+	width: 28px;
 }
 
 .Home .ToSignIn {
 	color: inherit;
 }
 
-.Home .Hero {
+.Home #Hero {
 	align-items: center;
 	display: flex;
 	justify-content: space-evenly;
-	height: calc(76vh - 80px);
-	margin-bottom: 18vh;
+	min-height: 72vh;
+	margin-bottom: 12vh;
 }
 
-.Home .Hero .Button {
-	margin: 0 12px 0 0;
+.Home #Hero .Button {
+	margin: 0 16px 0 0;
 }
 
-.Home .Hero .Title {
+.Home #Hero .Actions {
+	width: fit-content;
+}
+
+.Home #Hero .Title {
 	color: rgb(18, 25, 44);
 	font-family: 'Playfair Display', serif;
-	font-size: 52px;
+	font-size: 46px;
 	font-weight: 500;
-	margin-bottom: 16px;
-	white-space: pre;
+	margin-bottom: 24px;
+	white-space: pre-wrap;
 }
 
-.Home .Compliance {
+.Home #compliance {
+	align-items: flex-start;
 	background: rgb(18, 25, 44);
+	color: rgb(248, 249, 251);
+	display: flex;
+	justify-content: space-evenly;
+	min-height: 85vh;
+	padding-top: 15vh;
+}
+
+.Home #compliance .Details {
+	font-size: 18px;
+	opacity: 0.8;
+	white-space: pre-wrap;
+}
+
+.Home #compliance .Group {
+	max-width: 440px;
+}
+
+.Home #compliance .Group .Title {
+	font-family: 'Playfair Display', serif;
+	font-size: 36px;
+	font-weight: 500;
+	white-space: pre-wrap;
+}
+
+.Home #features {
 	min-height: 100vh;
+}
+
+@media only screen and (max-width: 800px) {
+	.Home nav .Hrefs {
+		display: none;
+	}
+}
+
+@media only screen and (max-width: 700px) {
+	.Home nav .CompanyName {
+		display: none;
+	}
+
+	.Home section {
+		justify-content: center;
+		text-align: center;
+	}
+
+	.Home #Hero .Actions {
+		margin: auto;
+	}
 }
