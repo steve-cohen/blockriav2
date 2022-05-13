@@ -79,8 +79,11 @@ const SetPortfolio = ({ advisor }) => {
 		return allocationsString
 	}
 
-	console.log({ portfolioId })
-	return (
+	return isLoading ? (
+		<div className='SetPortfolio NewForm'>
+			<div className='Loading'>Loading...</div>
+		</div>
+	) : (
 		<div className={`SetPortfolio NewForm ${isConfirming ? 'NewFormConfirm' : ''}`}>
 			<form onSubmit={handleSubmit}>
 				<div className='Title'>Set a Portfolio for {searchParams.get('clientName')}</div>
@@ -124,17 +127,10 @@ const SetPortfolio = ({ advisor }) => {
 						/>
 					</>
 				)}
-				<input
-					className='Continue'
-					disabled={isLoading ? true : false}
-					type='submit'
-					value={isLoading ? 'Loading...' : isConfirming ? 'Confirm Portfolio' : 'Set Portfolio'}
-				/>
-				{!isLoading && (
-					<div className='Cancel' onClick={() => (isConfirming ? setIsConfirming(false) : navigate(-1))}>
-						Cancel
-					</div>
-				)}
+				<input className='Continue' type='submit' value={isConfirming ? 'Confirm Portfolio' : 'Set Portfolio'} />
+				<div className='Cancel' onClick={() => (isConfirming ? setIsConfirming(false) : navigate(-1))}>
+					Cancel
+				</div>
 			</form>
 		</div>
 	)

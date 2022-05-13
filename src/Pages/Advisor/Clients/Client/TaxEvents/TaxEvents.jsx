@@ -27,6 +27,7 @@ const TaxEvents = ({ advisor }) => {
 		fetch(`https://blockria.com/api/coinbase/clients/client/taxevents?clientId=${searchParams.get('clientId')}`)
 			.then(response => response.json())
 			.then(newTaxEvents => {
+				console.log(newTaxEvents)
 				if (searchParams.get('year')) {
 					setTaxEvents(newTaxEvents.filter(({ updated_at }) => updated_at.slice(0, 4) === searchParams.get('year')))
 				} else {
@@ -86,7 +87,7 @@ const TaxEvents = ({ advisor }) => {
 		)
 	}
 
-	function renderTaxEvent({ buy, details, id, sell, status, type, updated_at }) {
+	function renderTaxEvent({ amount, buy, details, id, sell, status, type, updated_at }) {
 		const change = type === 'buy' ? '-' : '+'
 		const event = type === 'buy' ? buy : sell
 
@@ -110,17 +111,21 @@ const TaxEvents = ({ advisor }) => {
 						event.amount.currency
 					)}
 				</td>
-				<td className={`AlignRight Bold ${type === 'sell' ? 'Green' : ''}${type === 'buy' ? 'Red' : ''}`}>
-					{change}
-					{formatUSD(event.total.amount)}
+				<td>
+					{amount.amount < 0 && '+'}
+					{-1 * amount.amount}
 				</td>
+				<td className='AlignRight DeEmphasize'>{formatUSD(event.unit_price.amount)}</td>
 				<td className='AlignRight'>
 					{change}
 					{formatUSD(event.subtotal.amount)}
 				</td>
 				<td className='AlignRight DeEmphasize'>({formatUSD(event.fee.amount)})</td>
-				<td className='AlignRight DeEmphasize'>{formatUSD(event.unit_price.amount)}</td>
-				<td className='Break'>{details.title}</td>
+				<td className={`AlignRight Bold ${type === 'sell' ? 'Green' : ''}${type === 'buy' ? 'Red' : ''}`}>
+					{change}
+					{formatUSD(event.total.amount)}
+				</td>
+				<td>{details.title}</td>
 				<td>{details.payment_method_name}</td>
 				<td>{event.hold_days ? `${event.hold_days} Days` : ''}</td>
 				<td>{event.hold_until ? event.hold_until.slice(0, 10) : ''}</td>
@@ -135,7 +140,7 @@ const TaxEvents = ({ advisor }) => {
 		let totalAmount = 0
 		let totalFee = 0
 
-		taxEvents.forEach(({ buy, fiat_deposit, fiat_withdrawal, sell, type }) => {
+		taxEvents.forEach(({ buy, sell, type }) => {
 			switch (type) {
 				case 'buy':
 					totalNet -= buy.total.amount
@@ -184,11 +189,12 @@ const TaxEvents = ({ advisor }) => {
 					<th>TIME</th>
 					<th>TYPE</th>
 					<th>HOLDING</th>
-					<th className='AlignRight'>NET</th>
-					<th className='AlignRight'>AMOUNT</th>
-					<th className='AlignRight'>FEE</th>
+					<th>AMOUNT</th>
 					<th className='AlignRight'>UNIT PRICE</th>
-					<th>DESCRIPTION</th>
+					<th className='AlignRight'>COST</th>
+					<th className='AlignRight'>FEES</th>
+					<th className='AlignRight'>TOTAL</th>
+					<th className='Break'>DESCRIPTION</th>
 					<th>PAYMENT METHOD</th>
 					<th>HOLD</th>
 					<th>HOLD UNTIL</th>

@@ -128,12 +128,15 @@ table .AlignRight {
 	text-align: right;
 }
 
+table .Black {
+	color: rgb(26, 27, 29);
+}
+
 table .Blue {
 	color: rgb(0, 102, 204);
 }
 
 table .Bold {
-	color: rgb(26, 27, 29);
 	font-weight: 500;
 }
 

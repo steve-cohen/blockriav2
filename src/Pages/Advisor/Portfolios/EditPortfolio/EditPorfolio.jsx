@@ -130,7 +130,7 @@ const EditPortfolio = ({ advisor }) => {
 
 		return (
 			<div className='Delete' onClick={handleDelete} style={isConfirming ? {} : { marginLeft: '12px' }}>
-				{isLoading ? 'Loading...' : isConfirming ? 'Confirm Delete Portfolio' : 'Delete Portfolio'}
+				{isConfirming ? 'Confirm Delete Portfolio' : 'Delete Portfolio'}
 			</div>
 		)
 	}
@@ -179,7 +179,11 @@ const EditPortfolio = ({ advisor }) => {
 		)
 	}
 
-	return (
+	return isLoading ? (
+		<div className='EditPortfolio NewForm'>
+			<div className='Loading'>Loading...</div>
+		</div>
+	) : (
 		<div className={`EditPortfolio NewForm ${isConfirming && 'NewFormConfirm'}`}>
 			<form onSubmit={handleSubmit}>
 				<div className='Title'>{portfolioId ? 'Edit' : 'Create a'} Portfolio</div>
@@ -201,18 +205,8 @@ const EditPortfolio = ({ advisor }) => {
 				{!isDeleteing && (
 					<input
 						className='Continue'
-						disabled={isLoading && true}
-						style={isLoading ? { cursor: 'default', textDecoration: 'none' } : {}}
 						type='submit'
-						value={
-							isLoading
-								? 'Loading...'
-								: isConfirming
-								? 'Confirm Portfolio'
-								: portfolioId
-								? 'Edit Portfolio'
-								: 'Create Portfolio'
-						}
+						value={isConfirming ? 'Confirm Portfolio' : portfolioId ? 'Edit Portfolio' : 'Create Portfolio'}
 					/>
 				)}
 				{renderDelete()}

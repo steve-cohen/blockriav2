@@ -21,14 +21,17 @@ function formatUSD(number) {
 
 const Transactions = () => {
 	const [searchParams] = useSearchParams()
+	const clientId = searchParams.get('clientId')
+	const clientName = searchParams.get('clientName')
 	const [transactions, setTransactions] = useState([])
 
 	useEffect(() => {
-		fetch(`https://blockria.com/api/coinbase/clients/client/transactions?clientId=${searchParams.get('clientId')}`)
+		fetch(`https://blockria.com/api/coinbase/clients/client/transactions?clientId=${clientId}`)
 			.then(response => response.json())
 			.then(setTransactions)
 			.catch(error => alert(error))
 	}, [])
+	console.log(transactions)
 
 	function renderTransaction(transaction) {
 		switch (transaction.type) {
@@ -49,7 +52,7 @@ const Transactions = () => {
 		}
 	}
 
-	function renderBuyOrSell({ buy, details, id, sell, status, type, updated_at }) {
+	function renderBuyOrSell({ amount, buy, details, id, sell, status, type, updated_at }) {
 		const change = type === 'buy' ? '-' : '+'
 		const event = type === 'buy' ? buy : sell
 
@@ -73,17 +76,21 @@ const Transactions = () => {
 						event.amount.currency
 					)}
 				</td>
-				<td className={`AlignRight Bold ${type === 'sell' ? 'Green' : ''}${type === 'buy' ? 'Red' : ''}`}>
-					{change}
-					{formatUSD(event.total.amount)}
+				<td>
+					{amount.amount < 0 && '+'}
+					{-1 * amount.amount}
 				</td>
+				<td className='AlignRight DeEmphasize'>{formatUSD(event.unit_price.amount)}</td>
 				<td className='AlignRight'>
 					{change}
 					{formatUSD(event.subtotal.amount)}
 				</td>
 				<td className='AlignRight DeEmphasize'>({formatUSD(event.fee.amount)})</td>
-				<td className='AlignRight DeEmphasize'>{formatUSD(event.unit_price.amount)}</td>
-				<td className='Break'>{details.title}</td>
+				<td className={`AlignRight Bold ${type === 'sell' ? 'Green' : ''}${type === 'buy' ? 'Red' : ''}`}>
+					{change}
+					{formatUSD(event.total.amount)}
+				</td>
+				<td>{details.title}</td>
 				<td>{details.payment_method_name}</td>
 				<td>{event.hold_days ? `${event.hold_days} Days` : ''}</td>
 				<td>{event.hold_until ? event.hold_until.slice(0, 10) : ''}</td>
@@ -93,7 +100,7 @@ const Transactions = () => {
 		)
 	}
 
-	function renderDepositOrWithdrawal({ details, fiat_deposit, fiat_withdrawal, id, status, type, updated_at }) {
+	function renderDepositOrWithdrawal({ amount, details, fiat_deposit, fiat_withdrawal, id, status, type, updated_at }) {
 		const change = type === 'fiat_deposit' ? '+' : '-'
 		const event = type === 'fiat_deposit' ? fiat_deposit : fiat_withdrawal
 
@@ -103,16 +110,20 @@ const Transactions = () => {
 				<td>{updated_at.slice(11, 19)}</td>
 				<td className='Bold'>{type in displayTypes ? displayTypes[type] : type}</td>
 				<td className='Bold'>{event.amount.currency}</td>
-				<td className={`AlignRight Bold ${type === 'fiat_deposit' ? 'Green' : 'Red'}`}>
-					{change}
-					{formatUSD(event.amount.amount)}
+				<td>
+					{amount.amount >= 0 && '+'}
+					{amount.amount.toFixed(2)}
 				</td>
+				<td className='AlignRight'>$1.00</td>
 				<td className='AlignRight'>
 					{change}
 					{formatUSD(event.subtotal.amount)}
 				</td>
 				<td className='AlignRight DeEmphasize'>({formatUSD(event.fee.amount)})</td>
-				<td />
+				<td className={`AlignRight Bold ${type === 'fiat_deposit' ? 'Green' : 'Red'}`}>
+					{change}
+					{formatUSD(event.amount.amount)}
+				</td>
 				<td className=''>{details.title}</td>
 				<td>{details.payment_method_name}</td>
 				<td>{event.hold_days ? `${event.hold_days} Days` : ''}</td>
@@ -146,16 +157,20 @@ const Transactions = () => {
 						amount.currency
 					)}
 				</td>
-				<td className={`AlignRight Bold ${native_amount.amount > 0 ? 'Green' : 'Red'}`}>
-					{change}
-					{formatUSD(native_amount.amount)}
+				<td>
+					{amount.amount < 0 && '+'}
+					{-1 * amount.amount}
 				</td>
+				<td className='AlignRight'>{formatUSD(native_amount.amount / amount.amount)}</td>
 				<td className='AlignRight'>
 					{change}
 					{formatUSD(native_amount.amount)}
 				</td>
 				<td className='AlignRight'>($0.00)</td>
-				<td>{formatUSD(native_amount.amount / amount.amount)}</td>
+				<td className={`AlignRight Bold ${native_amount.amount > 0 ? 'Green' : 'Red'}`}>
+					{change}
+					{formatUSD(native_amount.amount)}
+				</td>
 				<td>{details.title}</td>
 				<td style={{ textTransform: 'none' }}>{details.subtitle}</td>
 				<td />
@@ -237,16 +252,20 @@ const Transactions = () => {
 						amount.currency
 					)}
 				</td>
-				<td className={`AlignRight Bold ${native_amount.amount > 0 ? 'Green' : 'Red'}`}>
-					{change}
-					{formatUSD(native_amount.amount)}
+				<td>
+					{amount.amount >= 0 && '+'}
+					{amount.amount}
 				</td>
+				<td>{formatUSD(native_amount.amount / amount.amount)}</td>
 				<td className='AlignRight'>
 					{change}
 					{formatUSD(native_amount.amount)}
 				</td>
 				<td className='AlignRight'>($0.00)</td>
-				<td>{formatUSD(native_amount.amount / amount.amount)}</td>
+				<td className={`AlignRight Bold ${native_amount.amount > 0 ? 'Green' : 'Red'}`}>
+					{change}
+					{formatUSD(native_amount.amount)}
+				</td>
 				<td>{details.title}</td>
 				<td>{details.subtitle}</td>
 				<td />
@@ -261,7 +280,7 @@ const Transactions = () => {
 		<table>
 			<caption>
 				<div className='Flex'>
-					<div className='Title'>Transaction History for {searchParams.get('clientName')}</div>
+					<div className='Title'>Transaction History for {clientName}</div>
 					<div></div>
 				</div>
 			</caption>
@@ -271,11 +290,12 @@ const Transactions = () => {
 					<th>TIME</th>
 					<th>TYPE</th>
 					<th>HOLDING</th>
-					<th className='AlignRight'>NET</th>
-					<th className='AlignRight'>AMOUNT</th>
-					<th className='AlignRight'>FEE</th>
+					<th>AMOUNT</th>
 					<th className='AlignRight'>UNIT PRICE</th>
-					<th>DESCRIPTION</th>
+					<th className='AlignRight'>COST</th>
+					<th className='AlignRight'>FEES</th>
+					<th className='AlignRight'>TOTAL</th>
+					<th className='Break'>DESCRIPTION</th>
 					<th>PAYMENT METHOD</th>
 					<th>HOLD</th>
 					<th>HOLD UNTIL</th>

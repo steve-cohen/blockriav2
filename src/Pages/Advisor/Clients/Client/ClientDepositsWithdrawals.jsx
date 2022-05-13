@@ -47,7 +47,7 @@ const ClientDepositsWithdrawals = () => {
 					<td className='Bold'>Withdrawals</td>
 					{/* <td></td> */}
 					<td style={{ textTransform: 'none' }}>
-						Transfer funds <b>FROM</b> {searchParams.get('clientName')}'s Coinbase account
+						Transfer funds <b>OUT</b> of {searchParams.get('clientName')}'s Coinbase account
 					</td>
 				</tr>
 			</tbody>
