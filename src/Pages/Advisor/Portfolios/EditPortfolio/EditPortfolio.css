@@ -4,8 +4,8 @@
 	display: flex;
 	justify-content: center;
 	left: 0;
-	min-height: 90vh;
-	padding-top: 10vh;
+	min-height: 80vh;
+	padding: 10vh 0;
 	position: absolute;
 	top: 0;
 	width: 100vw;

@@ -2,64 +2,84 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import './Withdrawal.css'
 
-const Withdrawal = ({ advisor, client }) => {
+const noPaymentMethod = {
+	id: 0,
+	limits: { deposit: [{ description: '' }] },
+	name: 'No Withdrawal Methods Found'
+}
+
+function formatUSD(number) {
+	return Number(number).toLocaleString('en-US', {
+		currency: 'USD',
+		style: 'currency'
+	})
+}
+
+const Withdrawal = ({ advisor }) => {
 	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
+	const advisorId = advisor.idToken.payload.sub
+	const clientId = searchParams.get('clientId')
+	const clientName = searchParams.get('clientName')
 
-	const [accountId, setAccountId] = useState(0)
 	const [amount, setAmount] = useState('')
-	const [withdrawalMethod, setWithdrawalMethod] = useState({
-		id: 0,
-		limits: { deposit: [{ description: '' }] },
-		name: 'Loading...'
-	})
-
-	const [confirmWithdrawal, setConfirmWithdrawal] = useState(false)
-	const [isLoading, setIsLoading] = useState(false)
-	const [showWithdrawalMethods, setShowWithdrawalMethods] = useState(false)
+	const [fiatAccount, setFiatAccount] = useState('')
+	const [withdrawalMethod, setWithdrawalMethod] = useState('')
 	const [withdrawalMethods, setWithdrawalMethods] = useState([])
 
+	const [isConfirming, setIsConfirming] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
+
 	useEffect(async () => {
-		let url = `https://blockria.com/coinbase/paymentmethods`
-		await fetch(`${url}?advisorId=${advisor.idToken.payload.sub}&clientId=${searchParams.get('clientId')}`)
+		setIsLoading(true)
+
+		await fetch(`https://blockria.com/coinbase/paymentmethods?advisorId=${advisorId}&clientId=${clientId}`)
 			.then(response => response.json())
 			.then(formatPaymentMethods)
 			.catch(alert)
+
+		setIsLoading(false)
 	}, [])
 
 	function formatPaymentMethods(paymentMethods) {
+		console.log(paymentMethods)
 		if (paymentMethods.data && paymentMethods.data.length >= 2) {
 			// FROM Coinbase Fiat Account
 			const newWithdrawalMethods = paymentMethods.data.filter(({ allow_withdraw }) => allow_withdraw)
-			setWithdrawalMethod(newWithdrawalMethods[0])
 			setWithdrawalMethods(newWithdrawalMethods)
 
 			// TO Payment Method
-			const newAccountId = paymentMethods.data.filter(({ fiat_account }) => fiat_account && fiat_account.id)
-			if (newAccountId && newAccountId.length) setAccountId(newAccountId[0].fiat_account.id)
+			const newFiatAccount = paymentMethods.data.filter(({ fiat_account }) => fiat_account && fiat_account.id)
+			console.log(newFiatAccount)
+			if (newFiatAccount && newFiatAccount.length) setFiatAccount(newFiatAccount[0])
 		} else {
-			setWithdrawalMethod({ id: 0, limits: { deposit: [{ description: '' }] }, name: 'No Withdrawal Methods Found' })
+			setWithdrawalMethod(noPaymentMethod)
 		}
 	}
 
-	function handleSubmit(e) {
+	async function handleSubmit(e) {
 		e.preventDefault()
-		e.stopPropagation()
-		setConfirmWithdrawal(true)
-	}
 
-	async function handleSubmitConfirm(e) {
-		e.preventDefault()
-		e.stopPropagation()
+		if (!e.currentTarget.checkValidity()) {
+			e.stopPropagation()
+			return
+		}
+
+		if (!isConfirming) {
+			setIsConfirming(true)
+			return
+		}
+
 		setIsLoading(true)
 
+		let newWithdrawalMethod = JSON.parse(withdrawalMethod)
 		let url = 'https://blockria.com/coinbase/withdrawal?'
-		url += `accountId=${accountId}`
-		url += `&advisorId=${advisor.idToken.payload.sub}`
+		url += `accountId=${fiatAccount.fiat_account.id}`
+		url += `&advisorId=${advisorId}`
 		url += `&amount=${amount}`
-		url += `&clientId=${searchParams.get('clientId')}`
-		url += `&currency=${withdrawalMethod.limits.deposit[0].remaining.currency}`
-		url += `&paymentMethod=${withdrawalMethod.id}`
+		url += `&clientId=${clientId}`
+		url += `&currency=${newWithdrawalMethod.limits.deposit[0].remaining.currency}`
+		url += `&paymentMethod=${newWithdrawalMethod.id}`
 
 		await fetch(url)
 			.then(response => response.json())
@@ -69,11 +89,7 @@ const Withdrawal = ({ advisor, client }) => {
 					setIsLoading(false)
 					alert(data.errors[0].message)
 				} else {
-					navigate(
-						`/advisor/clients/client?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get(
-							'clientId'
-						)}`
-					)
+					navigate(`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`)
 				}
 			})
 			.catch(error => {
@@ -82,85 +98,77 @@ const Withdrawal = ({ advisor, client }) => {
 			})
 	}
 
-	function renderWithdrawalMethod(newWithdrawalMethod) {
+	function renderWithdrawalMethod(withdrawalMethod) {
 		return (
-			<div
-				className='Method'
-				key={`WithdrawalMethod ${newWithdrawalMethod.id}`}
-				onClick={() => {
-					setWithdrawalMethod(newWithdrawalMethod)
-					setShowWithdrawalMethods(false)
-				}}
-			>
-				{newWithdrawalMethod.name}
-			</div>
+			<option value={JSON.stringify(withdrawalMethod)} key={`Deposit Method ${withdrawalMethod.id}`}>
+				{withdrawalMethod.name}
+			</option>
 		)
 	}
 
-	return (
-		<div className='Withdrawal'>
-			{!confirmWithdrawal ? (
+	function renderWithdrawalMethodLimit() {
+		if (
+			fiatAccount &&
+			fiatAccount.fiat_account &&
+			fiatAccount.fiat_account.balance &&
+			fiatAccount.fiat_account.balance.amount
+		) {
+			return (
 				<>
-					<div className='Description'>
-						<div className='Title'>Initiate a Withdrawal from {searchParams.get('clientName')}'s Coinbase Account.</div>
-						<p>
-							<b>New and exisiting bank accounts </b>
-							<span>
-								may take up to 24 hours to appear while the client undergoes Coinbase verification and Know Your
-								Customer (KYC) procedures.
-							</span>
-						</p>
-					</div>
-					<form className='Options' onSubmit={handleSubmit}>
-						<div className='SelectedMethod' onClick={() => setShowWithdrawalMethods(!showWithdrawalMethods)}>
-							{withdrawalMethod.name}
-							<div className='Icon' style={showWithdrawalMethods ? { transform: 'scaleY(-1)' } : {}}>
-								<svg viewBox='0 0 24 24'>
-									<path d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z' />
-								</svg>
-							</div>
-						</div>
-						{showWithdrawalMethods ? (
-							<div className='Methods'>{withdrawalMethods.map(renderWithdrawalMethod)}</div>
-						) : null}
-						<input
-							className='Amount'
-							onChange={e => setAmount(e.target.value)}
-							placeholder='AMOUNT'
-							min={1}
-							required
-							step={0.01}
-							type='number'
-							value={amount}
-						/>
-						<button className='InitiateWithdrawal'>Initiate Withdrawal</button>
-						<div className='Cancel' onClick={() => navigate(-1)}>
-							Cancel
-						</div>
-					</form>
+					<div>Withdrawal Limit</div>
+					<input disabled={true} value={formatUSD(fiatAccount.fiat_account.balance.amount)} />
 				</>
-			) : (
-				<>
-					<div className='Description'>
-						<div className='Title'>Confirm a Withdrawal from {searchParams.get('clientName')}'s Coinbase Account.</div>
-					</div>
-					<form className='Options' onSubmit={handleSubmitConfirm}>
-						<div className='SelectedMethod'>{withdrawalMethod.name}</div>
-						<input
-							className='Amount'
-							readOnly
-							required
-							value={Number(amount).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
-						/>
-						<button className='InitiateWithdrawalConfirm'>{isLoading ? 'Loading...' : 'Confirm Withdrawal'}</button>
-						{isLoading ? null : (
-							<div className='Cancel' onClick={() => setConfirmWithdrawal(false)}>
-								Cancel
-							</div>
-						)}
-					</form>
-				</>
-			)}
+			)
+		}
+	}
+
+	return isLoading ? (
+		<div className='Withdrawal NewForm'>
+			<div className='Loading'>Loading...</div>
+		</div>
+	) : (
+		<div className={`Withdrawal NewForm ${isConfirming && 'NewFormConfirm'}`}>
+			<form onSubmit={handleSubmit}>
+				<div className='Title'>Withdraw from {clientName}'s Coinbase Account</div>
+				<div>Withdrawal Method</div>
+				<select
+					disabled={isConfirming && true}
+					onChange={e => setWithdrawalMethod(e.target.value)}
+					required
+					value={withdrawalMethod}
+				>
+					<option disabled value=''>
+						Select a Withdrawal Method
+					</option>
+					{withdrawalMethods.map(renderWithdrawalMethod)}
+				</select>
+				{renderWithdrawalMethodLimit()}
+				<div>Withdrawal Amount</div>
+				<input
+					disabled={isConfirming && true}
+					min={1}
+					onChange={e => setAmount(e.target.value)}
+					placeholder='Ex: $10.00'
+					required
+					step={0.01}
+					type={isConfirming ? 'text' : 'number'}
+					value={isConfirming ? formatUSD(amount) : amount}
+				/>
+				{isConfirming && (
+					<>
+						<div>Description</div>
+						<input disabled={true} value={`Transfer funds out of ${clientName}'s Coinbase account`} />
+					</>
+				)}
+				<input
+					className='Continue'
+					type='submit'
+					value={isConfirming ? 'Confirm Initiate Withdrawal' : 'Initiate Withdrawal'}
+				/>
+				<div className='Cancel' onClick={() => (isConfirming ? setIsConfirming(false) : navigate(-1))}>
+					Cancel
+				</div>
+			</form>
 		</div>
 	)
 }

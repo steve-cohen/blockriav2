@@ -14,11 +14,15 @@ const SetPortfolio = ({ advisor }) => {
 	const [portfolioId, setPortfolioId] = useState(searchParams.get('portfolioId') || '')
 	const [portfolios, setPortfolios] = useState([])
 
-	useEffect(() => {
-		fetch(`https://blockria.com/api/portfolios?advisorId=${advisor.idToken.payload.sub}`)
+	useEffect(async () => {
+		setIsLoading(true)
+
+		await fetch(`https://blockria.com/api/portfolios?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.then(setPortfolios)
 			.catch(alert)
+
+		setIsLoading(false)
 	}, [])
 
 	async function handleSubmit(e) {

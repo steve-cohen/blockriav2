@@ -2,68 +2,82 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import './Deposit.css'
 
-const Deposit = ({ advisor, client }) => {
+const noPaymentMethod = {
+	id: 0,
+	limits: { deposit: [{ description: '' }] },
+	name: 'No Deposit Methods Found'
+}
+
+function formatUSD(number) {
+	return Number(number).toLocaleString('en-US', {
+		currency: 'USD',
+		style: 'currency'
+	})
+}
+
+const Deposit = ({ advisor }) => {
 	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
+	const advisorId = advisor.idToken.payload.sub
+	const clientId = searchParams.get('clientId')
+	const clientName = searchParams.get('clientName')
 
 	const [accountId, setAccountId] = useState(0)
 	const [amount, setAmount] = useState('')
-	const [depositMethod, setDepositMethod] = useState({
-		id: 0,
-		limits: { deposit: [{ description: '' }] },
-		name: 'Loading...'
-	})
-
-	const [confirmDeposit, setConfirmDeposit] = useState(false)
+	const [depositMethod, setDepositMethod] = useState('')
 	const [depositMethods, setDepositMethods] = useState([])
+
+	const [isConfirming, setIsConfirming] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
-	const [showDepositMethods, setShowDepositMethods] = useState(false)
 
 	useEffect(async () => {
-		let url = `https://blockria.com/coinbase/paymentmethods`
-		await fetch(`${url}?advisorId=${advisor.idToken.payload.sub}&clientId=${searchParams.get('clientId')}`)
+		setIsLoading(true)
+
+		await fetch(`https://blockria.com/coinbase/paymentmethods?advisorId=${advisorId}&clientId=${clientId}`)
 			.then(response => response.json())
 			.then(formatPaymentMethods)
 			.catch(alert)
+
+		setIsLoading(false)
 	}, [])
 
-	function formatPaymentMethods(paymentMethods) {
-		if (paymentMethods.data && paymentMethods.data.length >= 2) {
+	function formatPaymentMethods(depositMethods) {
+		if (depositMethods.data && depositMethods.data.length >= 2) {
 			// FROM Payment Method
-			let newDepositMethods = paymentMethods.data.filter(({ allow_deposit }) => allow_deposit)
-			setDepositMethod(newDepositMethods[0])
-			setDepositMethods(newDepositMethods)
+			let newPaymentMethods = depositMethods.data.filter(({ allow_deposit }) => allow_deposit)
+			setDepositMethods(newPaymentMethods)
 
 			// TO Coinbase Fiat Account
-			const newAccountId = paymentMethods.data.filter(({ fiat_account }) => fiat_account && fiat_account.id)
+			const newAccountId = depositMethods.data.filter(({ fiat_account }) => fiat_account && fiat_account.id)
 			if (newAccountId && newAccountId.length) setAccountId(newAccountId[0].fiat_account.id)
 		} else {
-			setDepositMethod({
-				id: 0,
-				limits: { deposit: [{ description: '' }] },
-				name: 'No Deposit Methods Found'
-			})
+			setDepositMethod(noPaymentMethod)
 		}
 	}
 
-	function handleSubmit(e) {
+	async function handleSubmit(e) {
 		e.preventDefault()
-		e.stopPropagation()
-		setConfirmDeposit(true)
-	}
 
-	async function handleSubmitConfirm(e) {
-		e.preventDefault()
-		e.stopPropagation()
+		if (!e.currentTarget.checkValidity()) {
+			e.stopPropagation()
+			return
+		}
+
+		if (!isConfirming) {
+			setIsConfirming(true)
+			return
+		}
+
 		setIsLoading(true)
 
+		let newDepositMethod = JSON.parse(depositMethod)
 		let url = 'https://blockria.com/coinbase/deposit?'
 		url += `accountId=${accountId}`
-		url += `&advisorId=${advisor.idToken.payload.sub}`
+		url += `&advisorId=${advisorId}`
 		url += `&amount=${amount}`
-		url += `&clientId=${searchParams.get('clientId')}`
-		url += `&currency=${depositMethod.limits.deposit[0].remaining.currency}`
-		url += `&paymentMethod=${depositMethod.id}`
+		url += `&clientId=${clientId}`
+		url += `&currency=${newDepositMethod.limits.deposit[0].remaining.currency}`
+		url += `&paymentMethod=${newDepositMethod.id}`
 
 		await fetch(url)
 			.then(response => response.json())
@@ -73,11 +87,7 @@ const Deposit = ({ advisor, client }) => {
 					setIsLoading(false)
 					alert(data.errors[0].message)
 				} else {
-					navigate(
-						`/advisor/clients/client?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get(
-							'clientId'
-						)}`
-					)
+					navigate(`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`)
 				}
 			})
 			.catch(error => {
@@ -86,85 +96,81 @@ const Deposit = ({ advisor, client }) => {
 			})
 	}
 
-	function renderDepositMethod(newDepositMethod) {
+	function renderDepositMethod(depositMethod) {
 		return (
-			<div
-				className='Method'
-				key={`DepositMethod ${newDepositMethod.id}`}
-				onClick={() => {
-					setDepositMethod(newDepositMethod)
-					setShowDepositMethods(false)
-				}}
-			>
-				{`${newDepositMethod.name}\n${newDepositMethod.limits.deposit[0].description.replace('of your', '/')}`}
-			</div>
+			<option value={JSON.stringify(depositMethod)} key={`Deposit Method ${depositMethod.id}`}>
+				{depositMethod.name}
+			</option>
 		)
 	}
 
-	return (
-		<div className='Deposit'>
-			{!confirmDeposit ? (
+	function renderDepositMethodLimit() {
+		if (!depositMethod) return
+
+		let newDepositMethod = JSON.parse(depositMethod)
+		if (
+			newDepositMethod &&
+			newDepositMethod.limits &&
+			newDepositMethod.limits.deposit &&
+			newDepositMethod.limits.deposit.length &&
+			newDepositMethod.limits.deposit[0].description
+		) {
+			return (
 				<>
-					<div className='Description'>
-						<div className='Title'>Initiate a Deposit into {searchParams.get('clientName')}'s Coinbase Account.</div>
-						<p>
-							<b>New and exisiting bank accounts </b>
-							<span>
-								may take up to 24 hours to appear while the client undergoes Coinbase verification and Know Your
-								Customer (KYC) procedures.
-							</span>
-						</p>
-					</div>
-					<form className='Options' onSubmit={handleSubmit}>
-						<div className='SelectedMethod' onClick={() => setShowDepositMethods(!showDepositMethods)}>
-							{`${depositMethod.name}\n${depositMethod.limits.deposit[0].description.replace('of your', '/')}`}
-							<div className='Icon' style={showDepositMethods ? { transform: 'scaleY(-1)' } : {}}>
-								<svg viewBox='0 0 24 24'>
-									<path d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z' />
-								</svg>
-							</div>
-						</div>
-						{showDepositMethods ? <div className='Methods'>{depositMethods.map(renderDepositMethod)}</div> : null}
-						<input
-							className='Amount'
-							min={10}
-							onChange={e => setAmount(e.target.value)}
-							placeholder='AMOUNT'
-							required
-							step={0.01}
-							type='number'
-							value={amount}
-						/>
-						<button className='InitiateDeposit'>Initiate Deposit</button>
-						<div className='Cancel' onClick={() => navigate(-1)}>
-							Cancel
-						</div>
-					</form>
+					<div>Deposit Limit</div>
+					<input disabled={true} value={newDepositMethod.limits.deposit[0].description.replace('of your', '/')} />
 				</>
-			) : (
-				<>
-					<div className='Description'>
-						<div className='Title'>Confirm a Deposit into {searchParams.get('clientName')}'s Coinbase Account.</div>
-					</div>
-					<form className='Options' onSubmit={handleSubmitConfirm}>
-						<div className='SelectedMethod'>
-							{`${depositMethod.name}\n${depositMethod.limits.deposit[0].description.replace('of your', '/')}`}
-						</div>
-						<input
-							className='Amount'
-							readOnly
-							required
-							value={Number(amount).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
-						/>
-						<button className='InitiateDepositConfirm'>{isLoading ? 'Loading...' : 'Confirm Deposit'}</button>
-						{isLoading ? null : (
-							<div className='Cancel' onClick={() => setConfirmDeposit(false)}>
-								Cancel
-							</div>
-						)}
-					</form>
-				</>
-			)}
+			)
+		}
+	}
+
+	return isLoading ? (
+		<div className='Deposit NewForm'>
+			<div className='Loading'>Loading...</div>
+		</div>
+	) : (
+		<div className={`Deposit NewForm ${isConfirming && 'NewFormConfirm'}`}>
+			<form onSubmit={handleSubmit}>
+				<div className='Title'>Deposit into {clientName}'s Coinbase Account</div>
+				<div>Deposit Method</div>
+				<select
+					disabled={isConfirming && true}
+					onChange={e => setDepositMethod(e.target.value)}
+					required
+					value={depositMethod}
+				>
+					<option disabled value=''>
+						Select a Deposit Method
+					</option>
+					{depositMethods.map(renderDepositMethod)}
+				</select>
+				{renderDepositMethodLimit()}
+				<div>Deposit Amount</div>
+				<input
+					disabled={isConfirming && true}
+					min={10}
+					onChange={e => setAmount(e.target.value)}
+					placeholder='Ex: $10.00'
+					required
+					step={0.01}
+					type={isConfirming ? 'text' : 'number'}
+					value={isConfirming ? formatUSD(amount) : amount}
+				/>
+				{isConfirming && (
+					<>
+						<div>Description</div>
+						<input disabled={true} value={`Transfer funds into ${clientName}'s Coinbase account`} />
+					</>
+				)}
+				<input
+					className='Continue'
+					type='submit'
+					value={isConfirming ? 'Confirm Initiate Deposit' : 'Initiate Deposit'}
+				/>
+				<div className='Cancel' onClick={() => (isConfirming ? setIsConfirming(false) : navigate(-1))}>
+					Cancel
+				</div>
+			</form>
 		</div>
 	)
 }
