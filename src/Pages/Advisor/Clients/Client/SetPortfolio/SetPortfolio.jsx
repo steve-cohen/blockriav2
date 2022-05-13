@@ -118,7 +118,6 @@ const SetPortfolio = ({ advisor }) => {
 						<div>Next Rebalancing</div>
 						<input
 							disabled={true}
-							type='text'
 							value={
 								portfolioId !== '0' && portfolioId !== '' && frequency !== '0'
 									? '11:59:59 PM GMT-0700 (Pacific Daylight Time)'

@@ -130,102 +130,99 @@ const BillingEdit = ({ advisor }) => {
 	}
 
 	return (
-		<div className={`NewForm ${isConfirming ? 'NewFormConfirm' : ''}`}>
-			<div style={{ float: 'left', marginBottom: '48px' }}>
-				<form onSubmit={handleSubmit}>
-					<div className='Title'>{searchParams.get('billingId') ? 'Edit' : 'New'} Billing Plan</div>
-					<div>Billing Plan Name</div>
-					<input
-						autoComplete='No'
-						autoFocus
-						disabled={isConfirming ? true : false}
-						onChange={e => setBillingName(e.target.value)}
-						required
-						type='text'
-						value={billingName}
-					/>
-					<div>Billing Plan Type</div>
-					<select
-						disabled={isConfirming ? true : false}
-						onChange={e => setBillingType(e.target.value)}
-						required
-						value={billingType}
-					>
-						<option disabled value=''>
-							Select a Billing Plan Type
-						</option>
-						<option value='Assets Under Management'>Assets Under Management</option>
-						<option value='Fixed'>Fixed Amount</option>
-						{/* <option value='Tiered'>Tiered</option> */}
-					</select>
-					<div>Billing Plan Amount {billingUnits[billingType]}</div>
-					<input
-						autoComplete='No'
-						disabled={isConfirming ? true : false}
-						max={billingType === 'Assets Under Management' ? 10000 : Infinity}
-						min={0}
-						onChange={e => setBillingAmount(e.target.value)}
-						placeholder={billingPlaceHolders[billingType]}
-						required
-						step={0.01}
-						type={isConfirming ? 'text' : 'number'}
-						value={renderBillingAmount()}
-					/>
-					{isConfirming ? (
-						<>
-							<div>Block RIA Platform Fee (Basis Points / Month)</div>
-							<input disabled={true} type='text' value={`${billingPlatformFee} bps / mo`} />
-							<div>Number of Clients Affected</div>
-							<input disabled={true} value={`${clientsAffected} Clients Affected`} />
-							<input
-								className={isDeleting ? 'Delete' : 'Continue'}
-								disabled={isLoading ? true : false}
-								style={isLoading ? { cursor: 'default', textDecoration: 'none' } : {}}
-								type='submit'
-								value={isLoading ? 'Loading...' : isDeleting ? 'Confirm Delete Billing Plan' : 'Confirm Billing Plan'}
-							/>
-							{!isLoading ? (
-								<div
-									className='Cancel'
-									onClick={() => {
-										setIsDeleting(false)
-										setIsConfirming(false)
-									}}
-								>
-									Cancel
-								</div>
-							) : null}
-						</>
-					) : (
-						<>
-							<input
-								className='Continue'
-								disabled={isLoading ? true : false}
-								style={isLoading ? { cursor: 'default', textDecoration: 'none' } : {}}
-								type='submit'
-								value={
-									isLoading ? 'Loading...' : searchParams.get('billingId') ? 'Edit Billing Plan' : 'Create Billing Plan'
-								}
-							/>
-							{searchParams.get('billingId') ? (
-								<div
-									className='Delete'
-									onClick={() => {
-										setIsDeleting(true)
-										setIsConfirming(true)
-									}}
-									style={{ marginLeft: '12px' }}
-								>
-									{isLoading ? 'Loading...' : 'Delete Billing Plan'}
-								</div>
-							) : null}
-							<div className='Cancel' onClick={() => navigate(-1)}>
+		<div className={`BillingEdit NewForm ${isConfirming && 'NewFormConfirm'}`}>
+			<form onSubmit={handleSubmit}>
+				<div className='Title'>{searchParams.get('billingId') ? 'Edit' : 'Create a'} Billing Plan</div>
+				<div>Billing Plan Name</div>
+				<input
+					autoComplete='No'
+					autoFocus
+					disabled={isConfirming ? true : false}
+					onChange={e => setBillingName(e.target.value)}
+					required
+					value={billingName}
+				/>
+				<div>Billing Plan Type</div>
+				<select
+					disabled={isConfirming ? true : false}
+					onChange={e => setBillingType(e.target.value)}
+					required
+					value={billingType}
+				>
+					<option disabled value=''>
+						Select a Billing Plan Type
+					</option>
+					<option value='Assets Under Management'>Assets Under Management</option>
+					<option value='Fixed'>Fixed Amount</option>
+					{/* <option value='Tiered'>Tiered</option> */}
+				</select>
+				<div>Billing Plan Amount {billingUnits[billingType]}</div>
+				<input
+					autoComplete='No'
+					disabled={isConfirming ? true : false}
+					max={billingType === 'Assets Under Management' ? 10000 : Infinity}
+					min={0}
+					onChange={e => setBillingAmount(e.target.value)}
+					placeholder={billingPlaceHolders[billingType]}
+					required
+					step={0.01}
+					type={isConfirming ? 'text' : 'number'}
+					value={renderBillingAmount()}
+				/>
+				{isConfirming ? (
+					<>
+						{/* <div>Block RIA Platform Fee (Basis Points / Month)</div>
+							<input disabled={true} value={`${billingPlatformFee} bps / mo`} /> */}
+						<div>Number of Clients Affected</div>
+						<input disabled={true} value={`${clientsAffected} Clients Affected`} />
+						<input
+							className={isDeleting ? 'Delete' : 'Continue'}
+							disabled={isLoading ? true : false}
+							style={isLoading ? { cursor: 'default', textDecoration: 'none' } : {}}
+							type='submit'
+							value={isLoading ? 'Loading...' : isDeleting ? 'Confirm Delete Billing Plan' : 'Confirm Billing Plan'}
+						/>
+						{!isLoading ? (
+							<div
+								className='Cancel'
+								onClick={() => {
+									setIsDeleting(false)
+									setIsConfirming(false)
+								}}
+							>
 								Cancel
 							</div>
-						</>
-					)}
-				</form>
-			</div>
+						) : null}
+					</>
+				) : (
+					<>
+						<input
+							className='Continue'
+							disabled={isLoading ? true : false}
+							style={isLoading ? { cursor: 'default', textDecoration: 'none' } : {}}
+							type='submit'
+							value={
+								isLoading ? 'Loading...' : searchParams.get('billingId') ? 'Edit Billing Plan' : 'Create Billing Plan'
+							}
+						/>
+						{searchParams.get('billingId') ? (
+							<div
+								className='Delete'
+								onClick={() => {
+									setIsDeleting(true)
+									setIsConfirming(true)
+								}}
+								style={{ marginLeft: '12px' }}
+							>
+								{isLoading ? 'Loading...' : 'Delete Billing Plan'}
+							</div>
+						) : null}
+						<div className='Cancel' onClick={() => navigate(-1)}>
+							Cancel
+						</div>
+					</>
+				)}
+			</form>
 		</div>
 	)
 }

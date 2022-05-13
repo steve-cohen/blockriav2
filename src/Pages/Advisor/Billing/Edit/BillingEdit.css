@@ -1,0 +1,13 @@
+.BillingEdit {
+	align-items: flex-start;
+	background: white;
+	display: flex;
+	justify-content: center;
+	left: 0;
+	min-height: 90vh;
+	padding-top: 10vh;
+	position: fixed;
+	top: 0;
+	width: 100vw;
+	z-index: 100;
+}

@@ -4,10 +4,13 @@ import './Taxes.css'
 
 const Taxes = ({ advisor }) => {
 	const [clients, setClients] = useState([])
+	const [isLoading, setIsLoading] = useState(false)
 	const [taxYears, setTaxYears] = useState([])
 
-	useEffect(() => {
-		fetch(`https://blockria.com/api/coinbase/taxes?advisorId=${advisor.idToken.payload.sub}`)
+	useEffect(async () => {
+		setIsLoading(true)
+
+		await fetch(`https://blockria.com/api/coinbase/taxes?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.then(newClients => {
 				const date = new Date()
@@ -23,7 +26,9 @@ const Taxes = ({ advisor }) => {
 				setClients(newClients)
 				setTaxYears(newTaxYears)
 			})
-			.catch(error => alert(error))
+			.catch(alert)
+
+		setIsLoading(false)
 	}, [])
 
 	function renderTaxYears(clientId, clientName, createdAt) {
@@ -58,23 +63,33 @@ const Taxes = ({ advisor }) => {
 					))}
 				</tr>
 			</thead>
-			<tbody>
-				{clients
-					.sort((a, b) => b.clientName - a.clientName)
-					.map(({ clientId, clientName, createdAt }) => (
-						<tr key={clientId}>
-							<td className='Bold'>
-								<Link to={`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`}>{clientName}</Link>
-							</td>
-							<td className='Bold Break'>
-								<Link to={`/advisor/clients/client/taxevents?clientName=${clientName}&clientId=${clientId}`}>
-									All Tax Events
-								</Link>
-							</td>
-							{renderTaxYears(clientId, clientName, createdAt)}
-						</tr>
-					))}
-			</tbody>
+			{isLoading ? (
+				<tbody>
+					<tr>
+						<td className='Loading' style={{ border: 'none' }}>
+							Loading...
+						</td>
+					</tr>
+				</tbody>
+			) : (
+				<tbody>
+					{clients
+						.sort((a, b) => b.clientName - a.clientName)
+						.map(({ clientId, clientName, createdAt }) => (
+							<tr key={clientId}>
+								<td className='Bold'>
+									<Link to={`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`}>{clientName}</Link>
+								</td>
+								<td className='Bold Break'>
+									<Link to={`/advisor/clients/client/taxevents?clientName=${clientName}&clientId=${clientId}`}>
+										All Tax Events
+									</Link>
+								</td>
+								{renderTaxYears(clientId, clientName, createdAt)}
+							</tr>
+						))}
+				</tbody>
+			)}
 		</table>
 	)
 }

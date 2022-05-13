@@ -50,9 +50,9 @@ const Billing = ({ advisor }) => {
 				<td className='AlignRight' style={{ textTransform: 'none' }}>
 					{renderBillingAmount} / mo
 				</td>
-				<td className='AlignRight' style={{ textTransform: 'none' }}>
+				{/* <td className='AlignRight' style={{ textTransform: 'none' }}>
 					{billingPlatformFee} bps / mo
-				</td>
+				</td> */}
 				<td className='AlignRight Bold'>
 					{billingCountTotals[billingId] !== 1
 						? `${billingCountTotals[billingId] || 0} Clients`
@@ -82,7 +82,7 @@ const Billing = ({ advisor }) => {
 						<th>NAME</th>
 						<th>TYPE</th>
 						<th className='AlignRight'>FIRM FEE</th>
-						<th className='AlignRight'>PLATFORM FEE</th>
+						{/* <th className='AlignRight'>PLATFORM FEE</th> */}
 						<th className='AlignRight Break'>ASSIGNED TO</th>
 						<th>EDIT</th>
 						<th>LAST EDIT</th>
@@ -100,7 +100,7 @@ const Billing = ({ advisor }) => {
 			<table>
 				<caption>
 					<div className='Flex'>
-						<div className='Title'>Billing Statements</div>
+						<div className='Title'>Billing CSVs</div>
 					</div>
 				</caption>
 				<thead>

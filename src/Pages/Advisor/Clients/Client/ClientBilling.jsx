@@ -27,7 +27,7 @@ const ClientBilling = ({ advisor, client }) => {
 				.catch(alert)
 		}
 
-		await setIsLoading(false)
+		setIsLoading(false)
 	}, [client])
 
 	function renderBillingAmount({ billingAmount, billingType }) {
@@ -59,7 +59,7 @@ const ClientBilling = ({ advisor, client }) => {
 					<th>NAME</th>
 					<th>TYPE</th>
 					<th className='AlignRight'>FIRM FEE</th>
-					<th className='AlignRight'>PLATFORM FEE</th>
+					{/* <th className='AlignRight'>PLATFORM FEE</th> */}
 					<th className='Break' />
 				</tr>
 			</thead>
@@ -76,9 +76,9 @@ const ClientBilling = ({ advisor, client }) => {
 						<td className='Bold'>{billingPlan.billingName}</td>
 						<td>{billingPlan.billingType}</td>
 						{renderBillingAmount(billingPlan)}
-						<td className='AlignRight' style={{ textTransform: 'none' }}>
+						{/* <td className='AlignRight' style={{ textTransform: 'none' }}>
 							{billingPlan.billingPlatformFee} bps / mo
-						</td>
+						</td> */}
 						<td />
 					</tr>
 				) : (
