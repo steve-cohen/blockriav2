@@ -5,13 +5,11 @@ import './BillingEdit.css'
 const billingUnits = {
 	'Assets Under Management': '(Basis Points / Month)',
 	Fixed: '($ / Month)'
-	// Tiered: ''
 }
 
 const billingPlaceHolders = {
 	'Assets Under Management': 'Ex: 100 bps / mo',
 	Fixed: 'Ex: $1,000.00 / mo'
-	// Tiered: ''
 }
 
 function formatUSD(number) {
@@ -24,6 +22,8 @@ function formatUSD(number) {
 const BillingEdit = ({ advisor }) => {
 	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
+	const advisorId = advisor.idToken.payload.sub
+	const billingId = searchParams.get('billingId')
 
 	const [billingAmount, setBillingAmount] = useState('')
 	const [billingName, setBillingName] = useState('')
@@ -37,9 +37,6 @@ const BillingEdit = ({ advisor }) => {
 	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(async () => {
-		const advisorId = advisor.idToken.payload.sub
-		const billingId = searchParams.get('billingId')
-
 		if (billingId) {
 			await fetch(`https://blockria.com/api/billing/edit?advisorId=${advisorId}&billingId=${billingId}`)
 				.then(response => response.json())
@@ -56,7 +53,7 @@ const BillingEdit = ({ advisor }) => {
 		setIsLoading(false)
 
 		if (billingId) {
-			fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisor.idToken.payload.sub}`)
+			fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisorId}`)
 				.then(response => response.json())
 				.then(clients => {
 					let newClientsAffected = 0
@@ -74,6 +71,33 @@ const BillingEdit = ({ advisor }) => {
 		setBillingAmount('')
 	}, [billingType])
 
+	async function handleDelete() {
+		if (!isConfirming) {
+			setIsConfirming(true)
+			setIsDeleting(true)
+			return
+		}
+
+		const deleteOptions = {
+			method: 'DELETE',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ advisorId, billingId })
+		}
+
+		await fetch('https://blockria.com/api/billing/edit', deleteOptions)
+			.then(() => navigate('/advisor/billing'))
+			.catch(alert)
+	}
+
+	function handleCancel() {
+		if (isConfirming) {
+			setIsDeleting(false)
+			setIsConfirming(false)
+		} else {
+			navigate(-1)
+		}
+	}
+
 	async function handleSubmit(e) {
 		e.preventDefault()
 
@@ -89,35 +113,23 @@ const BillingEdit = ({ advisor }) => {
 
 		setIsLoading(true)
 
-		if (isDeleting) {
-			const deleteOptions = {
-				method: 'DELETE',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ advisorId: advisor.idToken.payload.sub, billingId: searchParams.get('billingId') })
-			}
-
-			await fetch('https://blockria.com/api/billing/edit', deleteOptions)
-				.then(() => navigate('/advisor/billing'))
-				.catch(alert)
-		} else {
-			const billingOptions = {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					advisorId: advisor.idToken.payload.sub,
-					billingAmount,
-					billingId: searchParams.get('billingId') || Date.now(),
-					billingName,
-					billingPlatformFee,
-					billingType,
-					billingUpdatedAt: Date.now()
-				})
-			}
-
-			await fetch('https://blockria.com/api/billing/edit', billingOptions)
-				.then(() => navigate('/advisor/billing'))
-				.catch(alert)
+		const billingOptions = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				advisorId,
+				billingAmount,
+				billingId: billingId || Date.now(),
+				billingName,
+				billingPlatformFee,
+				billingType,
+				billingUpdatedAt: Date.now()
+			})
 		}
+
+		await fetch('https://blockria.com/api/billing/edit', billingOptions)
+			.then(() => navigate('/advisor/billing'))
+			.catch(alert)
 	}
 
 	function renderBillingAmount() {
@@ -129,22 +141,33 @@ const BillingEdit = ({ advisor }) => {
 		return billingAmount
 	}
 
-	return (
+	function renderDelete() {
+		if (!billingId) return
+		if (isConfirming && !isDeleting) return
+
+		return (
+			<div className='Delete' onClick={handleDelete} style={isConfirming ? {} : { marginLeft: '12px' }}>
+				{isConfirming ? 'Confirm Delete Portfolio' : 'Delete Portfolio'}
+			</div>
+		)
+	}
+
+	return !isLoading ? (
 		<div className={`BillingEdit NewForm ${isConfirming && 'NewFormConfirm'}`}>
 			<form onSubmit={handleSubmit}>
-				<div className='Title'>{searchParams.get('billingId') ? 'Edit' : 'Create a'} Billing Plan</div>
+				<div className='Title'>{billingId ? 'Edit' : 'Create a'} Billing Plan</div>
 				<div>Billing Plan Name</div>
 				<input
 					autoComplete='No'
 					autoFocus
-					disabled={isConfirming ? true : false}
+					disabled={isConfirming && true}
 					onChange={e => setBillingName(e.target.value)}
 					required
 					value={billingName}
 				/>
 				<div>Billing Plan Type</div>
 				<select
-					disabled={isConfirming ? true : false}
+					disabled={isConfirming && true}
 					onChange={e => setBillingType(e.target.value)}
 					required
 					value={billingType}
@@ -154,12 +177,11 @@ const BillingEdit = ({ advisor }) => {
 					</option>
 					<option value='Assets Under Management'>Assets Under Management</option>
 					<option value='Fixed'>Fixed Amount</option>
-					{/* <option value='Tiered'>Tiered</option> */}
 				</select>
 				<div>Billing Plan Amount {billingUnits[billingType]}</div>
 				<input
 					autoComplete='No'
-					disabled={isConfirming ? true : false}
+					disabled={isConfirming && true}
 					max={billingType === 'Assets Under Management' ? 10000 : Infinity}
 					min={0}
 					onChange={e => setBillingAmount(e.target.value)}
@@ -169,60 +191,29 @@ const BillingEdit = ({ advisor }) => {
 					type={isConfirming ? 'text' : 'number'}
 					value={renderBillingAmount()}
 				/>
-				{isConfirming ? (
+				{isConfirming && (
 					<>
-						{/* <div>Block RIA Platform Fee (Basis Points / Month)</div>
-							<input disabled={true} value={`${billingPlatformFee} bps / mo`} /> */}
 						<div>Number of Clients Affected</div>
-						<input disabled={true} value={`${clientsAffected} Clients Affected`} />
 						<input
-							className={isDeleting ? 'Delete' : 'Continue'}
-							disabled={isLoading ? true : false}
-							style={isLoading ? { cursor: 'default', textDecoration: 'none' } : {}}
-							type='submit'
-							value={isLoading ? 'Loading...' : isDeleting ? 'Confirm Delete Billing Plan' : 'Confirm Billing Plan'}
-						/>
-						{!isLoading ? (
-							<div
-								className='Cancel'
-								onClick={() => {
-									setIsDeleting(false)
-									setIsConfirming(false)
-								}}
-							>
-								Cancel
-							</div>
-						) : null}
-					</>
-				) : (
-					<>
-						<input
-							className='Continue'
-							disabled={isLoading ? true : false}
-							style={isLoading ? { cursor: 'default', textDecoration: 'none' } : {}}
-							type='submit'
+							disabled={true}
 							value={
-								isLoading ? 'Loading...' : searchParams.get('billingId') ? 'Edit Billing Plan' : 'Create Billing Plan'
+								clientsAffected === 1 ? `${clientsAffected} Client Affected` : `${clientsAffected} Clients Affected`
 							}
 						/>
-						{searchParams.get('billingId') ? (
-							<div
-								className='Delete'
-								onClick={() => {
-									setIsDeleting(true)
-									setIsConfirming(true)
-								}}
-								style={{ marginLeft: '12px' }}
-							>
-								{isLoading ? 'Loading...' : 'Delete Billing Plan'}
-							</div>
-						) : null}
-						<div className='Cancel' onClick={() => navigate(-1)}>
-							Cancel
-						</div>
 					</>
 				)}
+				{!isDeleting && (
+					<input className='Continue' type='submit' value={billingId ? 'Edit Billing Plan' : 'Create Billing Plan'} />
+				)}
+				{renderDelete()}
+				<div className='Cancel' onClick={handleCancel}>
+					Cancel
+				</div>
 			</form>
+		</div>
+	) : (
+		<div className='BillingEdit'>
+			<div className='Loading'>Loading...</div>
 		</div>
 	)
 }

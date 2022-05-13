@@ -24,7 +24,7 @@ const EditPortfolio = ({ advisor }) => {
 		{ holding: '', percent: '' },
 		{ holding: '', percent: '' }
 	])
-	const [isDeleteing, setIsDeleting] = useState(false)
+	const [isDeleting, setIsDeleting] = useState(false)
 	const [isConfirming, setIsConfirming] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const [portfolioName, setPortfolioName] = useState('')
@@ -55,6 +55,15 @@ const EditPortfolio = ({ advisor }) => {
 		let newHoldings = JSON.parse(JSON.stringify(holdings))
 		newHoldings.splice(index, 1)
 		setHoldings(newHoldings)
+	}
+
+	function handleCancel() {
+		if (isConfirming) {
+			setIsDeleting(false)
+			setIsConfirming(false)
+		} else {
+			navigate(-1)
+		}
 	}
 
 	function handleHolding(newHolding, index) {
@@ -126,7 +135,7 @@ const EditPortfolio = ({ advisor }) => {
 
 	function renderDelete() {
 		if (!portfolioId) return
-		if (isConfirming && !isDeleteing) return
+		if (isConfirming && !isDeleting) return
 
 		return (
 			<div className='Delete' onClick={handleDelete} style={isConfirming ? {} : { marginLeft: '12px' }}>
@@ -202,7 +211,7 @@ const EditPortfolio = ({ advisor }) => {
 						+ Add Holding
 					</div>
 				)}
-				{!isDeleteing && (
+				{!isDeleting && (
 					<input
 						className='Continue'
 						type='submit'
@@ -210,7 +219,7 @@ const EditPortfolio = ({ advisor }) => {
 					/>
 				)}
 				{renderDelete()}
-				<div className='Cancel' onClick={() => (isConfirming ? setIsConfirming(false) : navigate(-1))}>
+				<div className='Cancel' onClick={handleCancel}>
 					Cancel
 				</div>
 			</form>
