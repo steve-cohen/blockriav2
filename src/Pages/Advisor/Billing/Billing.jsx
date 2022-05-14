@@ -12,14 +12,22 @@ function formatUSD(number) {
 const Billing = ({ advisor }) => {
 	const [billingPlans, setBillingPlans] = useState([])
 	const [billingCountTotals, setBillingCountTotals] = useState({})
+	const [isLoading, setIsLoading] = useState(true)
 
-	useEffect(() => {
-		fetch(`https://blockria.com/api/billing?advisorId=${advisor.idToken.payload.sub}`)
+	useEffect(async () => {
+		await Promise.all([GETBillingPlans(), GETBillingCountTotals()])
+		setIsLoading(false)
+	}, [])
+
+	function GETBillingPlans() {
+		return fetch(`https://blockria.com/api/billing?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.then(setBillingPlans)
 			.catch(alert)
+	}
 
-		fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisor.idToken.payload.sub}`)
+	function GETBillingCountTotals() {
+		return fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.then(clients => {
 				let newBillingCountTotals = {}
@@ -30,7 +38,7 @@ const Billing = ({ advisor }) => {
 				setBillingCountTotals(newBillingCountTotals)
 			})
 			.catch(alert)
-	}, [])
+	}
 
 	function renderBillingPlans({
 		billingAmount,
@@ -61,7 +69,7 @@ const Billing = ({ advisor }) => {
 				<td className='Bold'>
 					<Link to={`/advisor/billing/edit?billingId=${billingId}`}>Edit Billing Plan</Link>
 				</td>
-				<td>{new Date(billingUpdatedAt).toISOString().slice(0, 10)}</td>
+				<td>{new Date(Number(billingUpdatedAt)).toISOString().slice(0, 10)}</td>
 			</tr>
 		)
 	}
@@ -88,7 +96,17 @@ const Billing = ({ advisor }) => {
 						<th>LAST EDIT</th>
 					</tr>
 				</thead>
-				<tbody>{billingPlans.map(renderBillingPlans)}</tbody>
+				<tbody>
+					{isLoading ? (
+						<tr>
+							<td style={{ border: 'none' }}>
+								<div className='Loading'>Loading...</div>
+							</td>
+						</tr>
+					) : (
+						billingPlans.map(renderBillingPlans)
+					)}
+				</tbody>
 				<tfoot>
 					<tr>
 						<td colSpan={6}>
