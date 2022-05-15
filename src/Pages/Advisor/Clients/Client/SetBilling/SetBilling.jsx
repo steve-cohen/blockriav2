@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import './SetBilling.css'
 
 const billingUnits = {
-	'Assets Under Management': '(Basis Points / Month)',
+	'Assets Under Management': '(Basis Points / Year)',
 	Fixed: '($ / Month)'
 	// Tiered: ''
 }
@@ -65,7 +65,7 @@ const SetBilling = ({ advisor }) => {
 			.catch(alert)
 	}
 	function renderBillingAmount() {
-		if (billingPlan.billingType === 'Assets Under Management') return `${billingPlan.billingAmount} bps / mo`
+		if (billingPlan.billingType === 'Assets Under Management') return `${billingPlan.billingAmount} bps / yr`
 		if (billingPlan.billingType === 'Fixed') return `${formatUSD(billingPlan.billingAmount)} / mo`
 		return ''
 	}
@@ -110,7 +110,7 @@ const SetBilling = ({ advisor }) => {
 				{isConfirming && (
 					<>
 						<div>New Billing Plan Begins</div>
-						<input disabled={true} value='11:59:59 PM GMT-0700 (Pacific Daylight Time)' />
+						<input disabled={true} value='12:00:00 AM GMT-0700 (Pacific Daylight Time)' />
 					</>
 				)}
 				<input className='Continue' type='submit' value={isConfirming ? 'Confirm Billing Plan' : 'Set Billing Plan'} />

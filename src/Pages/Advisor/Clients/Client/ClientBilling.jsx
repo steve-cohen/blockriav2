@@ -31,12 +31,12 @@ const ClientBilling = ({ advisor, client }) => {
 	}, [client])
 
 	function renderBillingAmount({ billingAmount, billingType }) {
-		let renderBillingAmount = `${billingAmount} bps`
-		if (billingType === 'Fixed') renderBillingAmount = formatUSD(billingAmount)
+		let renderBillingAmount = `${billingAmount} bps / yr`
+		if (billingType === 'Fixed') renderBillingAmount = `${formatUSD(billingAmount)} / mo`
 
 		return (
 			<td className='AlignRight' style={{ textTransform: 'none' }}>
-				{renderBillingAmount} / mo
+				{renderBillingAmount}
 			</td>
 		)
 	}

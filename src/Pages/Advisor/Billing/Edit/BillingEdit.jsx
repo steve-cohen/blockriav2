@@ -3,12 +3,12 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import './BillingEdit.css'
 
 const billingUnits = {
-	'Assets Under Management': '(Basis Points / Month)',
+	'Assets Under Management': '(Basis Points / Year)',
 	Fixed: '($ / Month)'
 }
 
 const billingPlaceHolders = {
-	'Assets Under Management': 'Ex: 100 bps / mo',
+	'Assets Under Management': 'Ex: 100 bps / yr',
 	Fixed: 'Ex: $1,000.00 / mo'
 }
 
@@ -134,7 +134,7 @@ const BillingEdit = ({ advisor }) => {
 
 	function renderBillingAmount() {
 		if (isConfirming) {
-			if (billingType === 'Assets Under Management') return `${billingAmount} bps / mo`
+			if (billingType === 'Assets Under Management') return `${billingAmount} bps / yr`
 			if (billingType === 'Fixed') return `${formatUSD(billingAmount)} / mo`
 		}
 

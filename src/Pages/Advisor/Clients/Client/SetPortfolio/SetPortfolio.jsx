@@ -120,7 +120,7 @@ const SetPortfolio = ({ advisor }) => {
 							disabled={true}
 							value={
 								portfolioId !== '0' && portfolioId !== '' && frequency !== '0'
-									? '11:59:59 PM GMT-0700 (Pacific Daylight Time)'
+									? '12:00:00 AM GMT-0700 (Pacific Daylight Time)'
 									: 'None'
 							}
 						/>
