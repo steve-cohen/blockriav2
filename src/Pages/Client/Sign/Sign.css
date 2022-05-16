@@ -9,6 +9,8 @@
 .Sign .Agreements {
 	border: 1px solid rgb(237, 238, 240);
 	border-radius: 2px;
+	font-size: 14px;
+	font-weight: 500;
 	max-width: 450px;
 	margin: 40px 20px;
 	padding: 40px;

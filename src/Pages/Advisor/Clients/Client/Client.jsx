@@ -48,9 +48,9 @@ const Client = ({ advisor }) => {
 				setTotalBalanceNonTradeable={setTotalBalanceNonTradeable}
 			/>
 			<ClientPortfolio advisor={advisor} client={client} />
-			<ClientBilling advisor={advisor} client={client} />
 			<ClientDepositsWithdrawals advisor={advisor} />
 			<ClientTransactions transactions={transactions} />
+			<ClientBilling advisor={advisor} client={client} />
 		</div>
 	)
 }

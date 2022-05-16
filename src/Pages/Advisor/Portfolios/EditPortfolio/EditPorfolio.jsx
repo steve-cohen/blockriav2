@@ -22,6 +22,7 @@ const EditPortfolio = ({ advisor }) => {
 
 	const [holdings, setHoldings] = useState([
 		{ holding: '', percent: '' },
+		{ holding: '', percent: '' },
 		{ holding: '', percent: '' }
 	])
 	const [isDeleting, setIsDeleting] = useState(false)
@@ -146,45 +147,45 @@ const EditPortfolio = ({ advisor }) => {
 
 	function renderHolding({ holding, percent }, index) {
 		return (
-			<React.Fragment key={`Holdings ${index}`}>
-				<div className='HoldingFlex'>
-					<div>Holding {index + 1}</div>
-					{!isConfirming && (
-						<div className='Red' onClick={() => deleteHolding(index)}>
-							Delete
-						</div>
-					)}
-				</div>
-				<select
-					disabled={isConfirming && true}
-					onChange={e => handleHolding({ holding: e.target.value, percent }, index)}
-					required
-					value={holding}
-				>
-					<option disabled value={''}>
-						Select a Holding
-					</option>
-					{coinbaseHoldings.map(holding => (
-						<option value={holding.split(' - ')[0]} key={`Holding ${holding}`}>
-							{holding}
+			<span key={`Holdings ${index}`} style={{ position: 'relative' }}>
+				<span className='HoldingFlex'>
+					<select
+						className='Holding'
+						disabled={isConfirming && true}
+						onChange={e => handleHolding({ holding: e.target.value, percent }, index)}
+						required
+						value={holding}
+					>
+						<option disabled value={''}>
+							Select a Holding
 						</option>
-					))}
-				</select>
-				<input
-					autoComplete='off'
-					className='Percent'
-					disabled={isConfirming && true}
-					displayvalue={isConfirming ? `${formatPercent(percent)}%` : null}
-					min={0.01}
-					max={100}
-					onChange={e => handleHolding({ holding, percent: e.target.value }, index)}
-					placeholder='Set a Percentage (Ex: 60.00%)'
-					required
-					step={0.01}
-					type={isConfirming ? 'text' : 'number'}
-					value={isConfirming ? formatPercent(percent) : percent}
-				/>
-			</React.Fragment>
+						{coinbaseHoldings.map(holding => (
+							<option value={holding.split(' - ')[0]} key={`Holding ${holding}`}>
+								{holding}
+							</option>
+						))}
+					</select>
+					<input
+						autoComplete='off'
+						className='Percent'
+						disabled={isConfirming && true}
+						displayvalue={isConfirming ? `${formatPercent(percent)}%` : null}
+						min={0.01}
+						max={100}
+						onChange={e => handleHolding({ holding, percent: e.target.value }, index)}
+						placeholder='0.00%'
+						required
+						step={0.01}
+						type={isConfirming ? 'text' : 'number'}
+						value={isConfirming ? formatPercent(percent) : percent}
+					/>
+				</span>
+				{!isConfirming && (
+					<span className='DeleteHolding Red' onClick={() => deleteHolding(index)}>
+						Delete
+					</span>
+				)}
+			</span>
 		)
 	}
 
@@ -205,9 +206,13 @@ const EditPortfolio = ({ advisor }) => {
 					required
 					value={portfolioName}
 				/>
+				<span className='HoldingFlex'>
+					<div>Holdings</div>
+					<div>Percent</div>
+				</span>
 				{holdings.map(renderHolding)}
 				{!isConfirming && (
-					<div className='Link' onClick={addHolding}>
+					<div className='AddHolding Link' onClick={addHolding}>
 						+ Add Holding
 					</div>
 				)}
