@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Transaction from './Transaction'
-import coinbaseTokenNames from '../../../coinbaseTokenNames.json'
 import './Transactions.css'
 
 function formatUSD(number) {
@@ -77,11 +76,11 @@ const Transactions = () => {
 				</tr>
 			</thead>
 			<tbody>
-				{transactions.map((transaction, index) => (
+				{transactions.map(transaction => (
 					<Transaction key={`Transaction ${transaction.id}`} transaction={transaction} />
 				))}
 			</tbody>
-			<tfoot>{renderTotals()}</tfoot>
+			{renderTotals()}
 		</table>
 	)
 }

@@ -4,6 +4,7 @@ import Transaction from './Transactions/Transaction'
 
 const ClientTransactions = ({ transactions }) => {
 	const [searchParams] = useSearchParams()
+	const taxEvents = transactions.filter(({ type }) => type === 'buy' || type === 'sell')
 
 	return (
 		<>
@@ -38,19 +39,22 @@ const ClientTransactions = ({ transactions }) => {
 						<Transaction key={`Transaction ${transaction.id}`} transaction={transaction} />
 					))}
 				</tbody>
-				<tfoot>
-					<tr>
-						<td colSpan={14}>
-							<Link
-								to={`transactions?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get(
-									'clientId'
-								)}`}
-							>
-								+ Show Full Transaction History
-							</Link>
-						</td>
-					</tr>
-				</tfoot>
+				{transactions.length && (
+					<tfoot>
+						<tr>
+							<td colSpan={14}>
+								<Link
+									to={`transactions?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get(
+										'clientId'
+									)}`}
+								>
+									+ Show All {transactions.length} Transaction
+									{transactions.length !== 1 && 's'}
+								</Link>
+							</td>
+						</tr>
+					</tfoot>
+				)}
 			</table>
 			<table>
 				<caption>
@@ -79,24 +83,24 @@ const ClientTransactions = ({ transactions }) => {
 					</tr>
 				</thead>
 				<tbody>
-					{transactions
-						.filter(({ type }) => type === 'buy' || type === 'sell')
-						.slice(0, 10)
-						.map(transaction => (
-							<Transaction key={`Taxes ${transaction.id}`} transaction={transaction} />
-						))}
+					{taxEvents.slice(0, 10).map(transaction => (
+						<Transaction key={`Taxes ${transaction.id}`} transaction={transaction} />
+					))}
 				</tbody>
-				<tfoot>
-					<tr>
-						<td colSpan={14}>
-							<Link
-								to={`taxEvents?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get('clientId')}`}
-							>
-								+ Show All Tax Events
-							</Link>
-						</td>
-					</tr>
-				</tfoot>
+				{taxEvents.length && (
+					<tfoot>
+						<tr>
+							<td colSpan={14}>
+								<Link
+									to={`taxEvents?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get('clientId')}`}
+								>
+									+ Show All {taxEvents.length} Tax Event
+									{taxEvents.length !== 1 && 's'}
+								</Link>
+							</td>
+						</tr>
+					</tfoot>
+				)}
 			</table>
 		</>
 	)
