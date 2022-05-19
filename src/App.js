@@ -8,6 +8,8 @@ import Home from './Pages/Home/Home'
 import Sign from './Pages/Client/Sign/Sign'
 
 import './App.css'
+import './Form.css'
+import './Table.css'
 
 function App() {
 	return (

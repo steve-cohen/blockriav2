@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import UserPool from '../../../UserPool'
-import './SignUp.css'
 
 const SignUp = () => {
 	const navigate = useNavigate()
@@ -40,11 +39,11 @@ const SignUp = () => {
 	}
 
 	return (
-		<div className='SignUp NewForm'>
+		<div className='SignUp NewForm NewFormWrapper'>
 			<form onSubmit={handleSubmit}>
 				<div className='Title'>Create a Block RIA Account</div>
 				<div>Email</div>
-				<input autoFocus minLength={1} onChange={e => setEmail(e.target.value)} required type='email' value={email} />
+				<input minLength={1} onChange={e => setEmail(e.target.value)} required type='email' value={email} />
 				<div>Password</div>
 				<input minLength={6} onChange={e => setPassword(e.target.value)} required type='password' />
 				<div>First Name</div>

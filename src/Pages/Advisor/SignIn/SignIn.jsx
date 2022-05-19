@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { AccountContext } from '../../../Account'
 import { demoAdvisorEmpty } from '../demoData'
-import './SignIn.css'
 
 const SignIn = ({ setAdvisor }) => {
 	const { authenticate } = useContext(AccountContext)
@@ -31,6 +30,7 @@ const SignIn = ({ setAdvisor }) => {
 		authenticate(email, password)
 			.then(async newAdvisor => {
 				if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+					// newAdvisor.idToken.payload.sub = ''
 				}
 				localStorage.setItem('advisor', JSON.stringify(newAdvisor))
 				setAdvisor(newAdvisor)
@@ -45,7 +45,7 @@ const SignIn = ({ setAdvisor }) => {
 	}
 
 	return (
-		<div className='SignIn NewForm'>
+		<div className='SignIn NewForm NewFormWrapper'>
 			<form onSubmit={handleSubmit}>
 				<div className='Title'>{searchParams.get('verified') ? 'Your email was verified!' : 'Sign Into Block RIA'}</div>
 				<div>Email</div>

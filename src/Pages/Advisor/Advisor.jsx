@@ -18,6 +18,7 @@ import SetPortfolio from './Clients/Client/SetPortfolio/SetPortfolio'
 import Settings from './Settings/Settings'
 import SignIn from './SignIn/SignIn'
 import SignUp from './SignUp/SignUp'
+// import Support from './Support/Support'
 import Taxes from './Taxes/Taxes'
 import TaxEvents from './Clients/Client/TaxEvents/TaxEvents'
 import Transactions from './Clients/Client/Transactions/Transactions'
@@ -66,6 +67,7 @@ const Advisor = () => {
 								<Route path='portfolios' element={<Portfolios advisor={advisor} />} />
 								<Route path='portfolios/edit' element={<EditPortfolio advisor={advisor} />} />
 								<Route path='settings' element={<Settings advisor={advisor} />} />
+								{/* <Route path='support' element={<Support advisor={advisor} />} /> */}
 								<Route path='taxes' element={<Taxes advisor={advisor} />} />
 								<Route path='*' element={<Navigate to='' />} />
 							</>

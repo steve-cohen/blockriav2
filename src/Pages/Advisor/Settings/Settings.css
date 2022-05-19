@@ -10,3 +10,11 @@
 .Settings .PlanSignUp {
 	text-transform: none;
 }
+
+.Settings .PlanSignUpBox {
+	border: 1px solid lightgrey;
+	line-height: 300px;
+	margin-bottom: 60px;
+	text-align: center;
+	width: 300px;
+}

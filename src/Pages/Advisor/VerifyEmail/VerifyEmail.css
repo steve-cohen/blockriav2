@@ -11,12 +11,12 @@
 	width: 100vw;
 }
 
-.VerifyEmail .Form {
+.VerifyEmail .VerifyForm {
 	margin: 0 36px;
 	width: 300px;
 }
 
-.VerifyEmail .Form button {
+.VerifyEmail .VerifyForm button {
 	all: initial;
 	background: rgb(18, 25, 44);
 	border: 1px solid rgb(18, 25, 44);
@@ -29,13 +29,13 @@
 	transition: 0.4s;
 }
 
-.VerifyEmail .Form button:hover {
+.VerifyEmail .VerifyForm button:hover {
 	background: rgb(255, 255, 255);
 	color: rgb(48, 48, 52);
 	cursor: pointer;
 }
 
-.VerifyEmail .Form .Email {
+.VerifyEmail .VerifyForm .Email {
 	border-bottom: 1px solid rgb(173, 174, 176);
 	color: inherit;
 	font-family: inherit;

@@ -30,7 +30,7 @@ const VerifyEmail = () => {
 	return (
 		<div className='VerifyEmail'>
 			<div className='Title'>Please Verify Your Email.</div>
-			<div className='Form'>
+			<div className='VerifyForm'>
 				<div className='Email'>{email}</div>
 				<button disabled={isLoading} onClick={() => resendConfirmation()}>
 					{isLoading ? 'Loading' : didResend ? 'Sent' : 'Resend Verification Email'}

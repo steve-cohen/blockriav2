@@ -8,55 +8,30 @@ function renderPhone(phone_number) {
 }
 
 const Settings = ({ advisor }) => {
-	const [isLoading, setIsLoading] = useState(false)
+	const advisorEmail = advisor.idToken.payload.email
+	const advisorId = advisor.idToken.payload.sub
+	const advisorName = `${advisor.idToken.payload.given_name} ${advisor.idToken.payload.family_name}`
+	const firmName = advisor.idToken.payload['custom:firm_name']
+
+	const [isLoading, setIsLoading] = useState(true)
 	const [customerId, setCustomerId] = useState('')
 	const [subscription, setSubscription] = useState({})
 
 	useEffect(async () => {
-		setIsLoading(true)
-
-		const newSubscription = await getSubscription()
-		console.log(newSubscription)
-
-		if (newSubscription && newSubscription.Item) {
-			setCustomerId(newSubscription.Item.stripeSubscription.M.data.M.object.M.customer.S)
-		}
-
-		setSubscription(newSubscription)
-		setIsLoading(false)
+		GETSubscription()
 	}, [])
 
-	function getSubscription() {
-		return fetch(`https://blockria.com/api/stripe/subscription?advisorId=${advisor.idToken.payload.sub}`)
+	function GETSubscription() {
+		return fetch(`https://blockria.com/api/stripe/subscription?advisorId=${advisorId}`)
 			.then(response => response.json())
+			.then(newSubscription => {
+				if (newSubscription && newSubscription.Item) {
+					setCustomerId(newSubscription.Item.stripeSubscription.M.data.M.object.M.customer.S)
+				}
+				setSubscription(newSubscription)
+				setIsLoading(false)
+			})
 			.catch(alert)
-	}
-
-	function renderBillingPortal() {
-		return (
-			<a
-				href={`https://blockria.com/api/stripe/billingportal?customerId=${customerId}`}
-				target='_blank'
-				rel='noopener noreferrer'
-			>
-				Manage Your Plan
-			</a>
-		)
-	}
-
-	function renderPlanSignUp() {
-		return (
-			<div className='PlanSignUp'>
-				<a
-					className='Bold Red'
-					href={`https://blockria.com/api/stripe/signup?advisorId=${advisor.idToken.payload.sub}&advisorName=${advisor.idToken.payload.given_name} ${advisor.idToken.payload.family_name}&firmName=${advisor.idToken.payload['custom:firm_name']}`}
-					target='_blank'
-					rel='noopener noreferrer'
-				>
-					Sign Up for a Plan
-				</a>
-			</div>
-		)
 	}
 
 	return (
@@ -65,6 +40,26 @@ const Settings = ({ advisor }) => {
 				<caption>
 					<div className='Flex'>
 						<div className='Title'>Billing Details</div>
+						{!isLoading &&
+							(customerId ? (
+								<a
+									className='Button'
+									href={`https://blockria.com/api/stripe/billingportal?customerId=${customerId}`}
+									target='_blank'
+									rel='noopener noreferrer'
+								>
+									Manage Billing Plan
+								</a>
+							) : (
+								<a
+									className='Button'
+									href={`https://blockria.com/api/stripe/signup?advisorEmail=${advisorEmail}&advisorId=${advisorId}&advisorName=${advisorName}&firmName=${firmName}`}
+									target='_blank'
+									rel='noopener noreferrer'
+								>
+									Sign Up for a Billing Plan
+								</a>
+							))}
 					</div>
 				</caption>
 				<thead>
@@ -74,22 +69,48 @@ const Settings = ({ advisor }) => {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td className='Bold'>Plan</td>
-						<td className='Break'>
-							{isLoading ? 'Loading..' : customerId ? renderBillingPortal() : renderPlanSignUp()}
-						</td>
-					</tr>
-					{subscription.Item ? (
+					{isLoading ? (
 						<tr>
-							<td className='Bold'>Billing Cycle</td>
-							<td>
-								<div style={{ textTransform: 'capitalize' }}>
-									{subscription.Item.stripeSubscription.M.data.M.object.M.items.M.data.L[0].M.plan.M.interval.S + 'ly'}
-								</div>
-							</td>
+							<td className='Loading'>Loading...</td>
 						</tr>
-					) : null}
+					) : (
+						<>
+							<tr>
+								<td className='Bold'>Billing Plan</td>
+								<td className='Break'>
+									{customerId ? (
+										<a
+											href={`https://blockria.com/api/stripe/billingportal?customerId=${customerId}`}
+											target='_blank'
+											rel='noopener noreferrer'
+										>
+											Manage Your Plan
+										</a>
+									) : (
+										<a
+											className='Bold'
+											href={`https://blockria.com/api/stripe/signup?advisorEmail=${advisorEmail}&advisorId=${advisorId}&advisorName=${advisorName}&firmName=${firmName}`}
+											target='_blank'
+											rel='noopener noreferrer'
+										>
+											Sign Up for a Billing Plan
+										</a>
+									)}
+								</td>
+							</tr>
+							<tr>
+								<td className='Bold'>Billing Cycle</td>
+								<td>
+									{subscription.Item && (
+										<div style={{ textTransform: 'capitalize' }}>
+											{subscription.Item.stripeSubscription.M.data.M.object.M.items.M.data.L[0].M.plan.M.interval.S +
+												'ly'}
+										</div>
+									)}
+								</td>
+							</tr>
+						</>
+					)}
 				</tbody>
 			</table>
 			<table>
@@ -119,7 +140,7 @@ const Settings = ({ advisor }) => {
 					</tr>
 					<tr>
 						<td className='Bold'>Email</td>
-						<td style={{ textTransform: 'none' }}>{advisor.idToken.payload.email}</td>
+						<td style={{ textTransform: 'none' }}>{advisorEmail}</td>
 					</tr>
 					<tr>
 						<td className='Bold'>Phone Number</td>
