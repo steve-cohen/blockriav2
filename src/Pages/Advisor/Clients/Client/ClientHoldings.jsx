@@ -75,8 +75,6 @@ const ClientHoldings = ({
 	}, [client])
 
 	async function handleNewClient(newClient) {
-		console.log({ newClient })
-
 		// [1.0] GET Spot Prices
 		// [1.1] Format Currencies
 		let currencies = {}
@@ -98,7 +96,6 @@ const ClientHoldings = ({
 		// [1.3] Format Spot Prices
 		let newSpotPrices = { USD: 1, 'USD-1D': 1, 'USD-1W': 1, 'USD-1M': 1, 'USD-3M': 1, 'USD-YTD': 1, 'USD-1Y': 1 }
 		spotPricesResponse.forEach(newSpotPrice => (newSpotPrices = { ...newSpotPrice, ...newSpotPrices }))
-		console.log({ newSpotPrices })
 
 		// [2.0] Separate Tradeable and NonTradeable Accounts
 		let newHoldings = []

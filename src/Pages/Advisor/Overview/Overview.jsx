@@ -83,8 +83,6 @@ const Overview = ({ advisor }) => {
 					(a, b) => Number(a.date.replace(/-/g, '')) - Number(b.date.replace(/-/g, ''))
 				)
 
-				console.log(newPerformance)
-
 				// Add an Initial $0.00 Data Point for the Graph
 				let startingPerformance = new Date(newPerformance[0].date)
 				startingPerformance = startingPerformance.setDate(startingPerformance.getDate() - 1)

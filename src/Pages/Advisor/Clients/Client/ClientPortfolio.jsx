@@ -52,7 +52,7 @@ function getSpotPrice(holding, timePeriod = '') {
 			const value = Number(response.data.amount)
 			return { [key]: value }
 		})
-		.catch(error => alert(error))
+		.catch(alert)
 }
 
 const ClientPortfolio = ({ advisor, client }) => {
@@ -92,7 +92,6 @@ const ClientPortfolio = ({ advisor, client }) => {
 		portfolio.allocations.forEach(({ holding }) => {
 			if (holding !== 'USD') currencies[holding] = true
 		})
-		console.log({ currencies })
 
 		// [2.2] GET Spot Prices
 		const spotPricesResponse = await Promise.all([
@@ -104,12 +103,10 @@ const ClientPortfolio = ({ advisor, client }) => {
 			...Object.keys(currencies).map(c => getSpotPrice(c, 'YTD')),
 			...Object.keys(currencies).map(c => getSpotPrice(c, '1Y'))
 		])
-		console.log({ spotPricesResponse })
 
 		// [2.3] Format Spot Prices
 		let newSpotPrices = { USD: 1, 'USD-1D': 1, 'USD-1W': 1, 'USD-1M': 1, 'USD-3M': 1, 'USD-YTD': 1, 'USD-1Y': 1 }
 		spotPricesResponse.forEach(newSpotPrice => (newSpotPrices = { ...newSpotPrice, ...newSpotPrices }))
-		console.log({ newSpotPrices })
 		setSpotPrices(newSpotPrices)
 	}, [portfolio])
 

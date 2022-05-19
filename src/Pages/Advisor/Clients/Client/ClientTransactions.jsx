@@ -39,7 +39,7 @@ const ClientTransactions = ({ transactions }) => {
 						<Transaction key={`Transaction ${transaction.id}`} transaction={transaction} />
 					))}
 				</tbody>
-				{transactions.length && (
+				{transactions.length ? (
 					<tfoot>
 						<tr>
 							<td colSpan={14}>
@@ -54,7 +54,7 @@ const ClientTransactions = ({ transactions }) => {
 							</td>
 						</tr>
 					</tfoot>
-				)}
+				) : null}
 			</table>
 			<table>
 				<caption>
@@ -87,7 +87,7 @@ const ClientTransactions = ({ transactions }) => {
 						<Transaction key={`Taxes ${transaction.id}`} transaction={transaction} />
 					))}
 				</tbody>
-				{taxEvents.length && (
+				{taxEvents.length ? (
 					<tfoot>
 						<tr>
 							<td colSpan={14}>
@@ -100,7 +100,7 @@ const ClientTransactions = ({ transactions }) => {
 							</td>
 						</tr>
 					</tfoot>
-				)}
+				) : null}
 			</table>
 		</>
 	)
