@@ -227,16 +227,42 @@ const Overview = ({ advisor }) => {
 	}
 
 	return (
-		<div className='Overview'>
-			{/* <table style={{ marginBottom: '60px' }}>
+		<div className='Overview NewForm'>
+			<table className='Quickstart'>
 				<caption>
 					<div className='Flex'>
-						<Link className='Button' to={`/advisor/invites`}>
-							Invite Client
-						</Link>
+						<div className='Title'>Welcome to Block RIA</div>
 					</div>
 				</caption>
-			</table> */}
+				<thead>
+					<tr>
+						<th>QUICK START</th>
+						<th className='Break'>ACTION</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td className='Bold'>Step 1</td>
+						<td className='Bold'>
+							<Link to='/advisor/invites'>Invite clients to connect their Coinbase account</Link>
+						</td>
+					</tr>
+					<tr>
+						<td className='Bold'>Step 2</td>
+						<td className='Bold'>
+							<Link to='/advisor/clients'>View client's current holdings</Link>
+						</td>
+					</tr>
+					<tr>
+						<td className='Bold'>Step 3</td>
+						<td className='Bold'>
+							<Link to='/advisor/agreements'>Upload your agreements </Link>
+							and
+							<Link to='/advisor/billing'> create a custom billing plan</Link>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			<table>
 				<caption>
 					<div className='Flex'>

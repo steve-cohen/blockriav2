@@ -1,3 +1,16 @@
+.Overview .Quickstart {
+	width: 600px;
+	margin-bottom: 60px;
+}
+
+.Overview .Quickstart thead th {
+	white-space: nowrap !important;
+}
+
+.Overview .Quickstart tr td {
+	text-transform: none !important;
+}
+
 .Overview .AreaChart {
 	height: 250px;
 	width: 100%;
@@ -31,8 +44,4 @@
 .Overview .PendingInvites .Red:hover {
 	cursor: pointer;
 	text-decoration: underline;
-}
-
-.Overview tbody tr:hover {
-	background: rgb(248, 249, 251);
 }

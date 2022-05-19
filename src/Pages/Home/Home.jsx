@@ -29,7 +29,7 @@ const Home = () => {
 					</Link>
 				</div>
 			</nav>
-			<section id='Hero' style={{ minHeight: '52vh' }}>
+			<section id='Hero'>
 				<div>
 					<div className='Title'>{`Manage Cryptocurrency\nfor Your Clients`}</div>
 					<div className='Actions'>

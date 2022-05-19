@@ -64,8 +64,8 @@
 	align-items: center;
 	display: flex;
 	justify-content: space-evenly;
-	min-height: 72vh;
-	margin-bottom: 12vh;
+	min-height: 70vh;
+	margin-bottom: 0;
 }
 
 .Home #Hero .Button {
@@ -158,6 +158,8 @@
 	}
 
 	.Home #Hero {
+		min-height: 52vh;
+		margin-bottom: 12vh;
 		justify-content: center;
 		text-align: center;
 	}
