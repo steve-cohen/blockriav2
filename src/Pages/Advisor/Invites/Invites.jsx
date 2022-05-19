@@ -52,8 +52,11 @@ const Invites = ({ advisor }) => {
 		await fetch(`https://blockria.com/api/invites?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.then(newPendingInvites => {
+				newPendingInvites = newPendingInvites.sort((a, b) => b.clientEmailLastSent - a.clientEmailLastSent)
+
 				let newIsResent = []
 				for (let i = 0; i < newPendingInvites.length; i++) newIsResent.push(false)
+
 				setIsResent(newIsResent)
 				setPendingInvites(newPendingInvites)
 			})

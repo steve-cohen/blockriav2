@@ -27,8 +27,6 @@ function GETSpotPrice(holding, startDate) {
 }
 
 const ClientPerformance = ({ totalBalance, totalBalanceNonTradeable, transactions }) => {
-	console.log(transactions)
-
 	const [searchParams] = useSearchParams()
 	const [performances, setPerformances] = useState([])
 

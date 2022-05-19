@@ -23,7 +23,7 @@ const Taxes = ({ advisor }) => {
 				let newTaxYears = []
 				for (let i = date.getFullYear(); i >= minTaxYear; i--) newTaxYears.push(i)
 
-				setClients(newClients)
+				setClients(newClients.sort((a, b) => a.clientName.localeCompare(b.clientName)))
 				setTaxYears(newTaxYears)
 			})
 			.catch(alert)

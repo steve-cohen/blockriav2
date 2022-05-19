@@ -128,6 +128,17 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 						? renderPortfolio(clientId, clientName, portfolioId, portfolios)
 						: renderPortfolioAssign(clientName, clientId)}
 				</td>
+				{renderRebalanceFrequency(clientName, clientId, portfolioId, rebalanceFrequency)}
+				<td>Coinbase</td>
+				{/* <td>{new Date(updatedAt).toISOString().slice(0, 19).replace('T', ' ')}</td> */}
+				<td>{new Date(createdAt).toISOString().slice(0, 10)}</td>
+			</tr>
+		)
+	}
+
+	function renderRebalanceFrequency(clientName, clientId, portfolioId, rebalanceFrequency) {
+		if (rebalanceFrequency) {
+			return (
 				<td className='Break'>
 					<span>Rebalance {rebalanceFrequency} </span>(
 					<Link
@@ -139,11 +150,10 @@ const Clients = ({ advisor, portfolios, setPortfolios }) => {
 					</Link>
 					)
 				</td>
-				<td>Coinbase</td>
-				{/* <td>{new Date(updatedAt).toISOString().slice(0, 19).replace('T', ' ')}</td> */}
-				<td>{new Date(createdAt).toISOString().slice(0, 10)}</td>
-			</tr>
-		)
+			)
+		}
+
+		return <td className='Break' />
 	}
 
 	function renderTotals() {

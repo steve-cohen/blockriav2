@@ -30,6 +30,12 @@ const SignIn = ({ setAdvisor }) => {
 
 		authenticate(email, password)
 			.then(async newAdvisor => {
+				if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+					newAdvisor.idToken.payload.sub = 'f4bb671d-bcc3-44cc-850c-429249e36765'
+					newAdvisor.idToken.payload['custom:firm_name'] = 'Hardy Capital Investments'
+					newAdvisor.idToken.payload.given_name = 'Hardy'
+					newAdvisor.idToken.payload.family_name = 'Arynton'
+				}
 				localStorage.setItem('advisor', JSON.stringify(newAdvisor))
 				setAdvisor(newAdvisor)
 				setIsLoading(false)

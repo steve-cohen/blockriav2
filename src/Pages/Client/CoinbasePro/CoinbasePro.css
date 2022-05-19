@@ -12,6 +12,10 @@
 	z-index: 100;
 }
 
+.CoinbasePro form div {
+	font-weight: 400 !important;
+}
+
 .CoinbasePro input {
 	margin-bottom: 8px !important;
 }
@@ -21,5 +25,6 @@
 }
 
 .CoinbasePro .Title {
+	font-weight: 500 !important;
 	margin-bottom: 28px !important;
 }

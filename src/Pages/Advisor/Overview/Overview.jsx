@@ -44,6 +44,8 @@ const Overview = ({ advisor }) => {
 		await fetch(`https://blockria.com/api/invites?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.then(newPendingInvites => {
+				newPendingInvites = newPendingInvites.sort((a, b) => b.clientEmailLastSent - a.clientEmailLastSent)
+
 				let newIsResent = []
 				for (let i = 0; i < newPendingInvites.length; i++) newIsResent.push(false)
 				setIsResent(newIsResent)
@@ -170,7 +172,11 @@ const Overview = ({ advisor }) => {
 							</td>
 						)
 					} else {
-						return <td key={`Performance Token ${index}`}>$0.00</td>
+						return (
+							<td className='AlignRight' key={`Performance Token ${index}`}>
+								$0.00
+							</td>
+						)
 					}
 				})}
 				<td />
@@ -262,7 +268,7 @@ const Overview = ({ advisor }) => {
 							fill='url(#Area)'
 							isAnimationActive={false}
 							stroke='rgb(18, 25, 44)'
-							type='natural'
+							type='monotone'
 						/>
 					</AreaChart>
 				</ResponsiveContainer>

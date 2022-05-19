@@ -12,6 +12,8 @@ import './Client.css'
 
 const Client = ({ advisor }) => {
 	const [searchParams] = useSearchParams()
+	const advisorId = advisor.idToken.payload.sub
+	const clientId = searchParams.get('clientId')
 
 	const [client, setClient] = useState({})
 	const [totalBalance, setTotalBalance] = useState(0)
@@ -19,9 +21,6 @@ const Client = ({ advisor }) => {
 	const [transactions, setTransactions] = useState([])
 
 	useEffect(() => {
-		const advisorId = advisor.idToken.payload.sub
-		const clientId = searchParams.get('clientId')
-
 		fetch(`https://blockria.com/api/coinbase/clients/client?advisorId=${advisorId}&clientId=${clientId}`)
 			.then(response => response.json())
 			.then(setClient)
@@ -29,7 +28,9 @@ const Client = ({ advisor }) => {
 
 		fetch(`https://blockria.com/api/coinbase/clients/client/transactions?clientId=${clientId}`)
 			.then(response => response.json())
-			.then(setTransactions)
+			.then(newTransactions =>
+				setTransactions(newTransactions.sort((a, b) => b.updated_at.localeCompare(a.updated_at)))
+			)
 			.catch(alert)
 	}, [])
 
