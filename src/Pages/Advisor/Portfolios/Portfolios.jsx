@@ -64,9 +64,10 @@ function getSpotPrice(holding, timePeriod = '') {
 		.catch(error => alert(error))
 }
 
-const Portfolios = ({ advisor, portfolios, setPortfolios }) => {
+const Portfolios = ({ advisor }) => {
 	const [isLoading, setIsLoading] = useState(true)
 	const [performances, setPerformances] = useState({})
+	const [portfolios, setPortfolios] = useState([])
 	const [portfolioCountTotals, setPortfolioCountTotals] = useState({})
 	const [showPortfolios, setShowPortfolios] = useState([])
 	const [spotPrices, setSpotPrices] = useState({})

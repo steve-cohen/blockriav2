@@ -48,7 +48,7 @@ const ClientTransactions = ({ transactions }) => {
 										'clientId'
 									)}`}
 								>
-									+ Show All {transactions.length} Transaction
+									Show All {transactions.length} Transaction
 									{transactions.length !== 1 && 's'}
 								</Link>
 							</td>
@@ -94,7 +94,7 @@ const ClientTransactions = ({ transactions }) => {
 								<Link
 									to={`taxEvents?clientName=${searchParams.get('clientName')}&clientId=${searchParams.get('clientId')}`}
 								>
-									+ Show All {taxEvents.length} Tax Event
+									Show All {taxEvents.length} Tax Event
 									{taxEvents.length !== 1 && 's'}
 								</Link>
 							</td>

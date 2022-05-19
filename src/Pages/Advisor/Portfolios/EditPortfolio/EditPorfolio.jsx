@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import coinbaseTokenNames from '../../coinbaseTokenNames.json'
-import coinbaseTokenOrder from './coinbaseTokenOrder.json'
 import './EditPortfolio.css'
-
-const coinbaseHoldings = coinbaseTokenOrder.map(token => `${token} - ${coinbaseTokenNames[token]}`).sort()
 
 function formatPercent(number) {
 	return (number / 100).toLocaleString('en-US', {
@@ -159,9 +156,9 @@ const EditPortfolio = ({ advisor }) => {
 						<option disabled value={''}>
 							Select a Holding
 						</option>
-						{coinbaseHoldings.map(holding => (
-							<option value={holding.split(' - ')[0]} key={`Holding ${holding}`}>
-								{holding}
+						{Object.entries(coinbaseTokenNames).map(([holding, name]) => (
+							<option value={holding} key={`Holding ${holding}`}>
+								{holding} - {name}
 							</option>
 						))}
 					</select>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
 
 import Agreements from './Agreements/Agreements'
@@ -19,27 +19,17 @@ import Settings from './Settings/Settings'
 import SignIn from './SignIn/SignIn'
 import SignUp from './SignUp/SignUp'
 import Taxes from './Taxes/Taxes'
+import TaxEvents from './Clients/Client/TaxEvents/TaxEvents'
 import Transactions from './Clients/Client/Transactions/Transactions'
 import Withdrawal from './Clients/Client/Withdrawal/Withdrawal'
 import VerifyEmail from './VerifyEmail/VerifyEmail'
 
-import { demoAdvisorEmpty, demoClientEmpty } from './demoData'
+import { demoAdvisorEmpty } from './demoData'
 
 import './Advisor.css'
-import TaxEvents from './Clients/Client/TaxEvents/TaxEvents'
 
 const Advisor = () => {
-	// Advisor Data
 	const [advisor, setAdvisor] = useState(JSON.parse(localStorage.getItem('advisor')) || demoAdvisorEmpty)
-	const [portfolios, setPortfolios] = useState([])
-
-	useEffect(() => {
-		if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-			console.log('Dev')
-		} else {
-			console.log('Prod')
-		}
-	}, [])
 
 	return (
 		<div className='Advisor'>
@@ -64,10 +54,7 @@ const Advisor = () => {
 								<Route path='agreements' element={<Agreements advisor={advisor} />} />
 								<Route path='billing' element={<Billing advisor={advisor} />} />
 								<Route path='billing/edit' element={<BillingEdit advisor={advisor} />} />
-								<Route
-									path='clients'
-									element={<Clients advisor={advisor} portfolios={portfolios} setPortfolios={setPortfolios} />}
-								/>
+								<Route path='clients' element={<Clients advisor={advisor} />} />
 								<Route path='clients/client' element={<Client advisor={advisor} />} />
 								<Route path='clients/client/deposit' element={<Deposit advisor={advisor} />} />
 								<Route path='clients/client/setbilling' element={<SetBilling advisor={advisor} />} />
@@ -76,10 +63,7 @@ const Advisor = () => {
 								<Route path='clients/client/transactions' element={<Transactions />} />
 								<Route path='clients/client/withdrawal' element={<Withdrawal advisor={advisor} />} />
 								<Route path='invites' element={<Invites advisor={advisor} />} />
-								<Route
-									path='portfolios'
-									element={<Portfolios advisor={advisor} portfolios={portfolios} setPortfolios={setPortfolios} />}
-								/>
+								<Route path='portfolios' element={<Portfolios advisor={advisor} />} />
 								<Route path='portfolios/edit' element={<EditPortfolio advisor={advisor} />} />
 								<Route path='settings' element={<Settings advisor={advisor} />} />
 								<Route path='taxes' element={<Taxes advisor={advisor} />} />
@@ -89,7 +73,7 @@ const Advisor = () => {
 							<Route path='*' element={<Navigate to='signin' />} />
 						)}
 						<Route path='clientonboarding' element={<ClientOnboarding />} />
-						<Route path='signin' element={<SignIn setAdvisor={setAdvisor} setPortfolios={setPortfolios} />} />
+						<Route path='signin' element={<SignIn setAdvisor={setAdvisor} />} />
 						<Route path='signup' element={<SignUp />} />
 						<Route path='verifyemail' element={<VerifyEmail />} />
 					</Routes>

@@ -50,10 +50,11 @@ function renderPortfolioAssign(clientName, clientId, rebalanceFrequency) {
 	)
 }
 
-const Clients = ({ advisor, portfolios, setPortfolios }) => {
+const Clients = ({ advisor }) => {
 	const navigate = useNavigate()
 	const [clients, setClients] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
+	const [portfolios, setPortfolios] = useState([])
 
 	useEffect(async () => {
 		setPortfolios([])
