@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import './Deposit.css'
 
 const noPaymentMethod = {
 	id: 0,
@@ -125,11 +124,11 @@ const Deposit = ({ advisor }) => {
 	}
 
 	return isLoading ? (
-		<div className='Deposit NewForm'>
+		<div className='Deposit NewForm NewFormWrapper'>
 			<div className='Loading'>Loading...</div>
 		</div>
 	) : (
-		<div className={`Deposit NewForm ${isConfirming && 'NewFormConfirm'}`}>
+		<div className={`Deposit NewForm ${isConfirming && 'NewFormConfirm'} NewFormWrapper`}>
 			<form onSubmit={handleSubmit}>
 				<div className='Title'>Deposit into {clientName}'s Coinbase Account</div>
 				<div>Deposit Method</div>

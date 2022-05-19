@@ -80,11 +80,11 @@ const SetPortfolio = ({ advisor }) => {
 	}
 
 	return isLoading ? (
-		<div className='SetPortfolio NewForm'>
+		<div className='SetPortfolio NewForm NewFormWrapper'>
 			<div className='Loading'>Loading...</div>
 		</div>
 	) : (
-		<div className={`SetPortfolio NewForm ${isConfirming ? 'NewFormConfirm' : ''}`}>
+		<div className={`SetPortfolio NewForm ${isConfirming ? 'NewFormConfirm' : ''} NewFormWrapper`}>
 			<form onSubmit={handleSubmit}>
 				<div className='Title'>Set a Portfolio for {searchParams.get('clientName')}</div>
 				<div>Portfolio</div>

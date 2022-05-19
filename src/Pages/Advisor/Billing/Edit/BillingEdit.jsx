@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import './BillingEdit.css'
 
 const billingUnits = {
 	'Assets Under Management': '(Basis Points / Year)',
@@ -153,7 +152,7 @@ const BillingEdit = ({ advisor }) => {
 	}
 
 	return !isLoading ? (
-		<div className={`BillingEdit NewForm ${isConfirming && 'NewFormConfirm'}`}>
+		<div className={`BillingEdit NewForm ${isConfirming && 'NewFormConfirm'} NewFormWrapper`}>
 			<form onSubmit={handleSubmit}>
 				<div className='Title'>{billingId ? 'Edit' : 'Create a'} Billing Plan</div>
 				<div>Billing Plan Name</div>

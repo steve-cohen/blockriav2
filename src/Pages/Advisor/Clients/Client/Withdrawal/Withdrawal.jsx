@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import './Withdrawal.css'
 
 const noPaymentMethod = {
 	id: 0,
@@ -123,11 +122,11 @@ const Withdrawal = ({ advisor }) => {
 	}
 
 	return isLoading ? (
-		<div className='Withdrawal NewForm'>
+		<div className='Withdrawal NewForm NewFormWrapper'>
 			<div className='Loading'>Loading...</div>
 		</div>
 	) : (
-		<div className={`Withdrawal NewForm ${isConfirming && 'NewFormConfirm'}`}>
+		<div className={`Withdrawal NewForm ${isConfirming && 'NewFormConfirm'} NewFormWrapper`}>
 			<form onSubmit={handleSubmit}>
 				<div className='Title'>Withdraw from {clientName}'s Coinbase Account</div>
 				<div>Withdrawal Method</div>

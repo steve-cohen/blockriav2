@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Transaction from './Transaction'
-import './Transactions.css'
 
 function formatUSD(number) {
 	return number.toLocaleString('en-US', {

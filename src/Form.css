@@ -2,10 +2,10 @@
 	align-items: center;
 	background: white;
 	display: flex;
-	/* padding: 10vh 0; */
-	min-height: 100vh;
 	justify-content: center;
 	left: 0;
+	min-height: 85vh;
+	padding-bottom: 15vh;
 	overflow: auto;
 	position: absolute;
 	top: 0;

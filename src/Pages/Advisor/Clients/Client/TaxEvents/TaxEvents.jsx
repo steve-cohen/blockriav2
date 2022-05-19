@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { CSVLink } from 'react-csv'
 import Transaction from '../Transactions/Transaction'
-import './TaxEvents.css'
 
 const displayTypes = {
 	buy: 'Buy',

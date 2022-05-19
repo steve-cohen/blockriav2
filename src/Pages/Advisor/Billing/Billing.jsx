@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { Link } from 'react-router-dom'
-import './Billing.css'
 
 const renderMonths = {
 	'01': 'Jan',
@@ -199,7 +198,7 @@ const Billing = ({ advisor }) => {
 
 	return (
 		<div className='Billing'>
-			<table>
+			<table style={{ marginBottom: '60px' }}>
 				<caption>
 					<div className='Flex'>
 						<div className='Title'>Billing Plans</div>

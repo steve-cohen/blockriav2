@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import './SetBilling.css'
 
 const billingUnits = {
 	'Assets Under Management': '(Basis Points / Year)',
@@ -79,11 +78,11 @@ const SetBilling = ({ advisor }) => {
 	}
 
 	return isLoading ? (
-		<div className='SetBilling NewForm'>
+		<div className='SetBilling NewForm NewFormWrapper'>
 			<div className='Loading'>Loading...</div>
 		</div>
 	) : (
-		<div className={`SetBilling NewForm ${isConfirming && 'NewFormConfirm'}`}>
+		<div className={`SetBilling NewForm ${isConfirming && 'NewFormConfirm'} NewFormWrapper`}>
 			<form onSubmit={handleSubmit}>
 				<div className='Title'>Billing Plan for {clientName}</div>
 				<div>Billing Plan</div>
