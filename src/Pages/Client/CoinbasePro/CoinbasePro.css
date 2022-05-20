@@ -1,17 +1,3 @@
-.CoinbasePro {
-	align-items: center;
-	background: white;
-	display: flex;
-	height: 90vh;
-	justify-content: center;
-	left: 0;
-	padding-bottom: 10vh;
-	position: fixed;
-	top: 0;
-	width: 100vw;
-	z-index: 100;
-}
-
 .CoinbasePro form div {
 	font-weight: 400 !important;
 }

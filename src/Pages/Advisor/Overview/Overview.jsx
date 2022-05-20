@@ -244,13 +244,13 @@ const Overview = ({ advisor }) => {
 					<tr>
 						<td className='Bold'>Step 1</td>
 						<td className='Bold'>
-							<Link to='/advisor/invites'>Invite clients to connect their Coinbase account</Link>
+							<Link to='/advisor/invites'>Invite a client</Link>
 						</td>
 					</tr>
 					<tr>
 						<td className='Bold'>Step 2</td>
 						<td className='Bold'>
-							<Link to='/advisor/clients'>View client's current holdings</Link>
+							<Link to='/advisor/clients'>View a client's holdings</Link>
 						</td>
 					</tr>
 					<tr>
@@ -258,7 +258,7 @@ const Overview = ({ advisor }) => {
 						<td className='Bold'>
 							<Link to='/advisor/agreements'>Upload your agreements </Link>
 							and
-							<Link to='/advisor/billing'> create a custom billing plan</Link>
+							<Link to='/advisor/billing'> create billing plans</Link>
 						</td>
 					</tr>
 				</tbody>

@@ -29,9 +29,9 @@ const SignIn = ({ setAdvisor }) => {
 
 		authenticate(email, password)
 			.then(async newAdvisor => {
-				if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-					// newAdvisor.idToken.payload.sub = ''
-				}
+				// if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+				// 	newAdvisor.idToken.payload.sub = ''
+				// }
 				localStorage.setItem('advisor', JSON.stringify(newAdvisor))
 				setAdvisor(newAdvisor)
 				setIsLoading(false)

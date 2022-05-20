@@ -1,53 +1,18 @@
-.Sign {
-	align-items: center;
-	display: flex;
-	height: 100vh;
-	justify-content: center;
-	width: 100vw;
-}
-
-.Sign .Agreements {
-	border: 1px solid rgb(237, 238, 240);
+.Sign form .Agreement {
+	border: 1px solid rgb(213, 214, 216);
 	border-radius: 2px;
-	font-size: 14px;
-	font-weight: 500;
-	max-width: 450px;
-	margin: 40px 20px;
-	padding: 40px;
-}
-
-.Sign .Agreements .Agree {
-	background: rgb(18, 25, 44);
-	border: none;
-	border-radius: 2px;
-	color: rgb(248, 249, 251);
-	cursor: pointer;
-	display: inline-block;
-	font-size: 14px;
-	font-weight: 500;
-	margin-top: 40px;
-	padding: 8px 0;
-	text-align: center;
-	width: 100%;
-}
-
-.Sign .Agreements .Agree:hover {
-	text-decoration: underline;
-}
-
-.Sign .Agreements .Agreement {
 	display: block;
-	line-height: 2;
+	font-weight: 500;
+	line-height: 20px;
+	margin: 8px 0;
+	padding: 5px 10px;
+	width: calc(100% - 20px - 2px);
 }
 
-.Sign .Agreements .SubTitle {
-	font-size: 14px;
-	line-height: 2;
-	margin-bottom: 8px;
+.Sign form:last-child {
+	margin-bottom: 16px;
 }
 
-.Sign .Agreements .Title {
-	font-size: 22px;
-	margin-bottom: 40px;
-	text-align: center;
+.Sign form .Button {
+	margin: 16px 0 0 0;
 }

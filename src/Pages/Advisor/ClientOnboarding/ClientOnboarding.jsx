@@ -1,8 +1,15 @@
 import React from 'react'
-import './ClientOnboarding.css'
 
 const ClientOnboarding = () => {
-	return <div className='ClientOnboarding'>{'Authorization Complete'}</div>
+	return (
+		<div className='NewForm NewFormWrapper'>
+			<form onSubmit={null}>
+				<div className='Title' style={{ textAlign: 'center' }}>
+					Authorization Complete
+				</div>
+			</form>
+		</div>
+	)
 }
 
 export default ClientOnboarding
