@@ -21,17 +21,27 @@ const Client = ({ advisor }) => {
 	const [transactions, setTransactions] = useState([])
 
 	useEffect(() => {
-		fetch(`https://blockria.com/api/coinbase/clients/client?advisorId=${advisorId}&clientId=${clientId}`)
-			.then(response => response.json())
-			.then(setClient)
-			.catch(alert)
+		console.log(advisorId, clientId)
+		if (clientId.includes('-')) {
+			// Coinbase Client
+			fetch(`https://blockria.com/api/coinbase/clients/client?advisorId=${advisorId}&clientId=${clientId}`)
+				.then(response => response.json())
+				.then(setClient)
+				.catch(alert)
 
-		fetch(`https://blockria.com/api/coinbase/clients/client/transactions?clientId=${clientId}`)
-			.then(response => response.json())
-			.then(newTransactions =>
-				setTransactions(newTransactions.sort((a, b) => b.updated_at.localeCompare(a.updated_at)))
-			)
-			.catch(alert)
+			fetch(`https://blockria.com/api/coinbase/clients/client/transactions?clientId=${clientId}`)
+				.then(response => response.json())
+				.then(newTransactions =>
+					setTransactions(newTransactions.sort((a, b) => b.updated_at.localeCompare(a.updated_at)))
+				)
+				.catch(alert)
+		} else {
+			// Coinbase Pro Client
+			fetch(`https://blockria.com/api/coinbasepro/clients/client?advisorId=${advisorId}&clientId=${clientId}`)
+				.then(response => response.json())
+				.then(setClient)
+				.catch(alert)
+		}
 	}, [])
 
 	return (

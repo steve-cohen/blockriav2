@@ -1,71 +1,58 @@
 .Navigation {
-	background: rgb(248, 249, 251);
-	border-right: 1px solid rgb(223, 224, 226);
+	background: rgb(18, 25, 44);
 	display: flex;
-	flex-direction: column;
 	font-family: -apple-system, 'system-ui', Roboto, 'Helvetica Neue', sans-serif !important;
-	font-feature-settings: 'pnum';
-	font-variant-numeric: proportional-nums;
-	height: calc(100vh - 60px - 1px);
 	justify-content: space-between;
-	padding-top: 1px;
-	max-height: calc(100vh - 60px);
-	overflow: hidden auto;
+	left: 0;
+	padding: 0 20px;
+	position: fixed;
+	top: 0;
+	width: calc(100vw - 40px);
+	z-index: 100;
 }
 
 .Navigation a {
-	color: rgb(26, 27, 29);
-	display: block;
-	fill: rgb(26, 27, 29);
+	color: rgb(248, 249, 251);
+	display: inline-block;
 	font-size: 14px;
 	font-weight: 500;
-	height: 16px;
-	padding: 12px 36px;
-	transition: color 0.4s, fill 0.4s;
+	line-height: 24px;
+	padding: 12px 13px;
+	vertical-align: middle;
 }
 
-.Navigation a:hover {
-	color: rgb(0, 0, 0);
-	fill: rgb(0, 0, 0);
-}
-
-.Navigation svg {
+.Navigation a div {
 	display: inline-block;
-	fill: inherit;
-	height: inherit;
-	margin-right: 11px;
-	width: 16px;
-	vertical-align: top;
+	text-decoration: inherit;
+	vertical-align: middle;
 }
 
-.Navigation .Search {
-	background: rgb(255, 255, 255);
-	border-bottom: 1px solid rgb(223, 224, 226);
-	border-radius: 2px;
-	margin: 36px 20px;
-	width: calc(100% - 40px - 3px);
-}
-
-.Navigation .Search input {
-	all: initial;
-	color: rgb(26, 27, 29);
+.Navigation a svg {
 	display: inline-block;
-	font-family: inherit;
-	font-size: 15px;
-	font-weight: 500;
-	height: 14px;
-	padding: 11px 0;
-	vertical-align: top;
-	width: calc(100% - 42px - 2px);
+	fill: rgb(248, 249, 251);
+	height: 13px;
+	margin-right: 4px;
+	width: 13px;
+	vertical-align: middle;
 }
 
-.Navigation .Search input::placeholder {
-	color: rgb(26, 27, 29);
+.Navigation .Logo {
+	border: 1.5px solid rgb(248, 249, 251);
+	border-radius: 4px;
+	font-weight: 600;
+	margin: 0 6px 0 12px;
+	padding: 0;
+	line-height: 22px;
+	text-align: center;
+	width: 22px;
 }
 
-.Navigation .Search .SearchIcon {
-	cursor: pointer;
-	fill: rgb(26, 27, 29);
+.Navigation .Profile a {
+	padding: 12px 10px;
+}
+
+.Navigation .Profile a svg {
+	margin-right: 0;
 	height: 14px;
-	padding: 11px 0 11px 10px;
+	width: 14px;
 }

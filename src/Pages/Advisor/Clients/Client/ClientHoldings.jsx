@@ -169,7 +169,7 @@ const ClientHoldings = ({
 						balance.currency
 					)}
 				</td>
-				<td>{currency.name}</td>
+				<td>{currency ? currency.name : coinbaseTokenNames[balance.currency]}</td>
 				<td>{balance.amount}</td>
 				<td className='AlignRight'>{formatUSD(spotPrices[balance.currency] || 0)}</td>
 				{renderHoldingPercentDifference(balance.currency, '1D')}

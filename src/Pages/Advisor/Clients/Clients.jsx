@@ -40,17 +40,18 @@ function renderPortfolio(clientId, clientName, currentPortfolioId, portfolios, r
 function renderPortfolioAssign(clientName, clientId, rebalanceFrequency) {
 	return (
 		<Link
-			className='Bold Red'
+			className='Red'
 			id='Assign'
 			to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=&rebalanceFrequency=${rebalanceFrequency}`}
 			style={{ textTransform: 'none' }}
 		>
-			Assign a Portfolio
+			No Portfolio
 		</Link>
 	)
 }
 
 const Clients = ({ advisor }) => {
+	const advisorId = advisor.idToken.payload.sub
 	const navigate = useNavigate()
 	const [clients, setClients] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
@@ -62,18 +63,28 @@ const Clients = ({ advisor }) => {
 		await setIsLoading(false)
 	}, [])
 
-	function GETClients() {
-		return fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisor.idToken.payload.sub}`)
+	async function GETClients() {
+		const [coinbase, coinbasePro] = await Promise.all([GETClientsCoinbase(), GETClientsCoinbasePro()])
+		handleNewClients([...coinbase, ...coinbasePro])
+	}
+
+	function GETClientsCoinbase() {
+		return fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisorId}`)
 			.then(response => response.json())
-			.then(handleNewClients)
-			.catch(error => alert(error))
+			.catch(alert)
+	}
+
+	function GETClientsCoinbasePro() {
+		return fetch(`https://blockria.com/api/coinbasepro/clients?advisorId=${advisorId}`)
+			.then(response => response.json())
+			.catch(alert)
 	}
 
 	function GETPortfolios() {
-		return fetch(`https://blockria.com/api/portfolios?advisorId=${advisor.idToken.payload.sub}`)
+		return fetch(`https://blockria.com/api/portfolios?advisorId=${advisorId}`)
 			.then(response => response.json())
 			.then(setPortfolios)
-			.catch(error => alert(error))
+			.catch(alert)
 	}
 
 	function handeClient(e, clientId, clientName) {
@@ -119,7 +130,15 @@ const Clients = ({ advisor }) => {
 		setClients(newClients)
 	}
 
-	function renderClient({ clientId, clientName, createdAt, nativeBalance, portfolioId, rebalanceFrequency }) {
+	function renderClient({
+		clientId,
+		clientName,
+		createdAt,
+		custodian,
+		nativeBalance,
+		portfolioId,
+		rebalanceFrequency
+	}) {
 		return (
 			<tr key={clientId} onClick={e => handeClient(e, clientId, clientName)}>
 				<td className='ClientName'>{clientName}</td>
@@ -130,7 +149,7 @@ const Clients = ({ advisor }) => {
 						: renderPortfolioAssign(clientName, clientId)}
 				</td>
 				{renderRebalanceFrequency(clientName, clientId, portfolioId, rebalanceFrequency)}
-				<td>Coinbase</td>
+				<td>{clientId.includes('-') ? 'Coinbase' : 'Coinbase Pro'}</td>
 				{/* <td>{new Date(updatedAt).toISOString().slice(0, 19).replace('T', ' ')}</td> */}
 				<td>{new Date(createdAt).toISOString().slice(0, 10)}</td>
 			</tr>
@@ -171,7 +190,8 @@ const Clients = ({ advisor }) => {
 					<td>{clients.length !== 1 ? `${clients.length} Clients` : '1 Client'}</td>
 					<td className='AlignRight Bold'>{formatUSD(balance)}</td>
 					<td className='Break' colSpan={4}>
-						{assignedPortfolios} / {clients.length} Portfolios Assigned
+						{assignedPortfolios}
+						{assignedPortfolios === 1 ? ' Portfolio Assigned' : ' Portfolios Assigned'}
 					</td>
 				</tr>
 			</tfoot>
@@ -193,7 +213,7 @@ const Clients = ({ advisor }) => {
 					<th>NAME</th>
 					<th className='AlignRight'>BALANCE</th>
 					<th>PORTFOLIO</th>
-					<th className='Break'>AUTOMATIC PORTFOLIO REBALANCING</th>
+					<th className='Break'>PORTFOLIO REBALANCING</th>
 					<th>CUSTODIAN</th>
 					{/* <th>UPDATED</th> */}
 					<th>JOINED</th>

@@ -34,19 +34,8 @@ const Advisor = () => {
 
 	return (
 		<div className='Advisor'>
-			<div className='Metadata'>
-				<Link className='Logo' to='/advisor'>
-					B
-				</Link>
-				<Link className='Firm' to='/advisor'>
-					{advisor.idToken.payload['custom:firm_name']}
-				</Link>
-				<Link className='Advisor' to='/advisor'>
-					{advisor.idToken.payload.given_name} {advisor.idToken.payload.family_name}
-				</Link>
-			</div>
 			<div className='Content'>
-				<Navigation />
+				<Navigation advisor={advisor} />
 				<div className='Body'>
 					<Routes>
 						{advisor.idToken.payload.sub ? (
