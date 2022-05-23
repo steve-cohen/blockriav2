@@ -46,51 +46,55 @@ const Taxes = ({ advisor }) => {
 	}
 
 	return (
-		<table className='Taxes'>
-			<caption>
-				<div className='Flex'>
-					<div className='Title'>Tax Events</div>
-				</div>
-			</caption>
-			<thead>
-				<tr>
-					<th>NAME</th>
-					<th>ALL</th>
-					{taxYears.map((taxYear, index) => (
-						<th className={index === taxYears.length - 1 ? 'Break' : ''} key={`TaxYearHead ${taxYear}`}>
-							{taxYear}
-						</th>
-					))}
-				</tr>
-			</thead>
-			{isLoading ? (
-				<tbody>
+		<div className='ResponsiveTable'>
+			<table className='Taxes'>
+				<caption>
+					<div className='Flex'>
+						<div className='Title'>Tax Events</div>
+					</div>
+				</caption>
+				<thead>
 					<tr>
-						<td className='Loading' style={{ border: 'none' }}>
-							Loading...
-						</td>
-					</tr>
-				</tbody>
-			) : (
-				<tbody>
-					{clients
-						.sort((a, b) => b.clientName - a.clientName)
-						.map(({ clientId, clientName, createdAt }) => (
-							<tr key={clientId}>
-								<td className='Bold'>
-									<Link to={`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`}>{clientName}</Link>
-								</td>
-								<td className='Bold Break'>
-									<Link to={`/advisor/clients/client/taxevents?clientName=${clientName}&clientId=${clientId}`}>
-										All Tax Events
-									</Link>
-								</td>
-								{renderTaxYears(clientId, clientName, createdAt)}
-							</tr>
+						<th>NAME</th>
+						<th>ALL</th>
+						{taxYears.map((taxYear, index) => (
+							<th className={index === taxYears.length - 1 ? 'Break' : ''} key={`TaxYearHead ${taxYear}`}>
+								{taxYear}
+							</th>
 						))}
-				</tbody>
-			)}
-		</table>
+					</tr>
+				</thead>
+				{isLoading ? (
+					<tbody>
+						<tr>
+							<td className='Loading' style={{ border: 'none' }}>
+								Loading...
+							</td>
+						</tr>
+					</tbody>
+				) : (
+					<tbody>
+						{clients
+							.sort((a, b) => b.clientName - a.clientName)
+							.map(({ clientId, clientName, createdAt }) => (
+								<tr key={clientId}>
+									<td className='Bold'>
+										<Link to={`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`}>
+											{clientName}
+										</Link>
+									</td>
+									<td className='Bold Break'>
+										<Link to={`/advisor/clients/client/taxevents?clientName=${clientName}&clientId=${clientId}`}>
+											All Tax Events
+										</Link>
+									</td>
+									{renderTaxYears(clientId, clientName, createdAt)}
+								</tr>
+							))}
+					</tbody>
+				)}
+			</table>
+		</div>
 	)
 }
 

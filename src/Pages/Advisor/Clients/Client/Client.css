@@ -1,24 +1,26 @@
-.Client {
-	margin-top: 40px;
+.Client table {
+	scroll-margin-top: 120px;
 }
 
-.Client table {
-	margin-bottom: 60px;
-	scroll-margin-top: 120px;
+.Client #performance {
+	margin-top: 40px;
 }
 
 .ClientNavigation {
 	background: white;
+	background: rgb(248, 249, 251);
 	border-bottom: 1px solid rgb(237, 238, 240);
 	font-family: -apple-system, 'system-ui', Roboto, 'Helvetica Neue', sans-serif !important;
 	font-feature-settings: 'pnum';
 	font-variant-numeric: proportional-nums;
+	overflow: auto hidden;
 	position: fixed;
 	height: 40px;
 	left: 0;
 	top: 50px;
-	padding: 0 10px 0 68px;
-	width: calc(100vw - 70px);
+	padding: 0 calc(3.5vw + 8px);
+	white-space: pre;
+	width: calc(100vw - 7vw - 16px);
 	z-index: 100;
 }
 

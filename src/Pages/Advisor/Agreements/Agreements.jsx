@@ -159,74 +159,78 @@ const Agreements = ({ advisor }) => {
 
 	return (
 		<div className='Agreements'>
-			<table>
-				<caption>
-					<div className='Flex'>
-						<div className='Title'>Agreement Automation</div>
-					</div>
-				</caption>
-				<thead>
-					<tr>
-						<th className='Break'>SERVICE</th>
-						<th className='AlignRight'>MODIFY</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td style={{ textTransform: 'none' }}>
-							When enabled, your firm's agreements will be sent to clients during onboarding
-						</td>
-						<td>{renderAutomation()}</td>
-					</tr>
-				</tbody>
-			</table>
-			<table>
-				<caption>
-					<div className='Flex'>
-						<div className='Title'>Agreements</div>
-					</div>
-				</caption>
-				<thead>
-					<tr>
-						<th className='Break'>FORM</th>
-						<th>UPDATED</th>
-						<th>VIEW</th>
-						<th>UPLOAD</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td className='Bold'>Investment Advisory Agreement (Client Agreement)</td>
-						<td>{1 in agreements ? agreements[1].updatedAt : null}</td>
-						{renderViewPDF(1)}
-						{document1IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(1)}
-					</tr>
-					<tr>
-						<td className='Bold'>Privacy Policy</td>
-						<td>{2 in agreements ? agreements[2].updatedAt : null}</td>
-						{renderViewPDF(2)}
-						{document2IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(2)}
-					</tr>
-					<tr>
-						<td className='Bold'>Form CRS</td>
-						<td>{3 in agreements ? agreements[3].updatedAt : null}</td>
-						{renderViewPDF(3)}
-						{document3IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(3)}
-					</tr>
-					<tr>
-						<td className='Bold'>Form ADV Part 2A</td>
-						<td>{4 in agreements ? agreements[4].updatedAt : null}</td>
-						{renderViewPDF(4)}
-						{document4IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(4)}
-					</tr>
-					<tr>
-						<td className='Bold'>Form ADV Part 2B</td>
-						<td>{5 in agreements ? agreements[5].updatedAt : null}</td>
-						{renderViewPDF(5)}
-						{document5IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(5)}
-					</tr>
-				</tbody>
-			</table>
+			<div className='ResponsiveTable'>
+				<table>
+					<caption>
+						<div className='Flex'>
+							<div className='Title'>Agreement Automation</div>
+						</div>
+					</caption>
+					<thead>
+						<tr>
+							<th className='Break'>SERVICE</th>
+							<th className='AlignRight'>MODIFY</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style={{ textTransform: 'none' }}>
+								When enabled, your firm's agreements will be sent to clients during onboarding
+							</td>
+							<td>{renderAutomation()}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div className='ResponsiveTable'>
+				<table>
+					<caption>
+						<div className='Flex'>
+							<div className='Title'>Agreements</div>
+						</div>
+					</caption>
+					<thead>
+						<tr>
+							<th className='Break'>FORM</th>
+							<th>UPDATED</th>
+							<th>VIEW</th>
+							<th>UPLOAD</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td className='Bold'>Investment Advisory Agreement (Client Agreement)</td>
+							<td>{1 in agreements ? agreements[1].updatedAt : null}</td>
+							{renderViewPDF(1)}
+							{document1IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(1)}
+						</tr>
+						<tr>
+							<td className='Bold'>Privacy Policy</td>
+							<td>{2 in agreements ? agreements[2].updatedAt : null}</td>
+							{renderViewPDF(2)}
+							{document2IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(2)}
+						</tr>
+						<tr>
+							<td className='Bold'>Form CRS</td>
+							<td>{3 in agreements ? agreements[3].updatedAt : null}</td>
+							{renderViewPDF(3)}
+							{document3IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(3)}
+						</tr>
+						<tr>
+							<td className='Bold'>Form ADV Part 2A</td>
+							<td>{4 in agreements ? agreements[4].updatedAt : null}</td>
+							{renderViewPDF(4)}
+							{document4IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(4)}
+						</tr>
+						<tr>
+							<td className='Bold'>Form ADV Part 2B</td>
+							<td>{5 in agreements ? agreements[5].updatedAt : null}</td>
+							{renderViewPDF(5)}
+							{document5IsLoading ? <td className='Loading'>Loading...</td> : renderUploadPDF(5)}
+						</tr>
+					</tbody>
+				</table>
+			</div>
 			{/* <table>
 				<caption>
 					<div className='Flex'>

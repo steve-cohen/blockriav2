@@ -236,53 +236,55 @@ const Portfolios = ({ advisor }) => {
 	}
 
 	return (
-		<table className='Portfolios'>
-			<caption>
-				<div className='Flex'>
-					<div className='Title'>Portfolios</div>
-					<Link className='Button' to={`/advisor/portfolios/edit`}>
-						Create Portfolio
-					</Link>
-				</div>
-			</caption>
-			<thead>
-				<tr>
-					<th>PORTFOLIO</th>
-					<th>ALLOCATION</th>
-					<th>HOLDING</th>
-					<th>NAME</th>
-					<th className='AlignRight'>SPOT PRICE</th>
-					<th className='AlignRight'>1D</th>
-					<th className='AlignRight'>1W</th>
-					<th className='AlignRight'>1M</th>
-					<th className='AlignRight'>3M</th>
-					<th className='AlignRight'>YTD</th>
-					<th className='AlignRight'>1Y</th>
-					<th className='AlignRight'>ASSIGNED TO</th>
-					<th>EDIT</th>
-				</tr>
-			</thead>
-			{isLoading ? (
-				<tbody>
+		<div className='ResponsiveTable'>
+			<table className='Portfolios'>
+				<caption>
+					<div className='Flex'>
+						<div className='Title'>Portfolios</div>
+						<Link className='Button' to={`/advisor/portfolios/edit`}>
+							Create Portfolio
+						</Link>
+					</div>
+				</caption>
+				<thead>
 					<tr>
-						<td style={{ border: 'none' }}>
-							<div className='Loading'>Loading...</div>
-						</td>
+						<th>PORTFOLIO</th>
+						<th>ALLOCATION</th>
+						<th>HOLDING</th>
+						<th>NAME</th>
+						<th className='AlignRight'>SPOT PRICE</th>
+						<th className='AlignRight'>1D</th>
+						<th className='AlignRight'>1W</th>
+						<th className='AlignRight'>1M</th>
+						<th className='AlignRight'>3M</th>
+						<th className='AlignRight'>YTD</th>
+						<th className='AlignRight'>1Y</th>
+						<th className='AlignRight'>ASSIGNED TO</th>
+						<th>EDIT</th>
 					</tr>
-				</tbody>
-			) : (
-				<>
-					<tbody>{portfolios.map(renderPortfolios)}</tbody>
-					<tfoot>
+				</thead>
+				{isLoading ? (
+					<tbody>
 						<tr>
-							<td colSpan={3}>
-								<Link to='/advisor/portfolios/edit'>+ Create Portfolio</Link>
+							<td style={{ border: 'none' }}>
+								<div className='Loading'>Loading...</div>
 							</td>
 						</tr>
-					</tfoot>
-				</>
-			)}
-		</table>
+					</tbody>
+				) : (
+					<>
+						<tbody>{portfolios.map(renderPortfolios)}</tbody>
+						<tfoot>
+							<tr>
+								<td colSpan={3}>
+									<Link to='/advisor/portfolios/edit'>+ Create Portfolio</Link>
+								</td>
+							</tr>
+						</tfoot>
+					</>
+				)}
+			</table>
+		</div>
 	)
 }
 

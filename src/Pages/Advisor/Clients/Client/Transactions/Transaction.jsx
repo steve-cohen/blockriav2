@@ -100,7 +100,6 @@ const Transaction = ({ transaction }) => {
 				<td>{details.payment_method_name}</td>
 				<td>{event.hold_days ? `${event.hold_days} Days` : ''}</td>
 				<td>{event.hold_until ? event.hold_until.slice(0, 10) : ''}</td>
-				<td>{event.instant ? 'Yes' : 'No'}</td>
 				<td className={`${status === 'completed' ? 'Green' : 'Red'}`}>{status}</td>
 			</tr>
 		)
@@ -134,7 +133,6 @@ const Transaction = ({ transaction }) => {
 				<td>{details.payment_method_name}</td>
 				<td>{event.hold_days ? `${event.hold_days} Days` : ''}</td>
 				<td>{type === 'fiat_deposit' ? event.hold_until.slice(0, 10) : event.payout_at.slice(0, 10)}</td>
-				<td>{event.instant ? 'Yes' : 'No'}</td>
 				<td className={`${status === 'completed' ? 'Green' : 'Red'}`}>{status}</td>
 			</tr>
 		)
@@ -228,11 +226,13 @@ const Transaction = ({ transaction }) => {
 				<td style={{ textTransform: 'none' }}>{details.subtitle}</td>
 				<td />
 				<td />
-				<td />
-				{network.status === 'confirmed' ? <td className='Green'>Confirmed</td> : null}
-				{network.status === 'off_blockchain' ? (
+				{network.status === 'confirmed' ? (
+					<td className='Green'>Completed</td>
+				) : network.status === 'off_blockchain' ? (
 					<td className={off_chain_status === 'completed' ? 'Green' : 'Red'}>{off_chain_status}</td>
-				) : null}
+				) : (
+					<td />
+				)}
 			</tr>
 		)
 	}
@@ -276,7 +276,6 @@ const Transaction = ({ transaction }) => {
 				</td>
 				<td>{details.title}</td>
 				<td>{details.subtitle}</td>
-				<td />
 				<td />
 				<td />
 				<td className={`${status === 'completed' ? 'Green' : 'Red'}`}>{status}</td>
@@ -323,7 +322,6 @@ const Transaction = ({ transaction }) => {
 				</td>
 				<td>{details.title}</td>
 				<td>{details.subtitle}</td>
-				<td />
 				<td />
 				<td />
 				<td className={`${status === 'completed' ? 'Green' : 'Red'}`}>{status}</td>

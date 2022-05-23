@@ -133,67 +133,69 @@ const ClientPortfolio = ({ advisor, client }) => {
 	}
 
 	return (
-		<table id='portfolio'>
-			<caption>
-				<div className='Flex'>
-					<div className='Title'>Automatic Portfolio Rebalancing</div>
-					<Link
-						className='Button'
-						to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}&rebalanceFrequency=${rebalanceFrequency}`}
-					>
-						{portfolioId ? 'Change Portfolio' : 'Assign a Portfolio'}
-					</Link>
-				</div>
-			</caption>
-			<thead>
-				<tr>
-					<th>PORTFOLIO</th>
-					<th className='Break'>AUTOMATIC REBALANCING FREQUENCY</th>
-					<th className='AlignRight'>1D</th>
-					<th className='AlignRight'>1W</th>
-					<th className='AlignRight'>1M</th>
-					<th className='AlignRight'>3M</th>
-					<th className='AlignRight'>YTD</th>
-					<th className='AlignRight'>1Y</th>
-				</tr>
-			</thead>
-			<tbody>
-				{isLoading ? (
+		<div className='ResponsiveTable'>
+			<table id='portfolio'>
+				<caption>
+					<div className='Flex'>
+						<div className='Title'>Automatic Portfolio Rebalancing</div>
+						<Link
+							className='Button'
+							to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}&rebalanceFrequency=${rebalanceFrequency}`}
+						>
+							{portfolioId ? 'Change Portfolio' : 'Assign a Portfolio'}
+						</Link>
+					</div>
+				</caption>
+				<thead>
 					<tr>
-						<td className='Loading' style={{ borderBottom: 'none' }}>
-							Loading...
-						</td>
+						<th>PORTFOLIO</th>
+						<th className='Break'>AUTOMATIC REBALANCING FREQUENCY</th>
+						<th className='AlignRight'>1D</th>
+						<th className='AlignRight'>1W</th>
+						<th className='AlignRight'>1M</th>
+						<th className='AlignRight'>3M</th>
+						<th className='AlignRight'>YTD</th>
+						<th className='AlignRight'>1Y</th>
 					</tr>
-				) : null}
-				{!isLoading && portfolioId ? (
-					<tr>
-						<td>
-							<span className='Bold'>{portfolio.portfolioName}</span>
-						</td>
-						<td className='Break'>
-							<span className='Bold'>Rebalance {rebalanceFrequency}</span>
-						</td>
-						{renderPortfolioPerformance(portfolio, '1D')}
-						{renderPortfolioPerformance(portfolio, '1W')}
-						{renderPortfolioPerformance(portfolio, '1M')}
-						{renderPortfolioPerformance(portfolio, '3M')}
-						{renderPortfolioPerformance(portfolio, 'YTD')}
-						{renderPortfolioPerformance(portfolio, '1Y')}
-					</tr>
-				) : (
-					<tr>
-						<td className='Bold Red' style={{ borderBottom: 'none' }}>
-							<Link
-								className='Red'
-								to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}&rebalanceFrequency=${rebalanceFrequency}`}
-							>
-								Assign a Portfolio
-							</Link>
-						</td>
-					</tr>
-				)}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					{isLoading ? (
+						<tr>
+							<td className='Loading' style={{ borderBottom: 'none' }}>
+								Loading...
+							</td>
+						</tr>
+					) : null}
+					{!isLoading && portfolioId ? (
+						<tr>
+							<td>
+								<span className='Bold'>{portfolio.portfolioName}</span>
+							</td>
+							<td className='Break'>
+								<span className='Bold'>Rebalance {rebalanceFrequency}</span>
+							</td>
+							{renderPortfolioPerformance(portfolio, '1D')}
+							{renderPortfolioPerformance(portfolio, '1W')}
+							{renderPortfolioPerformance(portfolio, '1M')}
+							{renderPortfolioPerformance(portfolio, '3M')}
+							{renderPortfolioPerformance(portfolio, 'YTD')}
+							{renderPortfolioPerformance(portfolio, '1Y')}
+						</tr>
+					) : (
+						<tr>
+							<td className='Bold Red' style={{ borderBottom: 'none' }}>
+								<Link
+									className='Red'
+									to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}&rebalanceFrequency=${rebalanceFrequency}`}
+								>
+									Assign a Portfolio
+								</Link>
+							</td>
+						</tr>
+					)}
+				</tbody>
+			</table>
+		</div>
 	)
 }
 

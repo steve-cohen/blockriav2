@@ -186,7 +186,7 @@ const Invites = ({ advisor }) => {
 				<form onSubmit={handleSubmit}>
 					<div className='Title'>New Invite</div>
 					<div>Client's Email</div>
-					<input autoComplete='No' autoFocus onChange={e => setEmail(e.target.value)} required value={email} />
+					<input autoComplete='No' onChange={e => setEmail(e.target.value)} required value={email} />
 					<div>Email Subject</div>
 					<input name='subject' onChange={e => setSubject(e.target.value)} required value={subject} />
 					<div>Email Body</div>

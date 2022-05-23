@@ -1,6 +1,5 @@
 .Overview .Quickstart {
 	width: 600px;
-	margin-bottom: 60px;
 }
 
 .Overview .Quickstart thead th {
@@ -13,6 +12,7 @@
 
 .Overview .AreaChart {
 	height: 250px;
+	margin-bottom: 60px;
 	width: 100%;
 }
 
@@ -30,10 +30,6 @@
 	font-size: 18px;
 	font-weight: 500;
 	padding-left: 8px;
-}
-
-.Overview .PendingInvites {
-	margin: 60px 0;
 }
 
 .Overview .PendingInvites tbody tr td {

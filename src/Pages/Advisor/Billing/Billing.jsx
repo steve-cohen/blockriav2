@@ -198,61 +198,65 @@ const Billing = ({ advisor }) => {
 
 	return (
 		<div className='Billing'>
-			<table style={{ marginBottom: '60px' }}>
-				<caption>
-					<div className='Flex'>
-						<div className='Title'>Billing Plans</div>
-						<Link className='Button' to='/advisor/billing/edit'>
-							Create Billing Plan
-						</Link>
-					</div>
-				</caption>
-				<thead>
-					<tr style={{ whiteSpace: 'nowrap' }}>
-						<th>NAME</th>
-						<th>TYPE</th>
-						<th className='AlignRight'>FIRM FEE</th>
-						{/* <th className='AlignRight'>PLATFORM FEE</th> */}
-						<th className='AlignRight Break'>ASSIGNED TO</th>
-						<th>EDIT</th>
-						<th>LAST EDIT</th>
-					</tr>
-				</thead>
-				<tbody>
-					{isLoading ? (
+			<div className='ResponsiveTable'>
+				<table>
+					<caption>
+						<div className='Flex'>
+							<div className='Title'>Billing Plans</div>
+							<Link className='Button' to='/advisor/billing/edit'>
+								Create Billing Plan
+							</Link>
+						</div>
+					</caption>
+					<thead>
+						<tr style={{ whiteSpace: 'nowrap' }}>
+							<th>NAME</th>
+							<th>TYPE</th>
+							<th className='AlignRight'>FIRM FEE</th>
+							{/* <th className='AlignRight'>PLATFORM FEE</th> */}
+							<th className='AlignRight Break'>ASSIGNED TO</th>
+							<th>EDIT</th>
+							<th>LAST EDIT</th>
+						</tr>
+					</thead>
+					<tbody>
+						{isLoading ? (
+							<tr>
+								<td style={{ border: 'none' }}>
+									<div className='Loading'>Loading...</div>
+								</td>
+							</tr>
+						) : (
+							billingPlans.map(renderBillingPlans)
+						)}
+					</tbody>
+					<tfoot>
 						<tr>
-							<td style={{ border: 'none' }}>
-								<div className='Loading'>Loading...</div>
+							<td colSpan={6}>
+								<Link to='/advisor/billing/edit'>+ Create Billing Plan</Link>
 							</td>
 						</tr>
-					) : (
-						billingPlans.map(renderBillingPlans)
-					)}
-				</tbody>
-				<tfoot>
-					<tr>
-						<td colSpan={6}>
-							<Link to='/advisor/billing/edit'>+ Create Billing Plan</Link>
-						</td>
-					</tr>
-				</tfoot>
-			</table>
-			<table>
-				<caption>
-					<div className='Flex'>
-						<div className='Title'>Billing CSVs</div>
-					</div>
-				</caption>
-				<thead>
-					<tr style={{ whiteSpace: 'nowrap' }}>
-						<th>MONTH</th>
-						<th className='AlignRight'>ADVISOR FEES</th>
-						<th className='AlignRight'>CLIENTS</th>
-						<th className='AlignRight Break'>EXPORT</th>
-					</tr>
-				</thead>
-				<tbody>{billingHistory.map(renderBillingHistory)}</tbody>
-			</table>
+					</tfoot>
+				</table>
+			</div>
+			<div className='ResponsiveTable'>
+				<table>
+					<caption>
+						<div className='Flex'>
+							<div className='Title'>Billing CSVs</div>
+						</div>
+					</caption>
+					<thead>
+						<tr style={{ whiteSpace: 'nowrap' }}>
+							<th>MONTH</th>
+							<th className='AlignRight'>ADVISOR FEES</th>
+							<th className='AlignRight'>CLIENTS</th>
+							<th className='AlignRight Break'>EXPORT</th>
+						</tr>
+					</thead>
+					<tbody>{billingHistory.map(renderBillingHistory)}</tbody>
+				</table>
+			</div>
 		</div>
 	)
 }

@@ -66,11 +66,10 @@ const Transactions = () => {
 					<th className='AlignRight'>COST</th>
 					<th className='AlignRight'>FEES</th>
 					<th className='AlignRight'>TOTAL</th>
-					<th className='Break'>DESCRIPTION</th>
-					<th>PAYMENT METHOD</th>
+					<th>DESCRIPTION</th>
+					<th className='Break'>PAYMENT METHOD</th>
 					<th>HOLD</th>
 					<th>HOLD UNTIL</th>
-					<th>INSTANT</th>
 					<th>STATUS</th>
 				</tr>
 			</thead>

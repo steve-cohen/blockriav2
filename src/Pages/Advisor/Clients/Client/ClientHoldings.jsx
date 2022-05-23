@@ -170,8 +170,8 @@ const ClientHoldings = ({
 					)}
 				</td>
 				<td>{currency ? currency.name : coinbaseTokenNames[balance.currency]}</td>
-				<td>{balance.amount}</td>
-				<td className='AlignRight'>{formatUSD(spotPrices[balance.currency] || 0)}</td>
+				<td>{balance.currency !== 'USD' && balance.amount}</td>
+				<td className='AlignRight'>{balance.currency !== 'USD' && formatUSD(spotPrices[balance.currency] || 0)}</td>
 				{renderHoldingPercentDifference(balance.currency, '1D')}
 				{renderHoldingPercentDifference(balance.currency, '1W')}
 				{renderHoldingPercentDifference(balance.currency, '1M')}
@@ -193,42 +193,11 @@ const ClientHoldings = ({
 
 	return (
 		<>
-			<table id='holdings'>
-				<caption>
-					<div className='Flex'>
-						<div className='Title'>Current Holdings</div>
-					</div>
-				</caption>
-				<thead>
-					<tr>
-						<th>PERCENT</th>
-						<th className='AlignRight'>BALANCE</th>
-						<th>HOLDING</th>
-						<th>NAME</th>
-						<th>AMOUNT</th>
-						<th>SPOT PRICE</th>
-						<th className='AlignRight Break'>1D</th>
-						<th className='AlignRight'>1W</th>
-						<th className='AlignRight'>1M</th>
-						<th className='AlignRight'>3M</th>
-						<th className='AlignRight'>YTD</th>
-						<th className='AlignRight'>1Y</th>
-					</tr>
-				</thead>
-				<tbody>{holdings.map(renderHolding)}</tbody>
-				<tfoot>
-					<tr>
-						<td className='AlignRight Bold'>{formatPercent(totalPercent)}</td>
-						<td className='AlignRight Bold'>{formatUSD(totalBalance)}</td>
-						<td>{holdings.length} Total</td>
-					</tr>
-				</tfoot>
-			</table>
-			{totalBalanceNonTradeable ? (
-				<table>
+			<div className='ResponsiveTable'>
+				<table id='holdings'>
 					<caption>
 						<div className='Flex'>
-							<div className='Title'>Current Non-Tradeable Holdings</div>
+							<div className='Title'>Holdings</div>
 						</div>
 					</caption>
 					<thead>
@@ -247,15 +216,51 @@ const ClientHoldings = ({
 							<th className='AlignRight'>1Y</th>
 						</tr>
 					</thead>
-					<tbody>{holdingsNonTradeable.map(renderHolding)}</tbody>
+					<tbody>{holdings.map(renderHolding)}</tbody>
 					<tfoot>
 						<tr>
-							<td className='AlignRight Bold'>{formatPercent(totalPercentNonTradeable)}</td>
-							<td className='AlignRight Bold'>{formatUSD(totalBalanceNonTradeable)}</td>
+							<td className='AlignRight Bold'>{formatPercent(totalPercent)}</td>
+							<td className='AlignRight Bold'>{formatUSD(totalBalance)}</td>
 							<td>{holdings.length} Total</td>
 						</tr>
 					</tfoot>
 				</table>
+			</div>
+
+			{totalBalanceNonTradeable ? (
+				<div className='ResponsiveTable'>
+					<table>
+						<caption>
+							<div className='Flex'>
+								<div className='Title'>Holdings (Non-Tradeable)</div>
+							</div>
+						</caption>
+						<thead>
+							<tr>
+								<th>PERCENT</th>
+								<th className='AlignRight'>BALANCE</th>
+								<th>HOLDING</th>
+								<th>NAME</th>
+								<th>AMOUNT</th>
+								<th>SPOT PRICE</th>
+								<th className='AlignRight Break'>1D</th>
+								<th className='AlignRight'>1W</th>
+								<th className='AlignRight'>1M</th>
+								<th className='AlignRight'>3M</th>
+								<th className='AlignRight'>YTD</th>
+								<th className='AlignRight'>1Y</th>
+							</tr>
+						</thead>
+						<tbody>{holdingsNonTradeable.map(renderHolding)}</tbody>
+						<tfoot>
+							<tr>
+								<td className='AlignRight Bold'>{formatPercent(totalPercentNonTradeable)}</td>
+								<td className='AlignRight Bold'>{formatUSD(totalBalanceNonTradeable)}</td>
+								<td>{holdings.length} Total</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
 			) : null}
 		</>
 	)

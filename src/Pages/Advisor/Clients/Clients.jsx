@@ -199,41 +199,43 @@ const Clients = ({ advisor }) => {
 	}
 
 	return (
-		<table className='Clients'>
-			<caption>
-				<div className='Flex'>
-					<div className='Title'>Clients</div>
-					<Link className='Button' to={`/advisor/invites`}>
-						Invite Client
-					</Link>
-				</div>
-			</caption>
-			<thead>
-				<tr>
-					<th>NAME</th>
-					<th className='AlignRight'>BALANCE</th>
-					<th>PORTFOLIO</th>
-					<th className='Break'>PORTFOLIO REBALANCING</th>
-					<th>CUSTODIAN</th>
-					{/* <th>UPDATED</th> */}
-					<th>JOINED</th>
-				</tr>
-			</thead>
-			{isLoading ? (
-				<tbody>
+		<div className='ResponsiveTable'>
+			<table className='Clients'>
+				<caption>
+					<div className='Flex'>
+						<div className='Title'>Clients</div>
+						<Link className='Button' to={`/advisor/invites`}>
+							Invite Client
+						</Link>
+					</div>
+				</caption>
+				<thead>
 					<tr>
-						<td style={{ border: 'none' }}>
-							<div className='Loading'>Loading...</div>
-						</td>
+						<th>NAME</th>
+						<th className='AlignRight'>BALANCE</th>
+						<th>PORTFOLIO</th>
+						<th className='Break'>PORTFOLIO REBALANCING</th>
+						<th>CUSTODIAN</th>
+						{/* <th>UPDATED</th> */}
+						<th>JOINED</th>
 					</tr>
-				</tbody>
-			) : (
-				<>
-					<tbody>{clients.map(renderClient)}</tbody>
-					{renderTotals()}
-				</>
-			)}
-		</table>
+				</thead>
+				{isLoading ? (
+					<tbody>
+						<tr>
+							<td style={{ border: 'none' }}>
+								<div className='Loading'>Loading...</div>
+							</td>
+						</tr>
+					</tbody>
+				) : (
+					<>
+						<tbody>{clients.map(renderClient)}</tbody>
+						{renderTotals()}
+					</>
+				)}
+			</table>
+		</div>
 	)
 }
 

@@ -228,52 +228,56 @@ const Overview = ({ advisor }) => {
 
 	return (
 		<div className='Overview NewForm'>
-			<table className='Quickstart'>
-				<caption>
-					<div className='Flex'>
-						<div className='Title'>Welcome to Block RIA</div>
-					</div>
-				</caption>
-				<thead>
-					<tr>
-						<th>QUICK START</th>
-						<th className='Break'>ACTION</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td className='Bold'>Step 1</td>
-						<td className='Bold'>
-							<Link to='/advisor/invites'>Invite a client</Link>
-						</td>
-					</tr>
-					<tr>
-						<td className='Bold'>Step 2</td>
-						<td className='Bold'>
-							<Link to='/advisor/clients'>View a client's holdings</Link>
-						</td>
-					</tr>
-					<tr>
-						<td className='Bold'>Step 3</td>
-						<td className='Bold'>
-							<Link to='/advisor/agreements'>Upload your agreements </Link>
-							and
-							<Link to='/advisor/billing'> create billing plans</Link>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<table>
-				<caption>
-					<div className='Flex'>
-						<div className='Title'>
-							{formatUSD(totalBalance)}
-							{' Total Balance - Beginning '}
-							{totalBalanceDate}
+			<div className='ResponsiveTable'>
+				<table className='Quickstart'>
+					<caption>
+						<div className='Flex'>
+							<div className='Title'>Welcome to Block RIA</div>
 						</div>
-					</div>
-				</caption>
-			</table>
+					</caption>
+					<thead>
+						<tr>
+							<th>QUICK START</th>
+							<th className='Break'>ACTION</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td className='Bold'>Step 1</td>
+							<td className='Bold'>
+								<Link to='/advisor/invites'>Invite a client</Link>
+							</td>
+						</tr>
+						<tr>
+							<td className='Bold'>Step 2</td>
+							<td className='Bold'>
+								<Link to='/advisor/clients'>View a client's holdings</Link>
+							</td>
+						</tr>
+						<tr>
+							<td className='Bold'>Step 3</td>
+							<td className='Bold'>
+								<Link to='/advisor/agreements'>Upload your agreements </Link>
+								and
+								<Link to='/advisor/billing'> create billing plans</Link>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div className='ResponsiveTable' style={{ marginBottom: 0 }}>
+				<table>
+					<caption>
+						<div className='Flex'>
+							<div className='Title'>
+								{formatUSD(totalBalance)}
+								{' Total Balance - Beginning '}
+								{totalBalanceDate}
+							</div>
+						</div>
+					</caption>
+				</table>
+			</div>
 			<div className='AreaChart'>
 				<ResponsiveContainer width='100%' height='100%'>
 					<AreaChart data={performance}>
@@ -297,30 +301,32 @@ const Overview = ({ advisor }) => {
 					</AreaChart>
 				</ResponsiveContainer>
 			</div>
-			<table className='PendingInvites'>
-				<caption>
-					<div className='Flex'>
-						<div className='Title'>Pending Invites</div>
-						<Link className='Button' to={`/advisor/invites`}>
-							Invite Client
-						</Link>
-					</div>
-				</caption>
-				<thead>
-					<tr>
-						<th className='Break'>EMAIL</th>
-						<th>SENT</th>
-						<th>RESEND</th>
-						<th>DELETE</th>
-					</tr>
-				</thead>
-				<tbody>{pendingInvites.map((pendingInvite, index) => renderPendingInvite(pendingInvite, index))}</tbody>
-				<tfoot>
-					<tr>
-						<td>{pendingInvites.length} Total</td>
-					</tr>
-				</tfoot>
-			</table>
+			<div className='ResponsiveTable'>
+				<table className='PendingInvites'>
+					<caption>
+						<div className='Flex'>
+							<div className='Title'>Pending Invites</div>
+							<Link className='Button' to={`/advisor/invites`}>
+								Invite Client
+							</Link>
+						</div>
+					</caption>
+					<thead>
+						<tr>
+							<th className='Break'>EMAIL</th>
+							<th>SENT</th>
+							<th>RESEND</th>
+							<th>DELETE</th>
+						</tr>
+					</thead>
+					<tbody>{pendingInvites.map((pendingInvite, index) => renderPendingInvite(pendingInvite, index))}</tbody>
+					<tfoot>
+						<tr>
+							<td>{pendingInvites.length} Total</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
 			{/* <table className='TotalBalanceHistory'>
 				<caption>
 					<div className='Flex'>

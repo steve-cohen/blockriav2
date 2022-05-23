@@ -11,6 +11,10 @@ table {
 	width: 100%;
 }
 
+table caption {
+	white-space: pre;
+}
+
 table caption .Flex {
 	align-items: flex-end;
 	display: flex;
@@ -26,6 +30,7 @@ table caption .Flex .Title {
 	color: rgb(26, 27, 29);
 	font-size: 18px;
 	font-weight: 500;
+	left: 0;
 	padding-left: 8px;
 }
 
@@ -64,4 +69,15 @@ table thead tr th {
 table tfoot tr td {
 	border-bottom: none;
 	white-space: nowrap;
+}
+
+.ResponsiveTable {
+	margin-bottom: 60px;
+	/* overflow-x: auto; */
+}
+
+@media only screen and (max-width: 800px) {
+	table caption .Flex {
+		justify-content: flex-start;
+	}
 }

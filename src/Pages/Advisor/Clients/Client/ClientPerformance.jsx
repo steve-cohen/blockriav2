@@ -172,27 +172,29 @@ const ClientPerformance = ({ totalBalance, totalBalanceNonTradeable, transaction
 	}
 
 	return (
-		<table id='performance'>
-			<caption>
-				<div className='Flex'>
-					<div className='Title'>Performance</div>
-				</div>
-			</caption>
-			<thead>
-				<tr>
-					<th>TIME PERIOD</th>
-					<th className='AlignRight'>STARTING BALANCE</th>
-					<th className='AlignRight'>DEPOSITS</th>
-					<th className='AlignRight'>WITHDRAWALS</th>
-					<th className='AlignRight'>NET CONTRIBUTIONS</th>
-					<th className='AlignRight'>ENDING BALANCE</th>
-					<th className='AlignRight'>PERFORMANCE ($)</th>
-					<th className='AlignRight'>PERFORMANCE (%)</th>
-				</tr>
-			</thead>
-			<tbody>{performances.map(renderPerformance)}</tbody>
-			<tfoot></tfoot>
-		</table>
+		<div className='ResponsiveTable'>
+			<table id='performance'>
+				<caption>
+					<div className='Flex'>
+						<div className='Title'>Performance</div>
+					</div>
+				</caption>
+				<thead>
+					<tr>
+						<th>TIME PERIOD</th>
+						<th className='AlignRight'>STARTING BALANCE</th>
+						<th className='AlignRight'>DEPOSITS</th>
+						<th className='AlignRight'>WITHDRAWALS</th>
+						<th className='AlignRight'>NET CONTRIBUTIONS</th>
+						<th className='AlignRight'>ENDING BALANCE</th>
+						<th className='AlignRight'>PERFORMANCE ($)</th>
+						<th className='AlignRight'>PERFORMANCE (%)</th>
+					</tr>
+				</thead>
+				<tbody>{performances.map(renderPerformance)}</tbody>
+				<tfoot></tfoot>
+			</table>
+		</div>
 	)
 }
 
