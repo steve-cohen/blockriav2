@@ -14,6 +14,7 @@ const Client = ({ advisor }) => {
 	const [searchParams] = useSearchParams()
 	const advisorId = advisor.idToken.payload.sub
 	const clientId = searchParams.get('clientId')
+	const clientName = searchParams.get('clientName')
 
 	const [client, setClient] = useState({})
 	const [totalBalance, setTotalBalance] = useState(0)
@@ -21,7 +22,6 @@ const Client = ({ advisor }) => {
 	const [transactions, setTransactions] = useState([])
 
 	useEffect(() => {
-		console.log(advisorId, clientId)
 		if (clientId.includes('-')) {
 			// Coinbase Client
 			fetch(`https://blockria.com/api/coinbase/clients/client?advisorId=${advisorId}&clientId=${clientId}`)
@@ -46,6 +46,16 @@ const Client = ({ advisor }) => {
 
 	return (
 		<div className='Client'>
+			<div className='ClientNavigation'>
+				<div>{clientName}</div>
+				<a href='#performance'>Performance</a>
+				<a href='#holdings'>Holdings</a>
+				<a href='#portfolio'>Portfolio</a>
+				<a href='#transfers'>Transfers</a>
+				<a href='#transactions'>Transactions</a>
+				<a href='#taxes'>Taxes</a>
+				<a href='#billing'>Billing</a>
+			</div>
 			<ClientPerformance
 				totalBalance={totalBalance}
 				totalBalanceNonTradeable={totalBalanceNonTradeable}

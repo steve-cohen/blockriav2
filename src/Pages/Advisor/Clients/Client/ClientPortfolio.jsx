@@ -133,7 +133,7 @@ const ClientPortfolio = ({ advisor, client }) => {
 	}
 
 	return (
-		<table>
+		<table id='portfolio'>
 			<caption>
 				<div className='Flex'>
 					<div className='Title'>Automatic Portfolio Rebalancing</div>

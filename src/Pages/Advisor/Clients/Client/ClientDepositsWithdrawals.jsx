@@ -5,7 +5,7 @@ const ClientDepositsWithdrawals = () => {
 	const [searchParams] = useSearchParams()
 
 	return (
-		<table style={{ marginBottom: '60px' }}>
+		<table id='transfers' style={{ marginBottom: '60px' }}>
 			<caption>
 				<div className='Flex'>
 					{/* <div className='Title'>Automatic Deposits and Withdrawals</div> */}

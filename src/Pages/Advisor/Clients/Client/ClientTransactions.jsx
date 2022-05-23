@@ -8,7 +8,7 @@ const ClientTransactions = ({ transactions }) => {
 
 	return (
 		<>
-			<table>
+			<table id='transactions'>
 				<caption>
 					<div className='Flex'>
 						<div className='Title'>Transaction History</div>
@@ -56,7 +56,7 @@ const ClientTransactions = ({ transactions }) => {
 					</tfoot>
 				) : null}
 			</table>
-			<table>
+			<table id='taxes'>
 				<caption>
 					<div className='Flex'>
 						<div className='Title'>Tax Events</div>

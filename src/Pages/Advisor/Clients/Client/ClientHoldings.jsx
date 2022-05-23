@@ -193,7 +193,7 @@ const ClientHoldings = ({
 
 	return (
 		<>
-			<table>
+			<table id='holdings'>
 				<caption>
 					<div className='Flex'>
 						<div className='Title'>Current Holdings</div>

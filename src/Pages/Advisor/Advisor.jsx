@@ -35,7 +35,7 @@ const Advisor = () => {
 	return (
 		<div className='Advisor'>
 			<div className='Content'>
-				<Navigation advisor={advisor} />
+				<Navigation />
 				<div className='Body'>
 					<Routes>
 						{advisor.idToken.payload.sub ? (

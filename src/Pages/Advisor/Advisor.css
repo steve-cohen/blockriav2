@@ -1,5 +1,6 @@
 .Advisor .Content .Body {
+	margin-top: 50px;
+	min-height: calc(100vh - 120px - 50px);
 	overflow: auto;
 	padding: 60px;
-	margin-top: 48px;
 }

@@ -42,7 +42,7 @@ const ClientBilling = ({ advisor, client }) => {
 	}
 
 	return (
-		<table style={{ marginBottom: 0 }}>
+		<table id='billing' style={{ marginBottom: 0 }}>
 			<caption>
 				<div className='Flex'>
 					<div className='Title'>Billing Plan</div>

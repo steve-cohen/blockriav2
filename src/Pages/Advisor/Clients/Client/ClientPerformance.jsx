@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 
-// const timePeriods = ['YTD', '1D', '1W', '1M', '3M', '1Y', 'ALL']
 const timePeriods = ['1D', '1W', '1M', '3M', 'YTD', '1Y', 'ALL']
 
 function formatUSD(number) {
@@ -27,7 +25,6 @@ function GETSpotPrice(holding, startDate) {
 }
 
 const ClientPerformance = ({ totalBalance, totalBalanceNonTradeable, transactions }) => {
-	const [searchParams] = useSearchParams()
 	const [performances, setPerformances] = useState([])
 
 	useEffect(async () => {
@@ -145,11 +142,7 @@ const ClientPerformance = ({ totalBalance, totalBalanceNonTradeable, transaction
 			(100 * (endBalance - (startingBalance + netContributions))) / (startingBalance + netContributions)
 
 		return (
-			<tr
-				key={`Performance ${timePeriod}`}
-				className={timePeriod === 'YTD' ? 'Bold' : ''}
-				style={timePeriod === 'YTD' ? { background: 'rgb(243, 244, 246)' } : {}}
-			>
+			<tr key={`Performance ${timePeriod}`}>
 				<td className='Bold'>{timePeriod}</td>
 				<td className='AlignRight'>{formatUSD(startingBalance)}</td>
 				<td className='AlignRight Green'>+{formatUSD(netDeposits)}</td>
@@ -179,10 +172,10 @@ const ClientPerformance = ({ totalBalance, totalBalanceNonTradeable, transaction
 	}
 
 	return (
-		<table>
+		<table id='performance'>
 			<caption>
 				<div className='Flex'>
-					<div className='Title'>Performance for {searchParams.get('clientName')}</div>
+					<div className='Title'>Performance</div>
 				</div>
 			</caption>
 			<thead>

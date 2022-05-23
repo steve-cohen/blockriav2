@@ -1,3 +1,41 @@
+.Client {
+	margin-top: 40px;
+}
+
 .Client table {
 	margin-bottom: 60px;
+	scroll-margin-top: 120px;
+}
+
+.ClientNavigation {
+	background: white;
+	border-bottom: 1px solid rgb(237, 238, 240);
+	font-family: -apple-system, 'system-ui', Roboto, 'Helvetica Neue', sans-serif !important;
+	font-feature-settings: 'pnum';
+	font-variant-numeric: proportional-nums;
+	position: fixed;
+	height: 40px;
+	left: 0;
+	top: 50px;
+	padding: 0 10px 0 68px;
+	width: calc(100vw - 70px);
+	z-index: 100;
+}
+
+.ClientNavigation a,
+.ClientNavigation div {
+	color: rgb(26, 27, 29);
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 500;
+	padding: 12px 10px;
+	vertical-align: middle;
+}
+
+.ClientNavigation div {
+	font-weight: 600;
+	border-right: 1px solid rgb(26, 27, 29);
+	line-height: 18px;
+	margin-right: 10px;
+	padding: 0 20px 0 0;
 }

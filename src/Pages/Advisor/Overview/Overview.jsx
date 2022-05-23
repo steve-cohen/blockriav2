@@ -321,7 +321,7 @@ const Overview = ({ advisor }) => {
 					</tr>
 				</tfoot>
 			</table>
-			<table className='TotalBalanceHistory'>
+			{/* <table className='TotalBalanceHistory'>
 				<caption>
 					<div className='Flex'>
 						<div className='Title'>Daily Balance History</div>
@@ -340,7 +340,7 @@ const Overview = ({ advisor }) => {
 					</tr>
 				</thead>
 				<tbody>{[...performance].reverse().map(renderPerformance)}</tbody>
-			</table>
+			</table> */}
 		</div>
 	)
 }
