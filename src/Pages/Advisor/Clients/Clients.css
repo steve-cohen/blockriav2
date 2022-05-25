@@ -10,3 +10,36 @@
 .Clients .ClientName:hover {
 	text-decoration: underline;
 }
+
+.Clients .AreaChart {
+	height: 200px;
+	margin-bottom: 60px;
+	width: 100%;
+}
+
+.Clients .AreaChart line {
+	stroke: rgb(237, 238, 240);
+}
+
+.Clients .AreaChart tspan,
+.Clients .AreaChart .recharts-tooltip-label,
+.Clients .AreaChart .recharts-tooltip-item-list {
+	fill: rgb(26, 27, 29);
+	font-family: -apple-system, 'system-ui', Roboto, 'Helvetica Neue', sans-serif !important;
+	font-feature-settings: 'pnum';
+	font-variant-numeric: proportional-nums;
+	font-size: 11px;
+	font-weight: 500;
+
+	fill: rgb(84, 90, 105);
+	font-size: 11px;
+	font-weight: 400;
+}
+
+.xAxis .recharts-cartesian-axis-ticks g:first-child .recharts-cartesian-axis-tick-value {
+	text-anchor: middle;
+}
+
+.xAxis .recharts-cartesian-axis-tick-value {
+	text-anchor: end;
+}

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import './Clients.css'
+
+let spotPrices = { USD: 1 }
 
 function formatUSD(number) {
 	return number.toLocaleString('en-US', {
@@ -9,63 +12,43 @@ function formatUSD(number) {
 	})
 }
 
-function getSpotPrice(holding) {
-	return fetch(`https://blockria.com/v2/prices/${holding}-USD/spot`)
-		.then(response => response.json())
-		.catch(error => alert(error))
-}
-
-function renderPortfolio(clientId, clientName, currentPortfolioId, portfolios, rebalanceFrequency) {
-	const portfolio = portfolios.filter(({ portfolioId }) => portfolioId === currentPortfolioId)
-
-	if (portfolio.length) {
-		return (
-			<>
-				{portfolio[0].portfolioName} (
-				<Link
-					id='Change'
-					to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${currentPortfolioId}&rebalanceFrequency=${rebalanceFrequency}`}
-					style={{ textTransform: 'none' }}
-				>
-					change
-				</Link>
-				)
-			</>
-		)
-	}
-
-	return null
-}
-
-function renderPortfolioAssign(clientName, clientId, rebalanceFrequency) {
-	return (
-		<Link
-			className='Red'
-			id='Assign'
-			to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=&rebalanceFrequency=${rebalanceFrequency}`}
-			style={{ textTransform: 'none' }}
-		>
-			No Portfolio
-		</Link>
-	)
-}
-
 const Clients = ({ advisor }) => {
-	const advisorId = advisor.idToken.payload.sub
 	const navigate = useNavigate()
+	const advisorId = advisor.idToken.payload.sub
+
+	const [billingPlans, setBillingPlans] = useState({})
 	const [clients, setClients] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
-	const [portfolios, setPortfolios] = useState([])
+	const [performance, setPerformance] = useState([])
+	const [portfolios, setPortfolios] = useState({})
+	const [totalBalance, setTotalBalance] = useState('$0.00')
+	const [totalBalanceTitle, setTotalBalanceTitle] = useState('')
 
 	useEffect(async () => {
-		setPortfolios([])
-		await Promise.all([GETClients(), GETPortfolios()])
-		await setIsLoading(false)
+		const [clients, performance] = await Promise.all([
+			GETClients(),
+			GETPerformance(),
+			GETPortfolios(),
+			GETBillingPlans()
+		])
+		await formatPerformance(clients, performance)
+		setIsLoading(false)
 	}, [])
+
+	function GETBillingPlans() {
+		return fetch(`https://blockria.com/api/billing?advisorId=${advisorId}`)
+			.then(response => response.json())
+			.then(response => {
+				let newBillingPlans = {}
+				response.forEach(({ billingId, billingName }) => (newBillingPlans[billingId] = billingName))
+				setBillingPlans(newBillingPlans)
+			})
+			.catch(alert)
+	}
 
 	async function GETClients() {
 		const [coinbase, coinbasePro] = await Promise.all([GETClientsCoinbase(), GETClientsCoinbasePro()])
-		handleNewClients([...coinbase, ...coinbasePro])
+		return handleNewClients([...coinbase, ...coinbasePro])
 	}
 
 	function GETClientsCoinbase() {
@@ -75,28 +58,101 @@ const Clients = ({ advisor }) => {
 	}
 
 	function GETClientsCoinbasePro() {
-		return fetch(`https://blockria.com/api/coinbasepro/clients?advisorId=${advisorId}`)
+		return []
+		// return fetch(`https://blockria.com/api/coinbasepro/clients?advisorId=${advisorId}`)
+		// 	.then(response => response.json())
+		// 	.catch(alert)
+	}
+
+	function GETPerformance() {
+		return fetch(`https://blockria.com/api/overview?advisorId=${advisorId}`)
 			.then(response => response.json())
+			.then(response => {
+				if (response.Item === undefined) return
+				if (response.Item.advisorId) delete response.Item.advisorId
+				if (!Object.keys(response.Item).length) return
+
+				// Destructure DynamoDB into [ { date: '2022-05-03', token1: 9.84, token2: 3.21, totalBalance: 17.81 }, ...]
+				let newPerformance = []
+				Object.entries(response.Item).forEach(([date, holdings]) => {
+					let performanceDay = { date }
+
+					let dayTotalBalance = 0
+					Object.entries(holdings.M).forEach(([token, amount]) => {
+						performanceDay[token] = Number(amount.N)
+						dayTotalBalance += Number(amount.N)
+					})
+					performanceDay.TotalBalance = Number(dayTotalBalance.toFixed(2))
+
+					newPerformance.push(performanceDay)
+				})
+				newPerformance = newPerformance.sort(
+					(a, b) => Number(a.date.replace(/-/g, '')) - Number(b.date.replace(/-/g, ''))
+				)
+
+				// Set Data
+				return newPerformance
+			})
 			.catch(alert)
 	}
 
 	function GETPortfolios() {
 		return fetch(`https://blockria.com/api/portfolios?advisorId=${advisorId}`)
 			.then(response => response.json())
-			.then(setPortfolios)
+			.then(response => {
+				let newPortfolios = {}
+				response.forEach(({ portfolioId, portfolioName }) => (newPortfolios[portfolioId] = portfolioName))
+				setPortfolios(newPortfolios)
+			})
 			.catch(alert)
 	}
+	function GETSpotPrice(holding) {
+		return fetch(`https://blockria.com/v2/prices/${holding}-USD/spot`)
+			.then(response => response.json())
+			.catch(error => alert(error))
+	}
 
-	function handeClient(e, clientId, clientName) {
-		e.preventDefault()
-		if (e.target.id !== 'Assign' && e.target.id !== 'Change') {
-			navigate(`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`)
+	function formatDate(date) {
+		const YYYYMMDD = date.split('-')
+
+		const months = {
+			'01': 'JAN',
+			'02': 'FEB',
+			'03': 'MAR',
+			'04': 'APR',
+			'05': 'MAY',
+			'06': 'JUN',
+			'07': 'JUL',
+			'08': 'AUG',
+			'09': 'SEP',
+			10: 'OCT',
+			11: 'NOV',
+			12: 'DEC'
 		}
+
+		return `${months[YYYYMMDD[1]]} ${YYYYMMDD[0]}`
+	}
+
+	function formatPerformance(newClients, newPerformance) {
+		// Add a Starting Data Point of $0.00
+		let startingPerformance = new Date(newPerformance[0].date)
+		startingPerformance = startingPerformance.setDate(startingPerformance.getDate() - 1)
+		startingPerformance = new Date(startingPerformance).toISOString().slice(0, 10)
+		newPerformance.unshift({ date: startingPerformance, TotalBalance: 0 })
+
+		// Add an Ending Data Point for the Current Total Balance
+		let endingDate = new Date().toISOString().slice(0, 10)
+		let endingBalance = 0
+		newClients.forEach(({ holdings }) => {
+			holdings.forEach(({ balance }) => (endingBalance += spotPrices[balance.currency] * balance.amount))
+		})
+		newPerformance.push({ date: endingDate, TotalBalance: endingBalance })
+
+		setClients(newClients)
+		setPerformance(newPerformance)
 	}
 
 	async function handleNewClients(newClients) {
-		console.log({ newClients })
-
 		// [1.0] GET Spot Prices
 		// [1.1] Format Currencies
 		let currencies = {}
@@ -105,137 +161,166 @@ const Clients = ({ advisor }) => {
 				if (balance.currency !== 'USD') currencies[balance.currency] = true
 			})
 		})
-		console.log({ currencies })
 
 		// [1.2] GET Spot Prices
-		const spotPricesResponse = await Promise.all(Object.keys(currencies).map(getSpotPrice))
+		const spotPricesResponse = await Promise.all(Object.keys(currencies).map(GETSpotPrice))
 
 		// [1.3] Format Spot Prices
-		let spotPrices = { USD: 1 }
 		spotPricesResponse.forEach(({ data }) => (spotPrices[data.base] = Number(data.amount)))
-		console.log({ spotPrices })
 
 		// [2.0] Calculate Total Native Balance for Each Client
+		let newTotalBalance = 0
 		newClients.forEach(({ holdings }, index) => {
 			let nativeBalance = 0
 			holdings.forEach(({ balance }) => (nativeBalance += spotPrices[balance.currency] * balance.amount))
 			newClients[index].nativeBalance = nativeBalance
+
+			newTotalBalance += nativeBalance
 		})
 
 		// [3.0] Sort Clients by Total Native Balance
 		newClients = newClients.sort((a, b) => b.nativeBalance - a.nativeBalance)
-		console.log({ newClients })
 
-		// [3.0] Update State
-		setClients(newClients)
+		// [5.0] Update State
+		setTotalBalance(formatUSD(newTotalBalance))
+
+		return newClients
 	}
 
 	function renderClient({
+		billingId,
+		clientEmail,
 		clientId,
 		clientName,
 		createdAt,
-		custodian,
 		nativeBalance,
 		portfolioId,
 		rebalanceFrequency
 	}) {
 		return (
-			<tr key={clientId} onClick={e => handeClient(e, clientId, clientName)}>
+			<tr
+				key={clientId}
+				onClick={() => navigate(`/advisor/clients/client?clientName=${clientName}&clientId=${clientId}`)}
+			>
 				<td className='ClientName'>{clientName}</td>
 				<td className='AlignRight Bold'>{formatUSD(nativeBalance)}</td>
-				<td>
-					{portfolioId
-						? renderPortfolio(clientId, clientName, portfolioId, portfolios)
-						: renderPortfolioAssign(clientName, clientId)}
-				</td>
-				{renderRebalanceFrequency(clientName, clientId, portfolioId, rebalanceFrequency)}
+				<td>{portfolioId ? portfolios[portfolioId] : 'No Portfolio'}</td>
+				<td>{rebalanceFrequency && `Rebalance ${rebalanceFrequency}`}</td>
+				<td>{billingId && billingPlans[billingId]}</td>
+				{/* <td style={{ textTransform: 'lowercase' }}>{clientEmail}</td> */}
 				<td>{clientId.includes('-') ? 'Coinbase' : 'Coinbase Pro'}</td>
-				{/* <td>{new Date(updatedAt).toISOString().slice(0, 19).replace('T', ' ')}</td> */}
 				<td>{new Date(createdAt).toISOString().slice(0, 10)}</td>
 			</tr>
 		)
 	}
 
-	function renderRebalanceFrequency(clientName, clientId, portfolioId, rebalanceFrequency) {
-		if (rebalanceFrequency) {
-			return (
-				<td className='Break'>
-					<span>Rebalance {rebalanceFrequency} </span>(
-					<Link
-						id='Change'
-						to={`/advisor/clients/client/setPortfolio?clientName=${clientName}&clientId=${clientId}&portfolioId=${portfolioId}&rebalanceFrequency=${rebalanceFrequency}`}
-						style={{ textTransform: 'none' }}
-					>
-						change
-					</Link>
-					)
-				</td>
-			)
+	function renderToolTip({ payload }) {
+		if (payload && payload.length) {
+			let date = new Date(payload[0].payload.date)
+			date = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timezone: 'PDT' })
+			const totalBalance = formatUSD(payload[0].payload.TotalBalance)
+			setTotalBalanceTitle(`${totalBalance} Total Balance on ${date}`)
+		} else {
+			setTotalBalanceTitle(`${totalBalance} Total Balance`)
 		}
 
-		return <td className='Break' />
-	}
-
-	function renderTotals() {
-		let assignedPortfolios = 0
-		let balance = 0
-		clients.forEach(({ nativeBalance, portfolioId }) => {
-			balance += nativeBalance
-			if (portfolioId) assignedPortfolios += 1
-		})
-
-		return (
-			<tfoot>
-				<tr>
-					<td>{clients.length !== 1 ? `${clients.length} Clients` : '1 Client'}</td>
-					<td className='AlignRight Bold'>{formatUSD(balance)}</td>
-					<td className='Break' colSpan={4}>
-						{assignedPortfolios}
-						{assignedPortfolios === 1 ? ' Portfolio Assigned' : ' Portfolios Assigned'}
-					</td>
-				</tr>
-			</tfoot>
-		)
+		return ''
 	}
 
 	return (
-		<div className='ResponsiveTable'>
-			<table className='Clients'>
-				<caption>
-					<div className='Flex'>
-						<div className='Title'>Clients</div>
-						<Link className='Button' to={`/advisor/invites`}>
-							Invite Client
-						</Link>
-					</div>
-				</caption>
-				<thead>
-					<tr>
-						<th>NAME</th>
-						<th className='AlignRight'>BALANCE</th>
-						<th>PORTFOLIO</th>
-						<th className='Break'>PORTFOLIO REBALANCING</th>
-						<th>CUSTODIAN</th>
-						{/* <th>UPDATED</th> */}
-						<th>JOINED</th>
-					</tr>
-				</thead>
-				{isLoading ? (
-					<tbody>
-						<tr>
-							<td style={{ border: 'none' }}>
-								<div className='Loading'>Loading...</div>
-							</td>
-						</tr>
-					</tbody>
-				) : (
+		<>
+			<div className='Clients'>
+				{performance.length ? (
 					<>
-						<tbody>{clients.map(renderClient)}</tbody>
-						{renderTotals()}
+						<table>
+							<caption>
+								<div className='Flex'>
+									<div className='Title'>{totalBalanceTitle}</div>
+								</div>
+							</caption>
+						</table>
+						<div className='AreaChart'>
+							<ResponsiveContainer width='100%' height='100%'>
+								<LineChart data={performance}>
+									<XAxis
+										dataKey='date'
+										interval='preserveStartEnd'
+										margin={{ top: 0, left: 0, right: 0, bottom: 0 }}
+										ticks={[performance[0].date, performance[performance.length - 1].date]}
+										tickFormatter={formatDate}
+										tickLine={0}
+										tickSize={5}
+									/>
+									<YAxis
+										// axisLine={false}
+										dataKey='TotalBalance'
+										orientation='right'
+										ticks={[0, performance[performance.length - 1].TotalBalance]}
+										tickFormatter={formatUSD}
+										tickLine={0}
+										tickSize={1}
+									/>
+									<Line
+										activeDot={false}
+										dataKey='TotalBalance'
+										dot={false}
+										fillOpacity={0}
+										stroke='rgb(18, 25, 44)'
+										strokeWidth={1.2}
+										type='monotone'
+									/>
+									<Tooltip className='ToolTip' content={renderToolTip} isAnimationActive={false} />
+								</LineChart>
+							</ResponsiveContainer>
+						</div>
 					</>
-				)}
-			</table>
-		</div>
+				) : null}
+			</div>
+			<div className='ResponsiveTable'>
+				<table className='Clients'>
+					<caption>
+						<div className='Flex'>
+							<div className='Title'>{clients.length !== 1 ? `${clients.length} Clients` : '1 Client'}</div>
+							<Link className='Button' to={`/advisor/invites`}>
+								Invite Client
+							</Link>
+						</div>
+					</caption>
+					<thead>
+						<tr>
+							<th>NAME</th>
+							<th className='AlignRight'>BALANCE</th>
+							<th>PORTFOLIO</th>
+							<th>PORTFOLIO REBALANCING</th>
+							<th className='Break'>BILLING PLAN</th>
+							{/* <th>EMAIL</th> */}
+							<th>CUSTODIAN</th>
+							<th>JOINED</th>
+						</tr>
+					</thead>
+					{isLoading ? (
+						<tbody>
+							<tr>
+								<td style={{ border: 'none' }}>
+									<div className='Loading'>Loading...</div>
+								</td>
+							</tr>
+						</tbody>
+					) : (
+						<>
+							<tbody>{clients.map(renderClient)}</tbody>
+							<tfoot>
+								<tr>
+									<td colSpan={Infinity}>
+										<Link to='/advisor/invites'>+ Invite Client</Link>
+									</td>
+								</tr>
+							</tfoot>
+						</>
+					)}
+				</table>
+			</div>
+		</>
 	)
 }
 

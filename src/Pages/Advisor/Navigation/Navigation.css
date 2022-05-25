@@ -1,4 +1,5 @@
 .Navigation {
+	align-items: center;
 	background: rgb(18, 25, 44);
 	display: flex;
 	font-family: -apple-system, 'system-ui', Roboto, 'Helvetica Neue', sans-serif !important;
@@ -19,8 +20,8 @@
 	display: inline-block;
 	font-size: 14px;
 	font-weight: 500;
-	line-height: 24px;
-	padding: 12px 13px;
+	height: 100%;
+	padding: 16px 12px;
 	vertical-align: middle;
 }
 
@@ -30,19 +31,10 @@
 	vertical-align: middle;
 }
 
-.Navigation a svg {
-	display: inline-block;
-	fill: rgb(248, 249, 251);
-	height: 12px;
-	margin-right: 4px;
-	width: 12px;
-	vertical-align: middle;
-}
-
 .Navigation .Logo {
 	border: 1.5px solid rgb(248, 249, 251);
 	border-radius: 4px;
-	font-weight: 600;
+	font-weight: 500;
 	margin: 0 6px 0 0;
 	padding: 0;
 	line-height: 22px;
@@ -51,11 +43,12 @@
 }
 
 .Navigation .Profile a {
-	padding: 12px 11px;
+	padding: 12px 10px;
 }
 
 .Navigation .Profile a svg {
-	margin-right: 4px;
-	height: 12px;
-	width: 12px;
+	fill: white;
+	height: 13px;
+	width: 13px;
+	vertical-align: middle;
 }

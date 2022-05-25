@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
 import Agreements from './Agreements/Agreements'
 import Billing from './Billing/Billing'
@@ -11,7 +11,6 @@ import Deposit from './Clients/Client/Deposit/Deposit'
 import EditPortfolio from './Portfolios/EditPortfolio/EditPorfolio'
 import Invites from './Invites/Invites'
 import Navigation from './Navigation/Navigation'
-import Overview from './Overview/Overview'
 import Portfolios from './Portfolios/Portfolios'
 import SetBilling from './Clients/Client/SetBilling/SetBilling'
 import SetPortfolio from './Clients/Client/SetPortfolio/SetPortfolio'
@@ -40,7 +39,7 @@ const Advisor = () => {
 					<Routes>
 						{advisor.idToken.payload.sub ? (
 							<>
-								<Route path='' element={<Overview advisor={advisor} />} />
+								<Route path='' element={<Clients advisor={advisor} />} />
 								<Route path='agreements' element={<Agreements advisor={advisor} />} />
 								<Route path='billing' element={<Billing advisor={advisor} />} />
 								<Route path='billing/edit' element={<BillingEdit advisor={advisor} />} />
