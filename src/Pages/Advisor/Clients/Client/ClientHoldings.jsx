@@ -170,7 +170,7 @@ const ClientHoldings = ({
 					)}
 				</td>
 				<td>{currency ? currency.name : coinbaseTokenNames[balance.currency]}</td>
-				<td>{balance.currency !== 'USD' && balance.amount}</td>
+				<td className='AlignRight'>{balance.currency !== 'USD' && balance.amount.toFixed(18)}</td>
 				<td className='AlignRight'>{balance.currency !== 'USD' && formatUSD(spotPrices[balance.currency] || 0)}</td>
 				{renderHoldingPercentDifference(balance.currency, '1D')}
 				{renderHoldingPercentDifference(balance.currency, '1W')}
@@ -206,9 +206,9 @@ const ClientHoldings = ({
 							<th className='AlignRight'>BALANCE</th>
 							<th>HOLDING</th>
 							<th>NAME</th>
-							<th>AMOUNT</th>
-							<th>SPOT PRICE</th>
-							<th className='AlignRight Break'>1D</th>
+							<th className='AlignRight'>AMOUNT</th>
+							<th className='AlignRight Break'>PRICE</th>
+							<th className='AlignRight'>1D</th>
 							<th className='AlignRight'>1W</th>
 							<th className='AlignRight'>1M</th>
 							<th className='AlignRight'>3M</th>

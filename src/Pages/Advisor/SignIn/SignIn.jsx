@@ -29,8 +29,8 @@ const SignIn = ({ setAdvisor }) => {
 
 		authenticate(email, password)
 			.then(async newAdvisor => {
-				if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-					// newAdvisor.idToken.payload.sub = ''
+				if (process.env.NODE_ENV === 'development' && process.env.REACT_APP_ADVISORID) {
+					newAdvisor.idToken.payload.sub = process.env.REACT_APP_ADVISORID
 				}
 				localStorage.setItem('advisor', JSON.stringify(newAdvisor))
 				setAdvisor(newAdvisor)

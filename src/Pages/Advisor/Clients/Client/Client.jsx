@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
+import ClientAbout from './ClientAbout'
 import ClientBilling from './ClientBilling'
 import ClientDepositsWithdrawals from './ClientDepositsWithdrawals'
 import ClientHoldings from './ClientHoldings'
 import ClientPerformance from './ClientPerformance'
 import ClientPortfolio from './ClientPortfolio'
+import ClientTaxes from './ClientTaxes'
 import ClientTransactions from './ClientTransactions'
 
 import './Client.css'
@@ -32,7 +34,7 @@ const Client = ({ advisor }) => {
 			fetch(`https://blockria.com/api/coinbase/clients/client/transactions?clientId=${clientId}`)
 				.then(response => response.json())
 				.then(newTransactions =>
-					setTransactions(newTransactions.sort((a, b) => b.updated_at.localeCompare(a.updated_at)))
+					setTransactions(newTransactions.sort((a, b) => a.updated_at.localeCompare(b.updated_at)))
 				)
 				.catch(alert)
 		} else {
@@ -40,6 +42,13 @@ const Client = ({ advisor }) => {
 			fetch(`https://blockria.com/api/coinbasepro/clients/client?advisorId=${advisorId}&clientId=${clientId}`)
 				.then(response => response.json())
 				.then(setClient)
+				.catch(alert)
+
+			fetch(`https://blockria.com/api/coinbasepro/transactions?clientId=${clientId}`)
+				.then(response => response.json())
+				.then(newTransactions =>
+					setTransactions(newTransactions.sort((a, b) => a.date_transactionId.S.localeCompare(b.date_transactionId.S)))
+				)
 				.catch(alert)
 		}
 	}, [])
@@ -55,23 +64,26 @@ const Client = ({ advisor }) => {
 				<a href='#transactions'>Transactions</a>
 				<a href='#taxes'>Taxes</a>
 				<a href='#billing'>Billing</a>
+				<a href='#about'>About</a>
 			</div>
-			<ClientPerformance
+			{/* <ClientPerformance
 				totalBalance={totalBalance}
 				totalBalanceNonTradeable={totalBalanceNonTradeable}
 				transactions={transactions}
-			/>
-			<ClientHoldings
+			/> */}
+			{/* <ClientHoldings
 				client={client}
 				totalBalance={totalBalance}
 				totalBalanceNonTradeable={totalBalanceNonTradeable}
 				setTotalBalance={setTotalBalance}
 				setTotalBalanceNonTradeable={setTotalBalanceNonTradeable}
-			/>
-			<ClientPortfolio advisor={advisor} client={client} />
-			<ClientDepositsWithdrawals advisor={advisor} />
-			<ClientTransactions transactions={transactions} />
-			<ClientBilling advisor={advisor} client={client} />
+			/> */}
+			{/* <ClientPortfolio advisor={advisor} client={client} /> */}
+			{/* <ClientDepositsWithdrawals advisor={advisor} /> */}
+			<ClientTransactions client={client} transactions={transactions} />
+			{/* <ClientTaxes client={client} transactions={transactions} /> */}
+			{/* <ClientBilling advisor={advisor} client={client} /> */}
+			{/* <ClientAbout client={client} /> */}
 		</div>
 	)
 }

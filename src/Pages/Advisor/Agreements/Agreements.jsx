@@ -7,6 +7,8 @@ function renderDate(timestamp) {
 }
 
 const Agreements = ({ advisor }) => {
+	const advisorId = advisor.idToken.payload.sub
+
 	const [agreements, setAgreements] = useState({})
 
 	const [document1IsLoading, setDocument1IsLoading] = useState(false)
@@ -17,6 +19,8 @@ const Agreements = ({ advisor }) => {
 
 	const [hasAutomation, setHasAutomation] = useState(true)
 	const [hasAutomationIsLoading, setHasAutomationIsLoading] = useState(true)
+
+	const [signedAgreements, setSignedAgreements] = useState([])
 
 	useEffect(() => {
 		GETAgreements()
@@ -55,7 +59,12 @@ const Agreements = ({ advisor }) => {
 		setHasAutomationIsLoading(false)
 	}
 
-	async function GETSignedAgreements() {}
+	async function GETSignedAgreements() {
+		fetch(`https://blockria.com/api/coinbase/clients?advisorId=${advisorId}`)
+			.then(response => response.json())
+			.then(setSignedAgreements)
+			.catch(alert)
+	}
 
 	async function handleAutomation(newHasAutomation) {
 		setHasAutomationIsLoading(true)
@@ -115,6 +124,18 @@ const Agreements = ({ advisor }) => {
 		)
 	}
 
+	function renderSignedAgreements({ clientEmail, clientId, clientName, createdAt }) {
+		const date = new Date(createdAt).toISOString()
+		return (
+			<tr key={`ClientId ${clientId}`}>
+				<td>{clientName}</td>
+				<td style={{ textTransform: 'lowercase' }}>{clientEmail}</td>
+				<td>{date.slice(0, 10)}</td>
+				<td>{date.slice(11, 19)}</td>
+			</tr>
+		)
+	}
+
 	function renderUploadPDF(documentOrder) {
 		return documentOrder in agreements ? (
 			<td>
@@ -169,7 +190,7 @@ const Agreements = ({ advisor }) => {
 					<thead>
 						<tr>
 							<th className='Break'>SERVICE</th>
-							<th className='AlignRight'>MODIFY</th>
+							<th className='AlignRight'>CHANGE</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -231,7 +252,7 @@ const Agreements = ({ advisor }) => {
 					</tbody>
 				</table>
 			</div>
-			{/* <table>
+			<table>
 				<caption>
 					<div className='Flex'>
 						<div className='Title'>Agreements Signed by Clients</div>
@@ -239,16 +260,14 @@ const Agreements = ({ advisor }) => {
 				</caption>
 				<thead>
 					<tr>
-						<th className='Break'>NAME</th>
-						<th>VIEW</th>
+						<th>NAME</th>
+						<th className='Break'>EMAIL</th>
 						<th>DATE</th>
 						<th>TIME</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr></tr>
-				</tbody>
-			</table> */}
+				<tbody>{signedAgreements.map(renderSignedAgreements)}</tbody>
+			</table>
 		</div>
 	)
 }

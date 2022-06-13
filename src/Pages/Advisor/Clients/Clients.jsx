@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import coinbaseTokenNames from '../coinbaseTokenNames.json'
 import './Clients.css'
 
 let spotPrices = { USD: 1 }
+const timePeriods = ['', '1D', '1W', '1M', '3M', 'YTD', '1Y']
+
+function formatPercent(number) {
+	return Number(number).toLocaleString('en-US', {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+		style: 'percent'
+	})
+}
 
 function formatUSD(number) {
-	return number.toLocaleString('en-US', {
+	return Number(number).toLocaleString('en-US', {
 		currency: 'USD',
 		style: 'currency'
 	})
@@ -23,6 +33,7 @@ const Clients = ({ advisor }) => {
 	const [portfolios, setPortfolios] = useState({})
 	const [totalBalance, setTotalBalance] = useState('$0.00')
 	const [totalBalanceTitle, setTotalBalanceTitle] = useState('')
+	const [totalHoldings, setTotalHoldings] = useState([])
 
 	useEffect(async () => {
 		const [clients, performance] = await Promise.all([
@@ -58,10 +69,10 @@ const Clients = ({ advisor }) => {
 	}
 
 	function GETClientsCoinbasePro() {
-		return []
-		// return fetch(`https://blockria.com/api/coinbasepro/clients?advisorId=${advisorId}`)
-		// 	.then(response => response.json())
-		// 	.catch(alert)
+		// return []
+		return fetch(`https://blockria.com/api/coinbasepro/clients?advisorId=${advisorId}`)
+			.then(response => response.json())
+			.catch(alert)
 	}
 
 	function GETPerformance() {
@@ -106,10 +117,43 @@ const Clients = ({ advisor }) => {
 			})
 			.catch(alert)
 	}
-	function GETSpotPrice(holding) {
-		return fetch(`https://blockria.com/v2/prices/${holding}-USD/spot`)
+
+	function GETSpotPrice(holding, timePeriod) {
+		let date = new Date()
+		date.setHours(0)
+		date.setMinutes(0)
+		date.setSeconds(0)
+		date.setMilliseconds(0)
+
+		switch (timePeriod) {
+			case '1D':
+				date.setDate(date.getDate() - 1)
+				break
+			case '1W':
+				date.setDate(date.getDate() - 7)
+				break
+			case '1M':
+				date.setMonth(date.getMonth() - 1)
+				break
+			case '3M':
+				date.setMonth(date.getMonth() - 3)
+				break
+			case 'YTD':
+				date.setDate(1)
+				date.setMonth(0)
+				break
+			case '1Y':
+				date.setFullYear(date.getFullYear() - 1)
+				break
+			default:
+				break
+		}
+
+		date = date.toISOString().slice(0, 10)
+
+		return fetch(`https://blockria.com/v2/prices/${holding}-USD/spot?date=${date}`)
 			.then(response => response.json())
-			.catch(error => alert(error))
+			.catch(alert)
 	}
 
 	function formatDate(date) {
@@ -144,7 +188,7 @@ const Clients = ({ advisor }) => {
 		let endingDate = new Date().toISOString().slice(0, 10)
 		let endingBalance = 0
 		newClients.forEach(({ holdings }) => {
-			holdings.forEach(({ balance }) => (endingBalance += spotPrices[balance.currency] * balance.amount))
+			holdings.forEach(({ balance }) => (endingBalance += spotPrices[balance.currency] * Number(balance.amount)))
 		})
 		newPerformance.push({ date: endingDate, TotalBalance: endingBalance })
 
@@ -163,33 +207,58 @@ const Clients = ({ advisor }) => {
 		})
 
 		// [1.2] GET Spot Prices
-		const spotPricesResponse = await Promise.all(Object.keys(currencies).map(GETSpotPrice))
+		for (let i = 0; i < timePeriods.length; i++) {
+			const spotPricesResponse = await Promise.all(
+				Object.keys(currencies).map(currency => GETSpotPrice(currency, timePeriods[i]))
+			)
 
-		// [1.3] Format Spot Prices
-		spotPricesResponse.forEach(({ data }) => (spotPrices[data.base] = Number(data.amount)))
+			spotPricesResponse.forEach(({ data }) => {
+				let key = i === 0 ? data.base : `${data.base}-${timePeriods[i]}`
+				spotPrices[key] = Number(data.amount)
+			})
+		}
 
 		// [2.0] Calculate Total Native Balance for Each Client
 		let newTotalBalance = 0
+		let newTotalHoldings = {}
 		newClients.forEach(({ holdings }, index) => {
 			let nativeBalance = 0
-			holdings.forEach(({ balance }) => (nativeBalance += spotPrices[balance.currency] * balance.amount))
+			holdings.forEach(({ balance }) => {
+				nativeBalance += spotPrices[balance.currency] * Number(balance.amount)
+
+				if (balance.currency in newTotalHoldings) {
+					newTotalHoldings[balance.currency].amount += Number(balance.amount)
+					newTotalHoldings[balance.currency].nativeBalance += spotPrices[balance.currency] * Number(balance.amount)
+				} else {
+					newTotalHoldings[balance.currency] = {
+						amount: Number(balance.amount),
+						nativeBalance: spotPrices[balance.currency] * Number(balance.amount)
+					}
+				}
+			})
 			newClients[index].nativeBalance = nativeBalance
 
 			newTotalBalance += nativeBalance
 		})
+
+		// [3.0] Calculate Total Native Percent
+		Object.entries(newTotalHoldings).forEach(([holding, { nativeBalance }]) => {
+			newTotalHoldings[holding].nativePercent = nativeBalance / newTotalBalance
+		})
+		newTotalHoldings = Object.entries(newTotalHoldings).sort((a, b) => b[1].nativeBalance - a[1].nativeBalance)
 
 		// [3.0] Sort Clients by Total Native Balance
 		newClients = newClients.sort((a, b) => b.nativeBalance - a.nativeBalance)
 
 		// [5.0] Update State
 		setTotalBalance(formatUSD(newTotalBalance))
+		setTotalHoldings(newTotalHoldings)
 
 		return newClients
 	}
 
 	function renderClient({
 		billingId,
-		clientEmail,
 		clientId,
 		clientName,
 		createdAt,
@@ -207,11 +276,50 @@ const Clients = ({ advisor }) => {
 				<td>{portfolioId ? portfolios[portfolioId] : 'No Portfolio'}</td>
 				<td>{rebalanceFrequency && `Rebalance ${rebalanceFrequency}`}</td>
 				<td>{billingId && billingPlans[billingId]}</td>
-				{/* <td style={{ textTransform: 'lowercase' }}>{clientEmail}</td> */}
 				<td>{clientId.includes('-') ? 'Coinbase' : 'Coinbase Pro'}</td>
 				<td>{new Date(createdAt).toISOString().slice(0, 10)}</td>
 			</tr>
 		)
+	}
+
+	function renderHolding([holding, { amount, nativeBalance, nativePercent }]) {
+		return (
+			<tr key={`Holding ${holding}`}>
+				<td className='Bold AlignRight'>{formatPercent(nativePercent)}</td>
+				<td className='AlignRight Bold'>{formatUSD(nativeBalance)}</td>
+				<td className='Bold'>
+					{holding !== 'USD' ? (
+						<a
+							href={`https://coinbase.com/price/${coinbaseTokenNames[holding].replace(/ /g, '-').toLowerCase()}`}
+							target='_blank'
+							rel='noopener noreferrer'
+						>
+							{holding}
+						</a>
+					) : (
+						holding
+					)}
+				</td>
+				<td>{coinbaseTokenNames[holding]}</td>
+				<td className='AlignRight'>{holding !== 'USD' && amount !== undefined && amount.toFixed(18)}</td>
+				<td className='AlignRight'>{holding !== 'USD' && formatUSD(spotPrices[holding] || 0)}</td>
+				{renderHoldingPercentDifference(holding, '1D')}
+				{renderHoldingPercentDifference(holding, '1W')}
+				{renderHoldingPercentDifference(holding, '1M')}
+				{renderHoldingPercentDifference(holding, '3M')}
+				{renderHoldingPercentDifference(holding, 'YTD')}
+				{renderHoldingPercentDifference(holding, '1Y')}
+			</tr>
+		)
+	}
+
+	function renderHoldingPercentDifference(holding, timePeriod) {
+		if (holding === 'USD') return <td />
+
+		const diff = (spotPrices[holding] - spotPrices[`${holding}-${timePeriod}`]) / spotPrices[`${holding}-${timePeriod}`]
+
+		if (diff < 0) return <td className='AlignRight Red'>{formatPercent(diff)}</td>
+		else return <td className='AlignRight Green'>+{formatPercent(diff)}</td>
 	}
 
 	function renderToolTip({ payload }) {
@@ -243,6 +351,7 @@ const Clients = ({ advisor }) => {
 							<ResponsiveContainer width='100%' height='100%'>
 								<LineChart data={performance}>
 									<XAxis
+										allowDuplicatedCategory={false}
 										dataKey='date'
 										interval='preserveStartEnd'
 										margin={{ top: 0, left: 0, right: 0, bottom: 0 }}
@@ -280,7 +389,7 @@ const Clients = ({ advisor }) => {
 				<table className='Clients'>
 					<caption>
 						<div className='Flex'>
-							<div className='Title'>{clients.length !== 1 ? `${clients.length} Clients` : '1 Client'}</div>
+							<div className='Title'>{clients.length !== 1 ? `${clients.length} Clients` : '1 Client'} Total</div>
 							<Link className='Button' to={`/advisor/invites`}>
 								Invite Client
 							</Link>
@@ -291,9 +400,8 @@ const Clients = ({ advisor }) => {
 							<th>NAME</th>
 							<th className='AlignRight'>BALANCE</th>
 							<th>PORTFOLIO</th>
-							<th>PORTFOLIO REBALANCING</th>
-							<th className='Break'>BILLING PLAN</th>
-							{/* <th>EMAIL</th> */}
+							<th className='Break'>PORTFOLIO REBALANCING</th>
+							<th>BILLING PLAN</th>
 							<th>CUSTODIAN</th>
 							<th>JOINED</th>
 						</tr>
@@ -320,6 +428,46 @@ const Clients = ({ advisor }) => {
 					)}
 				</table>
 			</div>
+			{clients.length ? (
+				<div className='ResponsiveTable'>
+					<table>
+						<caption>
+							<div className='Flex'>
+								<div className='Title'>
+									{totalHoldings.length !== 1 ? `${totalHoldings.length} Holdings` : '1 Holding'} Total
+								</div>
+							</div>
+						</caption>
+						<thead>
+							<tr>
+								<th>PERCENT</th>
+								<th className='AlignRight'>BALANCE</th>
+								<th>HOLDING</th>
+								<th>NAME</th>
+								<th className='AlignRight'>AMOUNT</th>
+								<th className='AlignRight Break'>PRICE</th>
+								<th className='AlignRight'>1D</th>
+								<th className='AlignRight'>1W</th>
+								<th className='AlignRight'>1M</th>
+								<th className='AlignRight'>3M</th>
+								<th className='AlignRight'>YTD</th>
+								<th className='AlignRight'>1Y</th>
+							</tr>
+						</thead>
+						{isLoading ? (
+							<tbody>
+								<tr>
+									<td style={{ border: 'none' }}>
+										<div className='Loading'>Loading...</div>
+									</td>
+								</tr>
+							</tbody>
+						) : (
+							<tbody>{totalHoldings.map(renderHolding)}</tbody>
+						)}
+					</table>
+				</div>
+			) : null}
 		</>
 	)
 }

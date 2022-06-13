@@ -13,6 +13,7 @@ const Taxes = ({ advisor }) => {
 		await fetch(`https://blockria.com/api/coinbase/taxes?advisorId=${advisor.idToken.payload.sub}`)
 			.then(response => response.json())
 			.then(newClients => {
+				console.log(newClients)
 				const date = new Date()
 
 				let minTaxYear = date.getFullYear()

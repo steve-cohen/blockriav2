@@ -27,6 +27,8 @@ const TaxEvents = () => {
 		fetch(`https://blockria.com/api/coinbase/clients/client/taxevents?clientId=${searchParams.get('clientId')}`)
 			.then(response => response.json())
 			.then(newTaxEvents => {
+				newTaxEvents = newTaxEvents.sort((a, b) => b.updated_at.localeCompare(a.updated_at))
+
 				if (searchParams.get('year')) {
 					setTaxEvents(newTaxEvents.filter(({ updated_at }) => updated_at.slice(0, 4) === searchParams.get('year')))
 				} else {

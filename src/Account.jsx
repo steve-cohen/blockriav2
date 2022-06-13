@@ -16,11 +16,9 @@ const Account = props => {
 
 			user.authenticateUser(authenticationDetails, {
 				onSuccess: data => {
-					console.log('onSuccess: ', data)
 					resolve(data)
 				},
 				onFailure: ({ message }) => {
-					console.log('onFailure: ', message)
 					reject(message)
 				},
 				newPasswordRequired: data => {
