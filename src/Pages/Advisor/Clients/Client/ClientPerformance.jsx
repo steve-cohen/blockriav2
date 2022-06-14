@@ -71,6 +71,7 @@ const ClientPerformance = ({ totalBalance, totalBalanceNonTradeable, transaction
 
 		startDate = startDate.toISOString().slice(0, 10)
 		const endDate = new Date().toISOString().slice(0, 10)
+		console.log(startDate, endDate)
 
 		// [2.0] Calculate Net Contributions within Time Period
 		let netContributions = 0
@@ -114,6 +115,7 @@ const ClientPerformance = ({ totalBalance, totalBalanceNonTradeable, transaction
 			}
 		}
 		startingTokens = Object.entries(startingTokens)
+		console.log(startingTokens)
 
 		// [3.2] Calculate Total Balance at Start Date
 		let startingBalance = 0

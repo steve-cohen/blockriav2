@@ -10,6 +10,7 @@ import ClientPortfolio from './ClientPortfolio'
 import ClientTaxes from './ClientTaxes'
 import ClientTransactions from './ClientTransactions'
 
+import formatCoinbaseProTransactions from './formatCoinbaseProTransactions'
 import './Client.css'
 
 const Client = ({ advisor }) => {
@@ -46,9 +47,7 @@ const Client = ({ advisor }) => {
 
 			fetch(`https://blockria.com/api/coinbasepro/transactions?clientId=${clientId}`)
 				.then(response => response.json())
-				.then(newTransactions =>
-					setTransactions(newTransactions.sort((a, b) => a.date_transactionId.S.localeCompare(b.date_transactionId.S)))
-				)
+				.then(newCoinbaseProTransactions => formatCoinbaseProTransactions(newCoinbaseProTransactions, setTransactions))
 				.catch(alert)
 		}
 	}, [])
@@ -66,23 +65,23 @@ const Client = ({ advisor }) => {
 				<a href='#billing'>Billing</a>
 				<a href='#about'>About</a>
 			</div>
-			{/* <ClientPerformance
+			<ClientPerformance
 				totalBalance={totalBalance}
 				totalBalanceNonTradeable={totalBalanceNonTradeable}
 				transactions={transactions}
-			/> */}
-			{/* <ClientHoldings
+			/>
+			<ClientHoldings
 				client={client}
 				totalBalance={totalBalance}
 				totalBalanceNonTradeable={totalBalanceNonTradeable}
 				setTotalBalance={setTotalBalance}
 				setTotalBalanceNonTradeable={setTotalBalanceNonTradeable}
-			/> */}
-			{/* <ClientPortfolio advisor={advisor} client={client} /> */}
+			/>
+			<ClientPortfolio advisor={advisor} client={client} />
 			{/* <ClientDepositsWithdrawals advisor={advisor} /> */}
-			<ClientTransactions client={client} transactions={transactions} />
+			<ClientTransactions transactions={transactions} />
 			{/* <ClientTaxes client={client} transactions={transactions} /> */}
-			{/* <ClientBilling advisor={advisor} client={client} /> */}
+			<ClientBilling advisor={advisor} client={client} />
 			{/* <ClientAbout client={client} /> */}
 		</div>
 	)

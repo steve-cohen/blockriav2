@@ -186,7 +186,7 @@ const Transaction = ({ transaction }) => {
 	}
 
 	function renderSend() {
-		const change = native_amount.amount > 0 ? '+' : ''
+		const change = amount.amount > 0 ? '+' : ''
 
 		return (
 			<tr>
@@ -209,8 +209,8 @@ const Transaction = ({ transaction }) => {
 					)}
 				</td>
 				<td>
-					{amount.amount < 0 && '+'}
-					{-1 * amount.amount}
+					{change}
+					{amount.amount}
 				</td>
 				<td className='AlignRight'>{formatUSD(native_amount.amount / amount.amount)}</td>
 				<td className='AlignRight'>
